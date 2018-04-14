@@ -1,0 +1,31 @@
+spring:
+  application.name: "example-togglz"
+  jackson:
+    date-format: "yyyy-MM-dd'T'hh:mm:ss.sssZ"
+    serialization.indent-output: true
+  thymeleaf.cache: false
+server:
+    servlet.context-path: "/"
+    port: 8080
+management:
+  endpoints.web:
+    base-path: "/actuator"
+    exposure.include: "*"
+breuninger:
+  gracefulshutdown.enabled: false
+  metrics.slf4j.logger: "com.breuninger.boot.example.metrics"
+  mongo:
+    host: "localhost"
+    db: "spring-boot-starter-breuninger-example"
+    maxWaitTime: 50
+    connectTimeout: 150
+    defaultReadTimeout: 1500
+    defaultWriteTimeout: 1500
+    serverSelectionTimeout: 800
+    connectionpool:
+      minSize: 1
+      maxSize: 100
+      blocked-connection-multiplier: 2
+  application:
+    description: "Example service to show how to use spring-boot-starter-breuninger-togglz together with spring-boot-starter-breuninger-mongo in your microservices"
+    title: "Example Togglz Mongo"

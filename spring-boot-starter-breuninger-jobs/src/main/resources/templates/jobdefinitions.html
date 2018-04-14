@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments/head :: head" />
+<body>
+<!--/*@thymesVar id="jobdefinitions" type="java.util.List<com.breuninger.boot.jobs.controller.JobDefinitionRepresentation>"*/-->
+<!--/*@thymesVar id="breuningerManagementBasePath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="baseUri" type="java.lang.String"*/-->
+<th:block th:replace="fragments/navigation :: navigation" />
+<div class="container">
+  <div class="card mb-4" th:each="def : ${jobdefinitions}">
+    <h5 class="card-header" th:text="${def.name}"></h5>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-4">
+          <dl class="row">
+            <dt class="col-4 text-right">Job Type:</dt>
+            <dd class="col-8" th:text="${def.jobType}"></dd>
+            <dt class="col-4 text-right">Max Age:</dt>
+            <dd class="col-8" th:text="${def.maxAge}"></dd>
+            <dt class="col-4 text-right">Frequency:</dt>
+            <dd class="col-8" th:text="${def.frequency}"></dd>
+            <dt class="col-4 text-right">Retries:</dt>
+            <dd class="col-8" th:text="${def.retry}"></dd>
+          </dl>
+        </div>
+        <div class="col-4" th:text="${def.description}">Description</div>
+        <div class="col-4">
+          <div class="form-group">
+            <a th:href="@{|${breuningerManagementBasePath}/jobs?type=${def.jobType}|}" class="btn btn-sm btn-secondary">Job Overview</a>
+          </div>
+          <div class="form-group">
+            <button type="button"
+                    class="js_triggerButton btn btn-sm btn-success"
+                    th:attr="data-trigger-url=${baseUri} + ${breuningerManagementBasePath} + '/jobs/' + ${def.jobType}, disabled=${def.isDisabled ? 'disabled' : null}"
+                    title="Click to start job now"
+                    data-loading-text="Triggering...">
+              <span>Trigger </span>
+            </button>
+          </div>
+          <form
+            th:action="${baseUri} + ${breuningerManagementBasePath} + '/jobs/' + ${def.jobType} + '/' + ${def.isDisabled?'enable':'disable'}"
+            method="POST">
+            <div class="input-group input-group-sm">
+              <span class="input-group-prepend">
+                <button type="submit" class="btn" th:classappend="${def.isDisabled} ? 'btn-success' : 'btn-danger'"
+                        th:title="${def.isDisabled} ? 'Job is disabled. Click to enable' : 'Job is enabled. Click to disable'">
+                  <span th:if="${def.isDisabled}">Enable</span>
+                  <span th:unless="${def.isDisabled}">Disable</span>
+                </button>
+              </span>
+              <textarea th:if="${def.isDisabled}" name="disabledComment" class="form-control" rows="1" disabled="disabled"
+                        th:text="${def.comment}" style="resize: none;"></textarea>
+              <textarea th:if="${!def.isDisabled}" name="disabledComment" class="form-control" rows="1"
+                        placeholder="Why disabled?" style="resize: none;"></textarea>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<th:block th:replace="fragments/footer :: footer" />
+<script th:src="${baseUri} + '/internal/js/triggerButton.js'"></script>
+</body>
+</html>

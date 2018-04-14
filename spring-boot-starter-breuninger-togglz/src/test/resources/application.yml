@@ -1,0 +1,4 @@
+spring.application.name: "togglztest"
+server:
+  servlet.context-path: "/togglztest"
+  port: 8085

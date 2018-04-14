@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments/head :: head"/>
+<body>
+<!--/*@thymesVar id="breuningerManagementBasePath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="baseUri" type="java.lang.String"*/-->
+<th:block th:replace="fragments/navigation :: navigation" />
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-4">
+        <h5 class="card-header">Loggers</h5>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <caption>List of loggers</caption>
+              <thead class="thead-light">
+              <tr>
+                <th scope="col">Logger</th>
+                <th scope="col">Level</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="logger : ${loggers}">
+                <td th:text="${logger.displayName}" class="align-middle">Logger Name</td>
+                <td>
+                  <form th:action="${baseUri} + ${breuningerManagementBasePath} + '/loggers'" method="POST">
+                    <div class="input-group input-group-sm">
+                      <select class="custom-select" name="level">
+                        <option th:selected="${logger.effectiveLevel == 'TRACE'}">TRACE</option>
+                        <option th:selected="${logger.effectiveLevel == 'DEBUG'}">DEBUG</option>
+                        <option th:selected="${logger.effectiveLevel == 'INFO'}">INFO</option>
+                        <option th:selected="${logger.effectiveLevel == 'WARN'}">WARN</option>
+                        <option th:selected="${logger.effectiveLevel == 'ERROR'}">ERROR</option>
+                      </select>
+                      <input type="hidden" hidden="hidden" name="name" th:value="${logger.name}" />
+                      <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">OK</button>
+                      </div>
+                    </div>
+                  </form>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<th:block th:replace="fragments/footer :: footer" />
+</body>
+</html>

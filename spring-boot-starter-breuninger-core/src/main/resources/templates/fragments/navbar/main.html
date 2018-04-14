@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<ul class="navbar-nav mr-auto" th:with="url=${#httpServletRequest.getRequestURI()}" th:fragment="main">
+  <li class="nav-item" th:each="item : ${@mainNavBar.items}" th:classappend="${url.endsWith(item.getLink()) ? 'active' : ''}">
+    <a class="nav-link" th:href="@{${item.link}}" th:text="${item.title}"></a>
+  </li>
+</ul>
+</body>
+</html>

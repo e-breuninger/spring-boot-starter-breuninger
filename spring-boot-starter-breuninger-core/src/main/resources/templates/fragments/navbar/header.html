@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!--/*@thymesVar id="breuningerManagementBasePath" type="java.lang.String"*/-->
+<th:block th:fragment="header">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" th:href="@{|${breuningerManagementBasePath}/status|}" th:text="${@applicationInfo.title}">Breuninger
+    µService</a>
+</th:block>
+</body>
+</html>

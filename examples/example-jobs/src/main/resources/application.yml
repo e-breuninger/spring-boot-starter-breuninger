@@ -1,0 +1,24 @@
+spring:
+  application.name: "example-jobs"
+  jackson:
+    date-format: "yyyy-MM-dd'T'hh:mm:ss.sssZ"
+    serialization.indent-output: true
+  thymeleaf.cache: false
+server:
+  servlet.context-path: "/"
+  port: 8080
+management:
+  endpoints.web:
+    base-path: "/internal"
+    exposure.include: "*"
+breuninger:
+  gracefulshutdown.enabled: false
+  jobs.status.calculator:
+    Bar: "errorOnLastThreeJobsFailed"
+    Foo: "warningOnLastJobFailed"
+    default: "errorOnLastJobFailed"
+  metrics.slf4j.logger: "com.breuninger.boot.example.metrics"
+  application:
+    title: "Example Jobs"
+    description: "Example service to show how to use spring-boot-starter-breuninger-jobs in your microservices"
+    management.base-path: "/internal"

@@ -1,0 +1,19 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments/head :: head"/>
+<body>
+<!--/*@thymesVar id="hello" type="java.lang.String"*/-->
+<th:block th:replace="fragments/navigation :: navigation" />
+<div class="container">
+  <div class="jumbotron">
+    <h3>Example</h3>
+    <p th:text="${hello}"></p>
+    <h3>Some Links</h3>
+    <ul>
+      <li><a href="/internal/status">Status Page</a></li>
+      <li><a href="/actuator/health">Application Health</a></li>
+    </ul>
+  </div>
+</div>
+<th:block th:replace="fragments/footer :: footer" />
+</body>
+</html>

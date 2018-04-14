@@ -1,0 +1,15 @@
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+  compile project(":spring-boot-starter-breuninger-core")
+
+  compile libraries.spring_boot_devtools
+
+  testCompile project(":spring-boot-starter-breuninger-testsupport")
+}
+
+artifacts {
+  archives jar
+  archives javadocJar
+  archives sourcesJar
+}

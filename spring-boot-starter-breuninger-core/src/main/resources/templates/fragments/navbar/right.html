@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!--/*@thymesVar id="webEndpointBasePath" type="java.lang.String"*/-->
+<ul class="navbar-nav" th:with="url=${#httpServletRequest.getRequestURI()}" th:fragment="right">
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+       aria-expanded="false">Admin</a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <a class="dropdown-item" th:each="item : ${@rightNavBar.items}" th:href="@{${item.link}}" th:text="${item.title}"></a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" th:href="@{|${webEndpointBasePath}/health|}">health</a>
+      <a class="dropdown-item" th:href="@{|${webEndpointBasePath}/metrics|}">metrics</a>
+      <a class="dropdown-item" th:href="@{|${webEndpointBasePath}/httptrace|}">httptrace</a>
+      <a class="dropdown-item" th:href="@{|${webEndpointBasePath}/info|}">info</a>
+      <a class="dropdown-item" th:href="@{|${webEndpointBasePath}/mappings|}">mappings</a>
+      <a class="dropdown-item" th:href="@{|${webEndpointBasePath}/conditions|}">conditions</a>
+      <a class="dropdown-item" th:href="@{|${webEndpointBasePath}/env|}">env</a>
+      <a class="dropdown-item" th:href="@{|${webEndpointBasePath}/beans|}">beans</a>
+    </div>
+  </li>
+</ul>
+</body>
+</html>

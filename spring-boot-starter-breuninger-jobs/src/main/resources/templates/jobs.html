@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments/head :: head" />
+<body>
+<!--/*@thymesVar id="jobs" type="java.util.List<com.breuninger.boot.jobs.controller.JobRepresentation>"*/-->
+<!--/*@thymesVar id="breuningerManagementBasePath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="baseUri" type="java.lang.String"*/-->
+<!--/*@thymesVar id="typeFilter" type="java.lang.String"*/-->
+<th:block th:replace="fragments/navigation :: navigation" />
+<div class="container">
+  <div class="card mb-4">
+    <h5 class="card-header">Job Overview</h5>
+    <div class="card-body">
+      <table class="table table-striped">
+        <caption>List of jobs</caption>
+        <thead class="thead-light">
+        <tr>
+          <th scope="col">JobType</th>
+          <th scope="col">Status</th>
+          <th scope="col">Started</th>
+          <th scope="col">Stopped</th>
+          <th scope="col">Runtime</th>
+          <th scope="col">Details</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="job : ${jobs}">
+          <td th:text="${job.jobType}">&nbsp;</td>
+          <td>
+            <th:block th:if="${job.state} != 'Running'">
+              <span th:if="${job.status} == 'OK'" class="badge badge-success progress-bar bg-success"
+                    th:text="${job.status}"></span>
+              <span th:if="${job.status} == 'SKIPPED'" class="badge badge-secondary progress-bar bg-success"
+                    th:text="${job.status}"></span>
+              <span th:if="${job.status} == 'ERROR'" class="badge badge-danger progress-bar bg-success"
+                    th:text="${job.status}"></span>
+              <span th:if="${job.status} == 'DEAD'" class="badge badge-warning progress-bar bg-success"
+                    th:text="${job.status}"></span>
+            </th:block>
+            <th:block th:if="${job.state} == 'Running'">
+              <span th:text="RUNNING" class="badge progress-bar bg-info progress-bar-striped progress-bar-animated">RUNNING</span>
+            </th:block>
+          </td>
+          <td th:text="${job.started}">&nbsp;</td>
+          <td th:text="${job.stopped}">&nbsp;</td>
+          <td th:text="${job.runtime}">&nbsp;</td>
+          <td>
+            <div class="btn-group" role="group">
+              <button type="button" class="js_triggerButton btn btn-sm btn-success"
+                      th:attr="data-trigger-url=${baseUri} + ${breuningerManagementBasePath} + '/jobs/' + ${job.jobType}, disabled=${job.isDisabled || (job.state == 'Running') ? 'disabled' : null}"
+                      title="Click to start job now" data-loading-text="Triggering..."><span>Trigger</span>
+              </button>
+              <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown">Details</button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" th:href="${job.jobUri}">Messages</a>
+                <a class="dropdown-item" th:if="${typeFilter == null}"
+                   th:href="@{|${breuningerManagementBasePath}/jobs?type=${job.jobType}|}">Job Overview</a>
+                <a class="dropdown-item" th:if="${typeFilter != null}" th:href="@{|${breuningerManagementBasePath}/jobs|}">Job
+                  Overview</a>
+                <a class="dropdown-item" th:href="@{|${breuningerManagementBasePath}/jobdefinitions/${job.jobType}|}">Job
+                  Definition</a>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(jobs)}">
+          <td colspan="6">No Jobs</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<th:block th:replace="fragments/footer :: footer" />
+<script th:src="${baseUri} + '/internal/js/triggerButton.js'"></script>
+</body>
+</html>

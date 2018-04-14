@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light" th:fragment="navigation">
+  <div class="container">
+    <th:block th:replace="fragments/navbar/header :: header"/>
+    <div id="navbarSupportedContent" class="collapse navbar-collapse">
+      <th:block th:replace="fragments/navbar/main :: main" />
+      <th:block th:replace="fragments/navbar/right :: right" />
+    </div>
+  </div>
+</nav>
+</body>
+</html>

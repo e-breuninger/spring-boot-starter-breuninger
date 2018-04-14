@@ -1,0 +1,20 @@
+tasks.withType(Test) {
+  systemProperties = System.properties
+  systemProperties['user.dir'] = workingDir
+
+  afterSuite { desc, result ->
+    if (!desc.parent) {
+      println "Test Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
+    }
+  }
+  options {
+    jvmArgs '-XX:SoftRefLRUPolicyMSPerMB=0', '-XX:+UseParallelGC', '-noverify'
+  }
+  testLogging {
+    events 'skipped', 'failed'
+    exceptionFormat 'full'
+    showCauses = true
+    showExceptions = true
+    showStackTraces = true
+  }
+}

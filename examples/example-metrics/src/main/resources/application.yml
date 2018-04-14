@@ -1,0 +1,23 @@
+spring:
+  application.name: "example-metrics"
+  jackson:
+    date-format: "yyyy-MM-dd'T'hh:mm:ss.sssZ"
+    serialization.indent-output: true
+server:
+  servlet.context-path: "/"
+  port: 8080
+management:
+  metrics.distribution:
+    percentiles.http.server.requests: "0.95, 0.99"
+    percentiles-histogram.http.server.requests: true
+    sla.http.server.requests: "10ms, 100ms"
+  health.diskspace.enabled: false
+  endpoints.web:
+    base-path: "/actuator"
+    exposure.include: "*"
+breuninger:
+  gracefulshutdown.enabled: false
+  metrics.slf4j.logger: "com.breuninger.boot.example.metrics"
+  application:
+    title: "Example Metrics"
+    description: "Example service to show how to use metrics in your microservices"

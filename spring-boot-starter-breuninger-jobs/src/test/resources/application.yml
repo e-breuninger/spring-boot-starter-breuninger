@@ -1,0 +1,4 @@
+spring.application.name: testjobs
+server:
+  servlet.context-path: "/testjobs"
+  port: 8086

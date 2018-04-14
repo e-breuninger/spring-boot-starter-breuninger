@@ -1,0 +1,50 @@
+buildscript {
+  apply from: "${rootDir}/gradle/dependencies.gradle"
+
+  repositories {
+    mavenLocal()
+    maven { url 'http://repo.spring.io/libs-snapshot' }
+    maven { url 'http://repo.spring.io/plugins-release' }
+  }
+
+  dependencies {
+    classpath gradle_plugins.values()
+  }
+}
+apply plugin: 'java'
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+  maven { url 'http://repo.spring.io/libs-snapshot' }
+}
+
+apply from: "${rootDir}/gradle/root/versions.gradle"
+apply from: "${rootDir}/gradle/root/eclipse.gradle"
+apply from: "${rootDir}/gradle/root/idea.gradle"
+apply from: "${rootDir}/gradle/root/jacoco.gradle"
+apply from: "${rootDir}/gradle/root/nexusstaging.gradle"
+
+subprojects {
+
+  apply plugin: 'project-report'
+
+  version = '2.0.0-m2-SNAPSHOT'
+  group = 'com.breuninger.boot'
+
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url 'https://oss.sonatype.org/content/repositories/releases/' }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+  }
+
+  task allDeps(type: DependencyReportTask) {}
+
+  apply from: "${rootDir}/gradle/idea.gradle"
+  apply from: "${rootDir}/gradle/compile.gradle"
+  apply from: "${rootDir}/gradle/test.gradle"
+  apply from: "${rootDir}/gradle/jacoco.gradle"
+  apply from: "${rootDir}/gradle/maven.gradle"
+  apply from: "${rootDir}/gradle/signing.gradle"
+}

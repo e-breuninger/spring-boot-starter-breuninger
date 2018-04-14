@@ -1,0 +1,9 @@
+apply plugin: 'eclipse'
+
+eclipse {
+  classpath {
+    defaultOutputDir = file('build/bin')
+    downloadSources = true
+    downloadJavadoc = false
+  }
+}

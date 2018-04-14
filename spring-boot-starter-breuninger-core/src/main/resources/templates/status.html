@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments/head :: head" />
+<body>
+<!--/*@thymesVar id="status" type="com.breuninger.boot.status.domain.ApplicationStatus"*/-->
+<!--/*@thymesVar id="criticality" type="com.breuninger.boot.status.domain.Criticality"*/-->
+<th:block th:replace="fragments/navigation :: navigation" />
+<div class="container">
+  <div class="row">
+    <div class="col-6">
+      <div class="card mb-4">
+        <h5 class="card-header">Application</h5>
+        <div class="card-body">
+          <dl class="row" th:with="app=${status.application}">
+            <dt class="col-4 text-right">Name:</dt>
+            <dd class="col-8" th:text="${app.name}">Name</dd>
+            <dt class="col-4 text-right">Title:</dt>
+            <dd class="col-8" th:text="${app.title}">Title</dd>
+            <dt class="col-4 text-right">Description:</dt>
+            <dd class="col-8" th:text="${app.description}">Name</dd>
+            <dt class="col-4 text-right">Group:</dt>
+            <dd class="col-8" th:text="${app.group}"></dd>
+            <dt class="col-4 text-right">Environment:</dt>
+            <dd class="col-8" th:text="${app.environment}"></dd>
+            <dt class="col-4 text-right">Status:</dt>
+            <dd class="col-8" th:text="${status.status}">Status</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="card mb-4">
+        <h5 class="card-header">System</h5>
+        <div class="card-body">
+          <dl class="row" th:with="system=${status.system}">
+            <dt class="col-4 text-right">Host:</dt>
+            <dd class="col-8" th:text="${system.hostname}">Hostname</dd>
+            <dt class="col-4 text-right">Port:</dt>
+            <dd class="col-8" th:text="${system.port}">Port</dd>
+            <dt class="col-4 text-right">System Time:</dt>
+            <dd class="col-8" th:text="${system.systemTime}">Systemtime</dd>
+            <dt class="col-4 text-right">System Started</dt>
+            <dd class="col-8" th:text="${system.systemStartTime}">Systemstarttime</dd>
+            <dt class="col-4 text-right">System Uptime</dt>
+            <dd class="col-8" th:text="${system.systemUpTime}">SystemUptime</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <div class="card mb-4">
+        <h5 class="card-header">Version</h5>
+        <div class="card-body">
+          <dl class="row" th:with="vcs=${status.vcs}">
+            <dt class="col-4 text-right">Version:</dt>
+            <dd class="col-8" th:text="${vcs.version}">Version</dd>
+            <dt class="col-4 text-right">Commit Message:</dt>
+            <dd class="col-8" th:text="${vcs.messageShort}">Short Message</dd>
+            <dt class="col-4 text-right">Commit ID:</dt>
+            <dd class="col-8" th:text="${vcs.commitId}">Git commit</dd>
+            <dt class="col-4 text-right">Commit Time:</dt>
+            <dd class="col-8" th:text="${vcs.commitTime}">Git time</dd>
+            <dt class="col-4 text-right">Branch:</dt>
+            <dd class="col-8" th:text="${vcs.branch}">master</dd>
+            <dt class="col-4 text-right">User:</dt>
+            <dd class="col-8" th:text="${vcs.userName + ' (' + vcs.userEmail + ')'}">
+            </dd>
+            <dt class="col-4 text-right">VCS:</dt>
+            <dd class="col-8" th:with="isHttpUrl=${#strings.startsWith(vcs.url, 'http')}">
+              <a th:if="${isHttpUrl}" th:href="${vcs.url}">Open VCS UI</a>
+              <span th:unless="${isHttpUrl}" th:text="${vcs.url}">Vcs Url</span>
+            </dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="card mb-4">
+        <h5 class="card-header">Team</h5>
+        <div class="card-body">
+          <dl class="row" th:with="team=${status.team}">
+            <dt class="col-4 text-right">Name:</dt>
+            <dd class="col-8" th:text="${team.name}"></dd>
+            <dt class="col-4 text-right">Technical Contact:</dt>
+            <dd class="col-8" th:text="${team.technicalContact}"></dd>
+            <dt class="col-4 text-right">Business Contact:</dt>
+            <dd class="col-8" th:text="${team.businessContact}"></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6" th:if="${criticality}">
+      <div class="card mb-4">
+        <h5 class="card-header">Criticality</h5>
+        <div class="card-body">
+          <dl class="row">
+            <dt class="col-4 text-right">Level:</dt>
+            <dd class="col-8" th:text="${criticality.level}"></dd>
+            <dt class="col-4 text-right">Disaster Impact:</dt>
+            <dd class="col-8" th:text="${criticality.disasterImpact}"></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <div class="col-6" th:if="${status.cluster.enabled}">
+      <div class="card mb-4">
+        <h5 class="card-header">Cluster Info</h5>
+        <div class="card-body">
+          <dl class="row">
+            <dt class="col-4 text-right">Color:</dt>
+            <dd class="col-8" th:text="${status.cluster.color}"></dd>
+            <dt class="col-4 text-right">Color State:</dt>
+            <dd class="col-8" th:text="${status.cluster.colorState}"></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-4">
+        <h5 class="card-header">Details</h5>
+        <div class="card-body">
+          <div class="list-group">
+            <div class="list-group-item" th:each="statusDetail : ${status.statusDetails}">
+              <h4 class="list-group-item-heading" th:text="${statusDetail.name}">List group item heading</h4>
+              <dl class="list-group-item-text row">
+                <dt class="col-2 text-right">Status:</dt>
+                <dd class="col-10" th:text="${statusDetail.status}"></dd>
+                <dt class="col-2 text-right">Message:</dt>
+                <dd class="col-10" th:text="${statusDetail.message}"></dd>
+                <th:block th:each="key : ${statusDetail.details.keySet()}">
+                  <dt class="col-2 text-right" th:text="${key} + ':'">Message:</dt>
+                  <dd class="col-10" th:text="${statusDetail.details.get(key)}"></dd>
+                </th:block>
+                <th:block th:each="link : ${statusDetail.links}">
+                  <dt class="col-2 text-right" th:text="${link.title}"></dt>
+                  <dd class="col-10"><a th:href="@{${link.href}}">Open</a></dd>
+                </th:block>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div th:unless="${#lists.isEmpty(dependencies)}" class="row">
+    <div class="col-12">
+      <div class="card mb-4">
+        <h5 class="card-header">Dependencies</h5>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <caption>List of dependencies</caption>
+              <thead class="thead-light">
+              <tr>
+                <th scope="col">Type</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Requirements</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="dep : ${dependencies}">
+                <td th:text="${dep.type}">Type</td>
+                <td th:text="${dep.name}">Name</td>
+                <td>
+                  <p th:if="${!#lists.isEmpty(dep.datasources)}">Datasources:<br />
+                    <span th:each="ds : ${dep.datasources}"><span th:text="${ds}"></span><br /></span>
+                  </p>
+                  <p th:if="${!#strings.isEmpty(dep.url)}">Service:<br />
+                    <span th:text="${dep.url}"></span>
+                  </p>
+                  <p th:if="${!#strings.isEmpty(dep.description)}">Description:<br />
+                    <span th:text="${dep.description}"></span>
+                  </p>
+                  <p th:if="${!#strings.isEmpty(dep.methods)}">Methods:<br />
+                    <span th:text="${dep.methods}"></span>
+                  </p>
+                  <p th:if="${!#lists.isEmpty(dep.mediatypes)}">Mediatypes:<br />
+                    <span th:each="mt : ${dep.mediatypes}"><span th:text="${mt}"></span><br /></span>
+                  </p>
+                  <p th:if="${!#strings.isEmpty(dep.authentication)}">Authentication:<br />
+                    <span th:text="${dep.authentication}"></span>
+                  </p>
+                </td>
+                <td>
+                  <p>Criticality:<br /> <span th:text="${dep.criticality.level}">Criticality</span></p>
+                  <p>Impact:<br /> <span th:text="${dep.criticality.disasterImpact}">Impact</span></p>
+                  <p>Availability:<br /> <span th:text="${dep.expectations.availability}"></span></p>
+                  <p>Performance:<br /> <span th:text="${dep.expectations.performance}"></span></p>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<th:block th:replace="fragments/footer :: footer" />
+</body>
+</html>

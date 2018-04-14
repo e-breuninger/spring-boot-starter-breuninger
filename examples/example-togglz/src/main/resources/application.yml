@@ -1,0 +1,21 @@
+spring:
+  application.name: "example-togglz"
+  jackson:
+    date-format: "yyyy-MM-dd'T'hh:mm:ss.sssZ"
+    serialization.indent-output: true
+  thymeleaf.cache: false
+server:
+  servlet.context-path: "/"
+  port: 8080
+management.endpoints.web:
+  base-path: "/actuator"
+  exposure.include: "*"
+breuninger:
+  gracefulshutdown.enabled: false
+  metrics.slf4j.logger: "com.breuninger.boot.example.metrics"
+  application:
+    description: "Example service to show how to use spring-boot-starter-breuninger-togglz in your microservices"
+    title: "Example Togglz"
+  togglz:
+    cache-ttl: 100
+    console.enabled: true

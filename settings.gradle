@@ -1,0 +1,15 @@
+// rootProject.buildFileName = 'build.gradle.kts'
+rootProject.name = 'spring-boot-starter-breuninger'
+
+include "spring-boot-starter-breuninger-core"
+include "spring-boot-starter-breuninger-jobs"
+include "spring-boot-starter-breuninger-mongo"
+include "spring-boot-starter-breuninger-testsupport"
+include "spring-boot-starter-breuninger-togglz"
+include "spring-boot-starter-breuninger-validation"
+
+include "examples:example-status"
+include "examples:example-jobs"
+include "examples:example-togglz"
+include "examples:example-metrics"
+include "examples:example-togglz-mongo"

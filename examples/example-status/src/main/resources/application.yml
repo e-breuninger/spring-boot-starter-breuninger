@@ -1,0 +1,22 @@
+spring:
+  application.name: "example-status"
+  jackson:
+    date-format: "yyyy-MM-dd'T'hh:mm:ss.sssZ"
+    serialization.indent-output: true
+server:
+  servlet.context-path: "/"
+  port: 8080
+management.endpoints.web:
+  base-path: "/actuator"
+  exposure.include: "*"
+breuninger:
+  gracefulshutdown.enabled: false
+  application:
+    title: "Example Status"
+    group: "example"
+    environment: "local"
+    description: "Example service to show how to use spring-boot-starter-breuninger-core in your microservices"
+  status.team:
+    business-contact: "spring-boot-starter-breuninger-team@example.org"
+    name: "spring-boot-starter-breuninger Team"
+    technical-contact: "spring-boot-starter-breuninger-dev@example.org"

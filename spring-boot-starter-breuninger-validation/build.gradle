@@ -1,0 +1,62 @@
+dependencies {
+  implementation project(":spring-boot-starter-breuninger-core")
+  implementation libraries.hibernate_validator
+  implementation libraries.edison_hal
+  implementation libraries.validator_collection
+  implementation libraries.java_validation_api
+
+  testImplementation project(":spring-boot-starter-breuninger-testsupport")
+  testImplementation test_libraries.rest_assured
+
+  compileOnly files("../libs/lombok-edge.jar")
+}
+
+
+artifacts {
+  archives jar
+  archives javadocJar
+  archives sourcesJar
+}
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+        authentication(userName: sonatypeUsername, password: sonatypePassword)
+      }
+      snapshotRepository(url: mavenLocal().url) {
+        authentication(userName: sonatypeUsername, password: sonatypePassword)
+      }
+
+      pom.project {
+        name 'spring-boot-starter-breuninger-validation'
+        packaging 'jar'
+        description 'spring-boot-starter-breuninger-validation'
+        url 'http://github.com/e-breuninger/spring-boot-starter-breuninger'
+
+        scm {
+          url 'scm:git@github.com:e-breuninger/spring-boot-starter-breuninger.git'
+          connection 'scm:git@github.com:e-breuninger/spring-boot-starter-breuninger.git'
+          developerConnection 'scm:git@github.com:e-breuninger/spring-boot-starter-breuninger.git'
+        }
+
+        licenses {
+          license {
+            name 'The Apache Software License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            distribution 'repo'
+          }
+        }
+
+        developers {
+          developer {
+            id 'bstemmildt'
+            name 'Benedikt Stemmildt'
+          }
+        }
+      }
+    }
+  }
+}

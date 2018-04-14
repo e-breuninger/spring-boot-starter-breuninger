@@ -1,0 +1,12 @@
+spring.application.name: "testcore"
+server:
+  servlet.context-path: "/testcore"
+  port: 8084
+management.endpoints.web:
+  base-path: "/actuator"
+  exposure.include: "*"
+breuninger:
+  status.cluster:
+    color-header: "X-Color"
+    color-state-header: "X-Staging"
+    enabled: true

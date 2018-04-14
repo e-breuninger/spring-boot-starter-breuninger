@@ -1,0 +1,17 @@
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+  compile project(":spring-boot-starter-breuninger-jobs")
+  // compile project(":spring-boot-starter-breuninger-mongo") // Enable to get persistent job information
+  compile libraries.async_http_client
+
+  compile libraries.spring_boot_devtools
+
+  testCompile project(":spring-boot-starter-breuninger-testsupport")
+}
+
+artifacts {
+  archives jar
+  archives javadocJar
+  archives sourcesJar
+}

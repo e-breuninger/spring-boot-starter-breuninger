@@ -1,0 +1,65 @@
+dependencies {
+  compileOnly libraries.togglz_servlet
+  compileOnly libraries.togglz_console
+  compileOnly libraries.togglz_spring_web
+  compileOnly test_libraries.togglz_testing
+  compileOnly files("../libs/lombok-edge.jar")
+
+  compile libraries.spring_boot
+  compile libraries.spring_boot_autoconfigure
+  compile test_libraries.junit
+  compile test_libraries.hamcrest_core
+  compile test_libraries.hamcrest_library
+  compile test_libraries.mockito_core
+  compile test_libraries.spring_test
+  compile test_libraries.spring_boot_starter_test
+}
+
+artifacts {
+  archives jar
+  archives javadocJar
+  archives sourcesJar
+}
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+        authentication(userName: sonatypeUsername, password: sonatypePassword)
+      }
+      snapshotRepository(url: mavenLocal().url) {
+        authentication(userName: sonatypeUsername, password: sonatypePassword)
+      }
+
+      pom.project {
+        name 'spring-boot-starter-breuninger-testsupport'
+        packaging 'jar'
+        description 'spring-boot-starter-breuninger-testsupport'
+        url 'http://github.com/e-breuninger/spring-boot-starter-breuninger'
+
+        scm {
+          url 'scm:git@github.com:e-breuninger/spring-boot-starter-breuninger.git'
+          connection 'scm:git@github.com:e-breuninger/spring-boot-starter-breuninger.git'
+          developerConnection 'scm:git@github.com:e-breuninger/spring-boot-starter-breuninger.git'
+        }
+
+        licenses {
+          license {
+            name 'The Apache Software License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            distribution 'repo'
+          }
+        }
+
+        developers {
+          developer {
+            id 'bstemmildt'
+            name 'Benedikt Stemmildt'
+          }
+        }
+      }
+    }
+  }
+}
