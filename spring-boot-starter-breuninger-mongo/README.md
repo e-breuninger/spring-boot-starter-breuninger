@@ -1,4 +1,4 @@
-# Edison Mongo
+# spring-boot-starter-breuninger-mongo
 
 MongoDB persistence for spring-boot-starter-breuninger.  
 
@@ -9,7 +9,7 @@ MongoDB persistence for spring-boot-starter-breuninger.
 ## MongoStatusDetailIndicator
 
 A StatusDetailIndicator is autoconfigured and regularly checks the availability of the MongoDB. The indicator can be
-disabled by setting the property `edison.mongo.status.enabled=false`.
+disabled by setting the property `breuninger.mongo.status.enabled=false`.
 
 ## MongoJobRepository
 

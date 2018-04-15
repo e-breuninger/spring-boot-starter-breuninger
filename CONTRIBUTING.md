@@ -2,7 +2,6 @@
 
 So, you want to contribute to this project! That's awesome. However, before doing so, please read the following simple steps how to contribute.
 
-
 ## Always open an issue
 
 Before doing anything always [open an issue](https://github.com/e-breuninger/spring-boot-starter-breuninger/issues), 
@@ -13,13 +12,13 @@ It is recommended to wait for feedback before continuing to next steps. However,
 the issue is clear (e.g. a typo) and the fix is simple, you can continue and fix it.
 
 
-## Contact the breuninger boot core team
+## Contact the spring-boot-starter-breuninger core team
 
 Feel free to contact any of us if you have any questions or need help!
 
 * [Benedikt Stemmildt](https://github.com/benestem) aka "The Author"
 
-Our colleagues at breuninger can use the rocket.chat group "spring-boot-starter-breuninger" to contact us.
+Our colleagues at breuninger can use the rocket.chat group "#spring-boot-starter-breuninger" to contact us.
 
 
 ## How to change code
@@ -35,7 +34,7 @@ Commit your changes in that branch, writing the code following the code style.
 To ensure a unified view to the changes please use [this commit message format](https://chris.beams.io/posts/git-commit/#seven-rules).
 Example (with a way too long subject line):
 
-    [spring-boot-starter-breuninger-jobs][breaking change]: Write subject in imperative mood wihtout a period at the end
+    fix: Write subject in imperative mood wihtout a period at the end
     
     - Separate subject from body with a blank line
     - Please use bulletpoints in the body
@@ -52,14 +51,12 @@ Example (with a way too long subject line):
 Add all noticeable changes to the [CHANGELOG.md](CHANGELOG.md).
 To ensure a unified view to the changes please format the [CHANGELOG.md](CHANGELOG.md) as done [in this example](https://github.com/skywinder/github-changelog-generator/blob/master/CHANGELOG.md). 
 
-
 ### Create a pull request
 
 Open a pull request, and reference the initial issue in the pull request message (e.g. fixes #). 
 Write a good description and title, so everybody will know what is fixed/improved.
 
 A travis-ci build will automatically be triggered to check everything.
-
 
 ### Wait for feedback
 
@@ -69,10 +66,9 @@ updated automatically.
 
 We will only accept pull requests that have zero failing checks.
 
-
 ### The merge
 
 Finally, your contributions will be merged.
 
 The merge will automatically publish a new snapshot version.
-A release version will be published manually by the [core team](#Contact-the-breuninger-boot-core-team) according to our roadmap.  
+A release version will be published manually by the [core team](#Contact-the-spring-boot-starter-breuninger-core-team) according to our roadmap.  

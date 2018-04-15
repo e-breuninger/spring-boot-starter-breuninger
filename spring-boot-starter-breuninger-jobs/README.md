@@ -1,4 +1,4 @@
-# Edison Jobs
+# spring-boot-starter-breuninger-jobs
 
 Simple addon library to support background jobs for spring-boot-starter-breuninger.
 
@@ -18,9 +18,37 @@ Beside of starting a job programmatically via the `Jobservice` you can also use 
 comes with this library. Links to this UI are automatically added to the service´s /internal pages menu bar if
 spring-boot-starter-breuninger-jobs is added to the classpath.
 
-The scheduling of the jobs is not part of this framework. External triggering is implemented by 
-[Edison JobTrigger](https://github.com/e-breuninger/spring-boot-starter-breuninger-jobtrigger), but also internal triggers are easy to implement
-using Spring's @EnableScheduling and @Scheduled annotations. 
+The scheduling of the jobs is not part of this framework. Internal triggers are easy to implement
+using Spring's @EnableScheduling and @Scheduled annotations.
+
+Or implementing the `SchedulingConfigurer` like this:
+```java
+@Component
+public final class JobWatcher implements SchedulingConfigurer {
+
+  private final JobDefinitionService jobDefinitionService;
+  private final JobService jobService;
+
+  @Override
+  public void configureTasks(final ScheduledTaskRegistrar taskRegistrar) {
+    jobDefinitionService.getJobDefinitions().forEach(def -> {
+      def.cron().ifPresent(cron -> registerCronJob(def.jobType(), cron, taskRegistrar));
+      def.fixedDelay().ifPresent(fixedDelay -> registerFixedDelay(def.jobType(), fixedDelay, taskRegistrar));
+    });
+  }
+
+  private void registerCronJob(final String jobType, final String cron, final ScheduledTaskRegistrar taskRegistrar) {
+    LOG.info("register job {} for cron scheduling: {}", jobType, cron);
+    taskRegistrar.addCronTask(() -> jobService.startAsyncJob(jobType), cron);
+  }
+
+  private void registerFixedDelay(final String jobType, final Duration fixedDelay, final ScheduledTaskRegistrar taskRegistrar) {
+    LOG.info("register job {} for scheduling with fixed delay: {}", jobType, fixedDelay);
+    taskRegistrar.addFixedDelayTask(
+      new IntervalTask(() -> jobService.startAsyncJob(jobType), fixedDelay.toMillis(), fixedDelay.toMillis()));
+  }
+}
+```
 
 For the usage of spring-boot-starter-breuninger-jobs take a look at example-jobs.
 
@@ -29,6 +57,7 @@ For the usage of spring-boot-starter-breuninger-jobs take a look at example-jobs
 *PENDING*
 
 ### JobMutexHandler
+
 You can define JobMutex-Groups to define, that certain jobs may not be executed, while other specific jobs are running.
 
 To define a mutex group you need to define a bean of type JobMutexGroup
