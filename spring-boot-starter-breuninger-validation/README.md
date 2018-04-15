@@ -55,4 +55,4 @@ Then, if you put a value like `{"id":"aa"}` to this endpoint `/testing`, you'll 
 ```
 
 You can customize the keys and messages used by providing a `ValidationMessages.properties` file in the root of the classpath,
-similar to [the one in this project](/src/main/resources/ValidationMessages.properties).
+similar to [the one in this project](https://github.com/e-breuninger/spring-boot-starter-breuninger/blob/master/spring-boot-starter-breuninger-validation/src/main/resources/ValidationMessages.properties).
