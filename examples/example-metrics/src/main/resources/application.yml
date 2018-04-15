@@ -17,7 +17,6 @@ management:
     exposure.include: "*"
 breuninger:
   gracefulshutdown.enabled: false
-  metrics.slf4j.logger: "com.breuninger.boot.example.metrics"
   application:
     title: "Example Metrics"
     description: "Example service to show how to use metrics in your microservices"

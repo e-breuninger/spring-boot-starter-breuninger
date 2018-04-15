@@ -12,7 +12,7 @@ import lombok.ToString;
 
 @Immutable
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @ToString
 public class StateChangeEvent extends ApplicationEvent {
 

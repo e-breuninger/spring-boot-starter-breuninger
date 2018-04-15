@@ -17,7 +17,6 @@ breuninger:
     Bar: "errorOnLastThreeJobsFailed"
     Foo: "warningOnLastJobFailed"
     default: "errorOnLastJobFailed"
-  metrics.slf4j.logger: "com.breuninger.boot.example.metrics"
   application:
     title: "Example Jobs"
     description: "Example service to show how to use spring-boot-starter-breuninger-jobs in your microservices"

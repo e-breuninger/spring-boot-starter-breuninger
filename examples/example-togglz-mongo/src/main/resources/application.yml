@@ -13,7 +13,6 @@ management:
     exposure.include: "*"
 breuninger:
   gracefulshutdown.enabled: false
-  metrics.slf4j.logger: "com.breuninger.boot.example.metrics"
   mongo:
     host: "localhost"
     db: "spring-boot-starter-breuninger-example"

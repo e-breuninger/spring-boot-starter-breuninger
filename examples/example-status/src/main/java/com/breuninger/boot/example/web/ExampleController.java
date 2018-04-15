@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.codahale.metrics.annotation.Timed;
+import io.micrometer.core.annotation.Timed;
 
 @RestController
 public class ExampleController {
 
-  @Timed
+  @Timed("sayHelloAsHtml")
   @RequestMapping(value = "/", produces = "text/html", method = GET)
   public ModelAndView sayHelloAsHtml() {
 

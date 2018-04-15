@@ -12,7 +12,6 @@ management.endpoints.web:
   exposure.include: "*"
 breuninger:
   gracefulshutdown.enabled: false
-  metrics.slf4j.logger: "com.breuninger.boot.example.metrics"
   application:
     description: "Example service to show how to use spring-boot-starter-breuninger-togglz in your microservices"
     title: "Example Togglz"
