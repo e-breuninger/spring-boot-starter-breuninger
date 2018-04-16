@@ -14,7 +14,9 @@ ext {
     hibernate_validator              : '6.0.9.Final',
     edison_hal                       : '1.0.0',
     validator_collection             : '2.2.0',
-    java_validation_api              : '2.0.1.Final'
+    java_validation_api              : '2.0.1.Final',
+    thymeleaf                        : '3.0.9.RELEASE',
+    thymeleaf_layout_dialect         : '2.3.0'
   ]
   test_versions = [
     junit       : '4.12',
@@ -52,7 +54,8 @@ ext {
     hibernate_validator                : "org.hibernate.validator:hibernate-validator:${versions.hibernate_validator}",
     java_validation_api                : "javax.validation:validation-api:${versions.java_validation_api}",
     edison_hal                         : "de.otto.edison:edison-hal:${versions.edison_hal}",
-    validator_collection               : "cz.jirutka.validator:validator-collection:${versions.validator_collection}"
+    validator_collection               : "cz.jirutka.validator:validator-collection:${versions.validator_collection}",
+    thymeleaf_layout_dialect           : "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:${versions.thymeleaf_layout_dialect}"
   ]
   test_libraries = [
     junit                   : "junit:junit:${test_versions.junit}",
