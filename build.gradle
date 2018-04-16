@@ -2,9 +2,10 @@ buildscript {
   apply from: "${rootDir}/gradle/dependencies.gradle"
 
   repositories {
-    mavenLocal()
-    maven { url 'http://repo.spring.io/libs-snapshot' }
+    jcenter()
     maven { url 'http://repo.spring.io/plugins-release' }
+    maven { url 'https://oss.sonatype.org/content/repositories/releases/' }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
   }
 
   dependencies {
@@ -14,9 +15,9 @@ buildscript {
 apply plugin: 'java'
 
 repositories {
-  mavenLocal()
-  mavenCentral()
-  maven { url 'http://repo.spring.io/libs-snapshot' }
+  jcenter()
+  maven { url 'https://oss.sonatype.org/content/repositories/releases/' }
+  maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
 }
 
 apply from: "${rootDir}/gradle/root/versions.gradle"
@@ -26,15 +27,13 @@ apply from: "${rootDir}/gradle/root/jacoco.gradle"
 apply from: "${rootDir}/gradle/root/nexusstaging.gradle"
 
 subprojects {
-
   apply plugin: 'project-report'
 
   version = '2.0.0-m2-SNAPSHOT'
   group = 'com.breuninger.boot'
 
   repositories {
-    mavenLocal()
-    mavenCentral()
+    jcenter()
     maven { url 'https://oss.sonatype.org/content/repositories/releases/' }
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
   }
