@@ -75,6 +75,17 @@ Publish new releases
 
     gradle uploadArchives
 
+### Known java 10 problems
+
+#### Gradle
+
+To make gradle work with jdk10 you have to run it with jdk8 and set the compiling jdk path to 10.
+You can do this by putting this into your *~/.gradle/gradle.properties*: `org.gradle.java.home=/path_to_jdk10`
+
+When running gradle tasks you then have to set `-Djava.endorsed.dirs=` as shown in this example:
+
+    $ gradle bootRun -Djava.endorsed.dirs=
+
 ## Contributing
 
 Have a look at our [contribution guidelines](CONTRIBUTING.md).
