@@ -6,6 +6,7 @@ dependencies {
   compile libraries.spring_boot
   compile libraries.spring_boot_autoconfigure
   compile libraries.mongodb_driver
+  compile libraries.mongodb_reactive_driver
 
   testCompile project(":spring-boot-starter-breuninger-testsupport")
   testCompile project(":spring-boot-starter-breuninger-jobs")

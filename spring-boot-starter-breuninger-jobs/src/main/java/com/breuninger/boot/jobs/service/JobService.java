@@ -7,13 +7,18 @@ import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNullElseGet;
 
 import static com.breuninger.boot.jobs.domain.JobInfo.JobStatus;
+import static com.breuninger.boot.jobs.domain.JobInfo.JobStatus.DEAD;
 import static com.breuninger.boot.jobs.domain.JobInfo.JobStatus.ERROR;
+import static com.breuninger.boot.jobs.domain.JobInfo.JobStatus.OK;
+import static com.breuninger.boot.jobs.domain.JobInfo.JobStatus.SKIPPED;
 import static com.breuninger.boot.jobs.domain.JobInfo.newJobInfo;
 import static com.breuninger.boot.jobs.domain.JobMessage.jobMessage;
+import static com.breuninger.boot.jobs.domain.Level.INFO;
 import static com.breuninger.boot.jobs.domain.Level.WARNING;
 import static com.breuninger.boot.jobs.service.JobRunner.newJobRunner;
 
 import java.time.Clock;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
@@ -21,8 +26,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -141,7 +144,7 @@ public class JobService {
   }
 
   public void killJob(final String jobId) {
-    stopJob(jobId, JobStatus.DEAD);
+    stopJob(jobId, DEAD);
     jobRepository.appendMessage(jobId,
       jobMessage(WARNING, "Job didn't receive updates for a while, considering it dead", now(clock)));
   }
@@ -159,12 +162,8 @@ public class JobService {
   }
 
   public void appendMessage(final String jobId, final JobMessage jobMessage) {
-    // TODO: Refactor JobRepository so only a single update is required
-    jobRepository.appendMessage(jobId, jobMessage);
-    if (jobMessage.getLevel() == Level.ERROR) {
-      jobRepository.findOne(jobId)
-        .ifPresent(jobInfo -> jobRepository.createOrUpdate(jobInfo.copy().setStatus(ERROR).setLastUpdated(now(clock)).build()));
-    }
+    writeMessageAndStatus(jobId, jobMessage.getLevel(), jobMessage.getMessage(),
+      jobMessage.getLevel() == Level.ERROR ? ERROR : OK, jobMessage.getTimestamp());
   }
 
   public void keepAlive(final String jobId) {
@@ -172,19 +171,23 @@ public class JobService {
   }
 
   public void markSkipped(final String jobId) {
-    // TODO: Refactor JobRepository so only a single update is required
-    final var currentTimestamp = now(clock);
-    jobRepository.appendMessage(jobId, jobMessage(Level.INFO, "Skipped job ..", currentTimestamp));
-    jobRepository.setLastUpdate(jobId, currentTimestamp);
-    jobRepository.setJobStatus(jobId, JobStatus.SKIPPED);
+    writeMessageAndStatus(jobId, INFO, "Skipped job ..", SKIPPED);
   }
 
   public void markRestarted(final String jobId) {
-    // TODO: Refactor JobRepository so only a single update is required
+    writeMessageAndStatus(jobId, WARNING, "Restarting job ..", OK);
+  }
+
+  private void writeMessageAndStatus(final String jobId, final Level messageLevel, final String message, final JobStatus jobStatus) {
     final var currentTimestamp = now(clock);
-    jobRepository.appendMessage(jobId, jobMessage(WARNING, "Restarting job ..", currentTimestamp));
-    jobRepository.setLastUpdate(jobId, currentTimestamp);
-    jobRepository.setJobStatus(jobId, JobStatus.OK);
+    writeMessageAndStatus(jobId, messageLevel, message, jobStatus, currentTimestamp);
+  }
+
+  private void writeMessageAndStatus(final String jobId, final Level messageLevel, final String message, final JobStatus jobStatus,
+                                     final OffsetDateTime timestamp) {
+    // TODO: Refactor JobRepository so only a single update is required
+    jobRepository.appendMessage(jobId, jobMessage(messageLevel, message, timestamp));
+    jobRepository.setJobStatus(jobId, jobStatus);
   }
 
   private JobInfo createJobInfo(final String jobType) {

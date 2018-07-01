@@ -24,15 +24,15 @@ public class JobRepresentation {
   private final String baseUri;
   private final boolean humanReadable;
   private final JobMeta jobMeta;
-  private final String breuningerManagementBasePath;
+  private final String managementContextPath;
 
   private JobRepresentation(final JobInfo job, final JobMeta jobMeta, final boolean humanReadable, final String baseUri,
-                            final String breuningerManagementBasePath) {
+                            final String managementContextPath) {
     this.job = job;
     this.humanReadable = humanReadable;
     this.baseUri = baseUri;
     this.jobMeta = jobMeta;
-    this.breuningerManagementBasePath = breuningerManagementBasePath;
+    this.managementContextPath = managementContextPath;
   }
 
   public static JobRepresentation representationOf(final JobInfo job, final JobMeta jobMeta, final boolean humanReadable,
@@ -41,7 +41,7 @@ public class JobRepresentation {
   }
 
   public String getJobUri() {
-    return String.format("%s%s/jobs/%s", baseUri, breuningerManagementBasePath, job.getJobId());
+    return String.format("%s%s/jobs/%s", baseUri, managementContextPath, job.getJobId());
   }
 
   public String getJobType() {
@@ -66,7 +66,9 @@ public class JobRepresentation {
   }
 
   public String getRuntime() {
-    return job.isStopped() ? formatRuntime(job.getStarted(), job.getStopped().get()) : "";
+    return job.isStopped() ?
+      formatRuntime(job.getStarted(), job.getStopped().get()) :
+      formatRuntime(job.getStarted(), OffsetDateTime.now());
   }
 
   public String getLastUpdated() {
@@ -85,6 +87,10 @@ public class JobRepresentation {
     return jobMeta != null ? jobMeta.getDisabledComment() : "";
   }
 
+  public String getId() {
+    return job.getJobId();
+  }
+
   public List<String> getMessages() {
     return job.getMessages()
       .stream()
@@ -94,9 +100,10 @@ public class JobRepresentation {
   }
 
   public List<Link> getLinks() {
-    final var jobUri = String.format("%s%s/jobs/%s", baseUri, breuningerManagementBasePath, job.getJobId());
-    return asList(Link.link("self", jobUri, "Self"), Link.link("http://github.com/e-breuninger/spring-boot-starter-breuninger/link-relations/job/definition",
-      String.format("%s%s/jobdefinitions/%s", baseUri, breuningerManagementBasePath, job.getJobType()), "Job Definition"),
+    final var jobUri = String.format("%s%s/jobs/%s", baseUri, managementContextPath, job.getJobId());
+    return asList(Link.link("self", jobUri, "Self"),
+      Link.link("http://github.com/e-breuninger/spring-boot-starter-breuninger/link-relations/job/definition",
+        String.format("%s%s/jobdefinitions/%s", baseUri, managementContextPath, job.getJobType()), "Job Definition"),
       Link.link("collection", jobUri.substring(0, jobUri.lastIndexOf("/")), "All Jobs"),
       Link.link("collection/" + getJobType(), jobUri.substring(0, jobUri.lastIndexOf("/")) + "?type=" + getJobType(),
         "All " + getJobType() + " Jobs"));

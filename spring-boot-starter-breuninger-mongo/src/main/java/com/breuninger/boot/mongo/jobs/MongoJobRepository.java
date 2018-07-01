@@ -7,13 +7,13 @@ import static java.util.Date.from;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
-import static com.mongodb.ReadPreference.primaryPreferred;
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Updates.push;
-import static com.mongodb.client.model.Updates.set;
-
 import static com.breuninger.boot.jobs.domain.JobInfo.newJobInfo;
 import static com.breuninger.boot.jobs.domain.JobMessage.jobMessage;
+import static com.mongodb.ReadPreference.primaryPreferred;
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.combine;
+import static com.mongodb.client.model.Updates.push;
+import static com.mongodb.client.model.Updates.set;
 
 import java.time.Clock;
 import java.time.OffsetDateTime;
@@ -27,11 +27,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.bson.Document;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
-
 import com.breuninger.boot.jobs.domain.JobInfo;
 import com.breuninger.boot.jobs.domain.JobInfo.JobStatus;
 import com.breuninger.boot.jobs.domain.JobMessage;
@@ -39,6 +34,10 @@ import com.breuninger.boot.jobs.domain.Level;
 import com.breuninger.boot.jobs.repository.JobRepository;
 import com.breuninger.boot.mongo.AbstractMongoRepository;
 import com.breuninger.boot.mongo.configuration.MongoProperties;
+import com.mongodb.BasicDBObject;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 
 public class MongoJobRepository extends AbstractMongoRepository<String, JobInfo> implements JobRepository {
 
@@ -51,8 +50,7 @@ public class MongoJobRepository extends AbstractMongoRepository<String, JobInfo>
   public MongoJobRepository(final MongoDatabase mongoDatabase, final String jobInfoCollectionName,
                             final MongoProperties mongoProperties) {
     super(mongoProperties);
-    final var tmpCollection = mongoDatabase.getCollection(jobInfoCollectionName)
-      .withReadPreference(primaryPreferred());
+    final var tmpCollection = mongoDatabase.getCollection(jobInfoCollectionName).withReadPreference(primaryPreferred());
     jobInfoCollection = tmpCollection.withWriteConcern(
       tmpCollection.getWriteConcern().withWTimeout(mongoProperties.getDefaultWriteTimeout(), TimeUnit.MILLISECONDS));
     clock = systemDefaultZone();
@@ -143,7 +141,8 @@ public class MongoJobRepository extends AbstractMongoRepository<String, JobInfo>
   @Override
   public void appendMessage(final String jobId, final JobMessage jobMessage) {
     collectionWithWriteTimeout(250, TimeUnit.MILLISECONDS).updateOne(eq(ID, jobId),
-      push(JobStructure.MESSAGES.key(), encodeJobMessage(jobMessage)));
+      combine(push(JobStructure.MESSAGES.key(), encodeJobMessage(jobMessage)),
+        set(JobStructure.LAST_UPDATED.key(), DateTimeConverters.toDate(jobMessage.getTimestamp()))));
   }
 
   @Override

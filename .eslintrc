@@ -2,7 +2,7 @@
   "env": {
     "browser": true,
     "jquery": true,
-    "es6": false,
+    "es6": true,
     "node": false
   },
   "rules": {
@@ -210,6 +210,10 @@
       "error",
       "always"
     ],
+    "max-classes-per-file": [
+      "error",
+      1
+    ],
     "max-depth": [
       "error",
       4
@@ -230,6 +234,10 @@
     "max-lines": [
       "error",
       130
+    ],
+    "max-lines-per-function": [
+      "error",
+      20
     ],
     "max-nested-callbacks": [
       "error",
@@ -533,6 +541,7 @@
       }
     ],
     "prefer-numeric-literals": "error",
+    "prefer-object-spread": "error",
     "prefer-promise-reject-errors": [
       "error",
       {

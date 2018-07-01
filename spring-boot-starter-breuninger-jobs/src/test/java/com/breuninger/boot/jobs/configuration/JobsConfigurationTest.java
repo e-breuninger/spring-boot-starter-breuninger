@@ -50,8 +50,7 @@ public class JobsConfigurationTest {
     when(noJobDefinitions.getJobDefinitions()).thenReturn(emptyList());
 
     // when
-    final var statusDetail = testee.jobStatusDetailIndicator(noJobDefinitions, singletonList(defaultCalculator))
-      .statusDetail();
+    final var statusDetail = testee.jobStatusDetailIndicator(noJobDefinitions, singletonList(defaultCalculator)).statusDetail();
     // then
     assertThat(statusDetail.getStatus(), is(OK));
     assertThat(statusDetail.getName(), is("Jobs"));
@@ -65,8 +64,7 @@ public class JobsConfigurationTest {
     when(defaultCalculator.getKey()).thenReturn("warningOnLastJobFailed");
 
     // when
-    final var indicator = testee.jobStatusDetailIndicator(someJobDefinitionService(),
-      singletonList(defaultCalculator));
+    final var indicator = testee.jobStatusDetailIndicator(someJobDefinitionService(), singletonList(defaultCalculator));
     // then
     assertThat(indicator, is(instanceOf(CompositeStatusDetailIndicator.class)));
   }

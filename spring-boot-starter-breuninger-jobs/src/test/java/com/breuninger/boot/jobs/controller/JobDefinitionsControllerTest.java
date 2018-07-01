@@ -29,11 +29,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.breuninger.boot.configuration.BreuningerApplicationProperties;
-import com.breuninger.boot.navigation.NavBar;
-
 import com.breuninger.boot.jobs.definition.JobDefinition;
 import com.breuninger.boot.jobs.service.JobDefinitionService;
 import com.breuninger.boot.jobs.service.JobMetaService;
+import com.breuninger.boot.navigation.NavBar;
 
 public class JobDefinitionsControllerTest {
 
@@ -51,8 +50,7 @@ public class JobDefinitionsControllerTest {
   public void setUp() {
     initMocks(this);
     webEndpointProperties.getManagement().setBasePath(MANAGEMENT_CONTEXT);
-    final var controller = new JobDefinitionsController(jobDefinitionService, jobMetaService, navBar,
-      webEndpointProperties);
+    final var controller = new JobDefinitionsController(jobDefinitionService, jobMetaService, navBar, webEndpointProperties);
     mockMvc = MockMvcBuilders.standaloneSetup(controller)
       .addPlaceholderValue("breuninger.application.management.base-path", MANAGEMENT_CONTEXT)
       .build();
@@ -80,7 +78,8 @@ public class JobDefinitionsControllerTest {
           "      \"rel\": \"self\"\n" + "    },\n" + "    {\n" + "      \"href\": \"" + MANAGEMENT_CONTEXT +
           "/jobdefinitions\",\n" + "      \"rel\": \"collection\"\n" + "    },\n" + "    {\n" + "      \"href\": \"" +
           MANAGEMENT_CONTEXT + "/jobs/FooJob\",\n" +
-          "      \"rel\": \"http://github.com/e-breuninger/spring-boot-starter-breuninger/link-relations/job/trigger\"\n" + "    }\n" + "  ]\n" + "}"));
+          "      \"rel\": \"http://github.com/e-breuninger/spring-boot-starter-breuninger/link-relations/job/trigger\"\n" +
+          "    }\n" + "  ]\n" + "}"));
   }
 
   @Test
@@ -136,9 +135,7 @@ public class JobDefinitionsControllerTest {
     mockMvc.perform(get(MANAGEMENT_CONTEXT + "/jobdefinitions/").accept("text/html"))
       .andExpect(status().is(200))
       .andDo(result -> {
-        final var jobDefinitions = (List<Map<String, Object>>) result.getModelAndView()
-          .getModel()
-          .get("jobdefinitions");
+        final var jobDefinitions = (List<Map<String, Object>>) result.getModelAndView().getModel().get("jobdefinitions");
         assertThat(jobDefinitions.size(), is(1));
         assertThat(jobDefinitions.get(0).get("frequency"), is("Every 59 Seconds"));
       });
@@ -154,9 +151,7 @@ public class JobDefinitionsControllerTest {
     mockMvc.perform(get(MANAGEMENT_CONTEXT + "/jobdefinitions/").accept("text/html"))
       .andExpect(status().is(200))
       .andDo(result -> {
-        final var jobDefinitions = (List<Map<String, Object>>) result.getModelAndView()
-          .getModel()
-          .get("jobdefinitions");
+        final var jobDefinitions = (List<Map<String, Object>>) result.getModelAndView().getModel().get("jobdefinitions");
         assertThat(jobDefinitions.size(), is(1));
         assertThat(jobDefinitions.get(0).get("frequency"), is("Every 1 Minutes"));
       });

@@ -54,14 +54,16 @@ public class JobsController {
     this.jobService = jobService;
     this.jobMetaService = jobMetaService;
     this.applicationProperties = applicationProperties;
-    rightNavBar.register(NavBarItem.navBarItem(10, "Job Overview", applicationProperties.getManagement().getBasePath() + "/jobs"));
+    rightNavBar.register(
+      NavBarItem.navBarItem(10, "Job Overview", applicationProperties.getManagement().getBasePath() + "/jobs"));
   }
 
-  @RequestMapping(value = "${breuninger.application.management.base-path:/internal}/jobs", method = GET, produces = "text/html")
+  @RequestMapping(value = "${breuninger.application.management.base-path:/internal}/jobs", method = GET,
+                  produces = "text/html")
   public ModelAndView getJobsAsHtml(@RequestParam(value = "type", required = false) final String type,
                                     @RequestParam(value = "count", defaultValue = "100") final int count,
-                                    @RequestParam(value = "distinct", defaultValue = "true", required = false) final boolean distinct,
-                                    final HttpServletRequest request) {
+                                    @RequestParam(value = "distinct", defaultValue = "true", required = false)
+                                    final boolean distinct, final HttpServletRequest request) {
     final var jobRepresentations = getJobInfos(type, count, distinct).stream()
       .map(j -> representationOf(j, getJobMeta(j.getJobType()), true, baseUriOf(request),
         applicationProperties.getManagement().getBasePath()))
@@ -82,9 +84,11 @@ public class JobsController {
   public List<JobRepresentation> getJobsAsJson(@RequestParam(name = "type", required = false) final String type,
                                                @RequestParam(name = "count", defaultValue = "10") final int count,
                                                @RequestParam(name = "distinct", defaultValue = "true", required = false)
-                                               final boolean distinct, final HttpServletRequest request) {
+                                               final boolean distinct,
+                                               @RequestParam(name = "humanReadable", defaultValue = "false", required = false)
+                                               final boolean humanReadable, final HttpServletRequest request) {
     return getJobInfos(type, count, distinct).stream()
-      .map(j -> representationOf(j, getJobMeta(j.getJobType()), false, baseUriOf(request),
+      .map(j -> representationOf(j, getJobMeta(j.getJobType()), humanReadable, baseUriOf(request),
         applicationProperties.getManagement().getBasePath()))
       .collect(toList());
   }
@@ -119,7 +123,8 @@ public class JobsController {
     return "redirect:" + applicationProperties.getManagement().getBasePath() + "/jobdefinitions";
   }
 
-  @RequestMapping(value = "${breuninger.application.management.base-path:/internal}/jobs/{id}", method = GET, produces = "text/html")
+  @RequestMapping(value = "${breuninger.application.management.base-path:/internal}/jobs/{id}", method = GET,
+                  produces = "text/html")
   public ModelAndView getJobAsHtml(final HttpServletRequest request, final HttpServletResponse response,
                                    @PathVariable("id") final String jobId) throws IOException {
 
@@ -144,14 +149,16 @@ public class JobsController {
                   produces = "application/json")
   @ResponseBody
   public JobRepresentation getJob(final HttpServletRequest request, final HttpServletResponse response,
-                                  @PathVariable("id") final String jobId) throws IOException {
+                                  @PathVariable("id") final String jobId,
+                                  @RequestParam(name = "humanReadable", defaultValue = "false", required = false)
+                                  final boolean humanReadable) throws IOException {
 
     setCorsHeaders(response);
 
     final var optionalJob = jobService.findJob(jobId);
     if (optionalJob.isPresent()) {
       final var jobInfo = optionalJob.get();
-      return representationOf(optionalJob.get(), getJobMeta(jobInfo.getJobType()), false, baseUriOf(request),
+      return representationOf(optionalJob.get(), getJobMeta(jobInfo.getJobType()), humanReadable, baseUriOf(request),
         applicationProperties.getManagement().getBasePath());
     } else {
       response.sendError(SC_NOT_FOUND, "Job not found");

@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -33,7 +34,7 @@ public class ExampleJobsSmokeTest {
 
   @Test
   public void shouldHaveStatusEndpoint() {
-    final var response = restTemplate.getForEntity("/internal/status.json", String.class);
+    final var response = restTemplate.getForEntity("/internal/status?format=json", String.class);
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
     assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON_UTF8);
     assertThat(response.getBody()).startsWith("{");
@@ -41,14 +42,14 @@ public class ExampleJobsSmokeTest {
 
   @Test
   public void shouldHaveHealthCheck() {
-    final var response = restTemplate.getForEntity("/internal/health", String.class);
+    final var response = restTemplate.getForEntity("/actuator/health", String.class);
     assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON_UTF8);
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
   }
 
   @Test
   public void shouldHaveJobDefinitions() throws JSONException {
-    final var response = restTemplate.getForEntity("/internal/jobdefinitions.json", String.class);
+    final var response = restTemplate.getForEntity("/internal/jobdefinitions?format=json", String.class);
     assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON_UTF8);
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
     JSONAssert.assertEquals(
@@ -68,7 +69,7 @@ public class ExampleJobsSmokeTest {
 
   @Test
   public void shouldHaveFooJobDefinition() throws JSONException {
-    final var response = restTemplate.getForEntity("/internal/jobdefinitions/foo.json", String.class);
+    final var response = restTemplate.getForEntity("/internal/jobdefinitions/foo?format=json", String.class);
     assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON_UTF8);
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
     JSONAssert.assertEquals(
@@ -87,7 +88,7 @@ public class ExampleJobsSmokeTest {
     assertThat(postResponse.getStatusCodeValue()).isEqualTo(204);
     final var jobResponse = restTemplate.getForEntity(postResponse.getHeaders().getLocation(), String.class);
     assertThat(jobResponse.getStatusCodeValue()).isEqualTo(200);
-    assertThat(jobResponse.getBody()).contains("\"state\":\"Running\"");
-    assertThat(jobResponse.getBody()).contains("\"jobType\":\"Foo\"");
+    assertThat(jobResponse.getBody()).containsPattern(("\"state\"( )*:( )*\"Running\"")); // contains ignoring whitespaces
+    assertThat(jobResponse.getBody()).containsPattern("\"jobType\"( )*:( )*\"Foo\""); // contains ignoring whitespaces
   }
 }

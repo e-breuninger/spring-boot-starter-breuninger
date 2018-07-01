@@ -38,11 +38,10 @@ public class StatusRepresentationTest {
   @Test
   public void shouldCreateStatusRepresentationWithoutDetails() {
     // given
-    final var breuningerApplicationProperties = breuningerApplicationProperties("Some Title", "group", "local-env",
-      "desc");
+    final var breuningerApplicationProperties = breuningerApplicationProperties("Some Title", "group", "local-env", "desc");
     final var json = statusRepresentationOf(
-      applicationStatus(applicationInfo("app-name", breuningerApplicationProperties), mock(ClusterInfo.class), mock(SystemInfo.class),
-        mock(VersionInfo.class), mock(TeamInfo.class), emptyList()));
+      applicationStatus(applicationInfo("app-name", breuningerApplicationProperties), mock(ClusterInfo.class),
+        mock(SystemInfo.class), mock(VersionInfo.class), mock(TeamInfo.class), emptyList()));
     // then
     assertThat(json.application.name, is("app-name"));
     assertThat(json.application.title, is("Some Title"));

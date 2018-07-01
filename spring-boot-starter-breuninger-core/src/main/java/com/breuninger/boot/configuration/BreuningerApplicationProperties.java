@@ -18,8 +18,7 @@ public class BreuningerApplicationProperties {
   private Management management = new Management("/internal");
 
   public static BreuningerApplicationProperties breuningerApplicationProperties(final String title, final String group,
-                                                                                final String environment,
-                                                                                final String description) {
+                                                                                final String environment, final String description) {
     final var breuningerApplicationProperties = new BreuningerApplicationProperties();
     breuningerApplicationProperties.setTitle(title);
     breuningerApplicationProperties.setGroup(group);
@@ -30,8 +29,7 @@ public class BreuningerApplicationProperties {
   }
 
   public static BreuningerApplicationProperties breuningerApplicationProperties(final String title, final String group,
-                                                                                final String environment,
-                                                                                final String description,
+                                                                                final String environment, final String description,
                                                                                 final Management management) {
     final var breuningerApplicationProperties = new BreuningerApplicationProperties();
     breuningerApplicationProperties.setTitle(title);

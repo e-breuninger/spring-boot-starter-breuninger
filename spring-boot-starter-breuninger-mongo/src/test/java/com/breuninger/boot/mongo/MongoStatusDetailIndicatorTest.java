@@ -33,43 +33,43 @@ public class MongoStatusDetailIndicatorTest {
 
   @Test
   public void shouldReturnOKStatus() {
-    //given
+    // given
     when(mongoDatabase.runCommand(new Document().append("ping", 1))).thenReturn(new Document().append("ok", 1.0d));
-    //when
+    // when
     final var statusDetail = testee.statusDetail();
-    //then
+    // then
     assertThat(statusDetail.getStatus(), is(OK));
   }
 
   @Test
   public void shouldReturnErrorStatusWhenDatabaseDoesntReturnOKForPing() {
-    //given
+    // given
     when(mongoDatabase.runCommand(new Document().append("ping", 1))).thenReturn(new Document().append("error", 1.0d));
-    //when
+    // when
     final var statusDetail = testee.statusDetail();
-    //then
+    // then
     assertThat(statusDetail.getStatus(), is(ERROR));
     assertThat(statusDetail.getMessage(), containsString("Mongo database unreachable or ping command failed."));
   }
 
   @Test
   public void shouldReturnErrorStatusWhenDatabaseTimesOut() {
-    //given
+    // given
     when(mongoDatabase.runCommand(new Document().append("ping", 1))).thenThrow(new MongoTimeoutException("Timeout"));
-    //when
+    // when
     final var statusDetail = testee.statusDetail();
-    //then
+    // then
     assertThat(statusDetail.getStatus(), is(ERROR));
     assertThat(statusDetail.getMessage(), containsString("Mongo database check ran into timeout"));
   }
 
   @Test
   public void shouldReturnErrorStatusOnAnyException() {
-    //given
+    // given
     when(mongoDatabase.runCommand(new Document().append("ping", 1))).thenThrow(new MongoException("SomeException"));
-    //when
+    // when
     final var statusDetail = testee.statusDetail();
-    //then
+    // then
     assertThat(statusDetail.getStatus(), is(ERROR));
     assertThat(statusDetail.getMessage(), containsString("Exception during database check"));
   }

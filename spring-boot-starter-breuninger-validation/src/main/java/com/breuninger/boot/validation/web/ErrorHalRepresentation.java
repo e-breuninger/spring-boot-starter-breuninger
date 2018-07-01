@@ -28,7 +28,7 @@ public class ErrorHalRepresentation extends HalRepresentation {
   private final Map<String, List<Map<String, String>>> errors;
 
   private ErrorHalRepresentation(final Builder builder) {
-    super(linkingTo(profile(PROFILE_ERROR)));
+    super(linkingTo().single(profile(PROFILE_ERROR)).build());
     errors = builder.errors;
     errorMessage = builder.errorMessage;
   }

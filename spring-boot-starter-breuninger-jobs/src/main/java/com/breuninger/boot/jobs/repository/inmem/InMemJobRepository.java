@@ -112,7 +112,7 @@ public class InMemJobRepository implements JobRepository {
   @Override
   public void appendMessage(final String jobId, final JobMessage jobMessage) {
     final var jobInfo = jobs.get(jobId);
-    jobs.replace(jobId, jobInfo.copy().addMessage(jobMessage).build());
+    jobs.replace(jobId, jobInfo.copy().setLastUpdated(jobMessage.getTimestamp()).addMessage(jobMessage).build());
   }
 
   @Override

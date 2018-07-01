@@ -77,6 +77,16 @@ public class DatasourceDependencyBuilder {
     return kafkaDependency(asList(datasources));
   }
 
+  public static DatasourceDependencyBuilder kinesisDependency(final Datasource... datasources) {
+    return kinesisDependency(asList(datasources));
+  }
+
+  public static DatasourceDependencyBuilder kinesisDependency(final List<Datasource> datasources) {
+    return new DatasourceDependencyBuilder().withDatasources(datasources)
+      .withType(DatasourceDependency.TYPE_STREAM)
+      .withSubtype(DatasourceDependency.SUBTYPE_KINESIS);
+  }
+
   public static DatasourceDependencyBuilder datasourceDependency(final List<Datasource> datasources) {
     return new DatasourceDependencyBuilder().withDatasources(datasources);
   }

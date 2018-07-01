@@ -143,7 +143,7 @@ public class JobRunnerTest {
     // when
     jobRunner.run();
 
-    //then
+    // then
     final var pingRunnableArgumentCaptor = forClass(Runnable.class);
     verify(executor).scheduleAtFixedRate(pingRunnableArgumentCaptor.capture(), eq(20L), eq(20L), eq(SECONDS));
 
@@ -161,7 +161,7 @@ public class JobRunnerTest {
     // when
     jobRunner.run();
 
-    //then
+    // then
     verify(scheduledJob).cancel(false);
   }
 

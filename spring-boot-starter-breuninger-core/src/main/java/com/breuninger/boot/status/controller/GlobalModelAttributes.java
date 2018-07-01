@@ -1,6 +1,5 @@
 package com.breuninger.boot.status.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointProperties;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;

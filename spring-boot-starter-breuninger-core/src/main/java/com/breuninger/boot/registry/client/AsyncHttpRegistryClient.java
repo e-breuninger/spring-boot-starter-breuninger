@@ -13,9 +13,6 @@ import javax.annotation.PostConstruct;
 import org.asynchttpclient.AsyncCompletionHandler;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.Response;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -23,7 +20,6 @@ import org.springframework.stereotype.Component;
 
 import com.breuninger.boot.annotations.Beta;
 import com.breuninger.boot.configuration.BreuningerApplicationProperties;
-
 import com.breuninger.boot.registry.configuration.ServiceRegistryProperties;
 import com.breuninger.boot.status.domain.ApplicationInfo;
 
@@ -57,7 +53,8 @@ public class AsyncHttpRegistryClient implements RegistryClient {
   public void postConstruct() {
     if (serviceRegistryProperties.isEnabled()) {
       if (validateConfig()) {
-        LOG.info("Scheduling registration at Breuninger JobTrigger every '{}' minutes.", serviceRegistryProperties.getRefreshAfter());
+        LOG.info("Scheduling registration at Breuninger JobTrigger every '{}' minutes.",
+          serviceRegistryProperties.getRefreshAfter());
         scheduledExecutorService.scheduleWithFixedDelay(this::registerService, 0, serviceRegistryProperties.getRefreshAfter(),
           MINUTES);
         isRunning = true;
@@ -83,9 +80,9 @@ public class AsyncHttpRegistryClient implements RegistryClient {
           .setHeader("Accept", "application/vnd.breuninger.breuninger.links+json")
           .setBody("{\n" + "   \"groups\":[\"" + breuningerApplicationProperties.getGroup() + "\"],\n" + "   \"expire\":" +
             serviceRegistryProperties.getExpireAfter() + ",\n" + "   \"links\":[{\n" +
-            "      \"rel\":\"http://github.com/e-breuninger/spring-boot-starter-breuninger/link-relations/microservice\",\n" + "      \"href\" : \"" +
-            serviceRegistryProperties.getService() + "\",\n" + "      \"title\":\"" + applicationInfo.title + "\"\n" +
-            "   }]  \n" + "}")
+            "      \"rel\":\"http://github.com/e-breuninger/spring-boot-starter-breuninger/link-relations/microservice\",\n" +
+            "      \"href\" : \"" + serviceRegistryProperties.getService() + "\",\n" + "      \"title\":\"" +
+            applicationInfo.title + "\"\n" + "   }]  \n" + "}")
           .execute(new AsyncCompletionHandler<Integer>() {
             @Override
             public void onThrowable(final Throwable t) {

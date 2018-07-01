@@ -38,10 +38,10 @@ public class JobMessageLogAppenderTest {
   public void shouldNotLogWhenNoJobIdInMDC() {
     final var loggingEvent = new LoggingEvent();
 
-    //when
+    // when
     jobEventAppender.append(loggingEvent);
 
-    //then
+    // then
     verifyZeroInteractions(jobService);
   }
 

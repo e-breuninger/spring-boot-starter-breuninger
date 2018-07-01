@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -30,7 +31,7 @@ public class ExampleMetricsSmokeTest {
 
   @Test
   public void shouldHaveStatusEndpoint() {
-    final var response = restTemplate.getForEntity("/internal/status.json", String.class);
+    final var response = restTemplate.getForEntity("/internal/status", String.class);
     assertThat(response.getStatusCodeValue()).isEqualTo(200);
     assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON_UTF8);
     assertThat(response.getBody()).startsWith("{");

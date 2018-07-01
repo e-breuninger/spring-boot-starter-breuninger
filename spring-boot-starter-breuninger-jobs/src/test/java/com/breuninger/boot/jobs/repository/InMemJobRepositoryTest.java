@@ -252,7 +252,7 @@ public class InMemJobRepositoryTest {
   @Test
   public void shouldUpdateJobStatus() {
     // given
-    final var foo = jobInfo("http://localhost/foo", "T_FOO");
+    final var foo = jobInfo("http://localhost/foo", "T_FOO"); //default jobStatus is 'OK'
     repository.createOrUpdate(foo);
 
     // when

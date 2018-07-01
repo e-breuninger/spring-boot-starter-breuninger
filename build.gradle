@@ -29,7 +29,7 @@ apply from: "${rootDir}/gradle/root/nexusstaging.gradle"
 subprojects {
   apply plugin: 'project-report'
 
-  version = '2.0.0'
+  version = '2.0.0-m2-SNAPSHOT'
   group = 'com.breuninger.boot'
 
   repositories {
