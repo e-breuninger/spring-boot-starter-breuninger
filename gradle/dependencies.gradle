@@ -6,7 +6,7 @@ ext {
     jcip_annotations                 : '1.0',
     logback_classic                  : '1.2.3',
     javax_servlet_api                : '3.1.0',
-    togglz                           : '2.6.0.Final',
+    togglz                           : '2.6.1.Final',
     mongodb_driver                   : '3.8.0',
     mongodb_reactive_driver          : '1.9.0',
     caffeine                         : '2.5.6',
