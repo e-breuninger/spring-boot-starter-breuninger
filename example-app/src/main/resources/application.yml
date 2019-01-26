@@ -1,0 +1,13 @@
+server.port: 9090
+
+spring:
+  boot.admin.client.url: "http://localhost:8080"
+  data.mongodb.database: "kotlin-spring-poc"
+
+management.endpoints.web.exposure.include: "*"
+
+togglz:
+  mongo.enabled: true
+  cache:
+    time-to-live: 30
+    time-unit: seconds
