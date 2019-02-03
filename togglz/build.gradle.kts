@@ -9,6 +9,7 @@ dependencies {
 
   compile(libraries["togglz-spring-core"] as String)
 
+  compileOnly(libraries["spring-boot-starter-actuator"] as String)
   compileOnly(libraries["spring-boot-starter-data-mongodb-reactive"] as String)
 
   annotationProcessor(libraries["spring-boot-configuration-processor"] as String)

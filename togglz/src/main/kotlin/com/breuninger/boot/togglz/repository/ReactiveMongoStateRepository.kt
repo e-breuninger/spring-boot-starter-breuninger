@@ -1,5 +1,6 @@
 package com.breuninger.boot.togglz.repository
 
+import com.breuninger.boot.togglz.domain.TogglzFeature
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.stereotype.Repository
@@ -12,11 +13,10 @@ import org.togglz.core.repository.StateRepository
 class MongoStateRepositoryImpl(val mongoTemplate: MongoTemplate) : StateRepository {
 
   override fun getFeatureState(feature: Feature): FeatureState? {
-    return mongoTemplate.findById(feature.name(), MongoFeatureState::class.java)?.toFeatureState(feature)
+    return mongoTemplate.findById(feature.name(), TogglzFeature::class.java)?.toFeatureState(feature)
   }
 
   override fun setFeatureState(featureState: FeatureState) {
-    mongoTemplate.save(
-      MongoFeatureState(featureState.feature.name(), featureState.isEnabled, featureState.strategyId, featureState.parameterMap))
+    mongoTemplate.save(TogglzFeature(featureState.feature, featureState))
   }
 }
