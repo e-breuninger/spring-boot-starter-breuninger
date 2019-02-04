@@ -16,6 +16,7 @@ dependencies {
   compile(libraries["spring-boot-starter-actuator"] as String)
   compile(libraries["spring-boot-starter-webflux"] as String)
   compile(libraries["spring-boot-starter-data-mongodb-reactive"] as String)
+  compile(project(":validation"))
   compile(project(":togglz"))
 
   compile(libraries["reactor-kafka"] as String)

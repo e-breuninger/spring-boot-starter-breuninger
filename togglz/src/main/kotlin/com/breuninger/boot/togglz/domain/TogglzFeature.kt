@@ -6,11 +6,12 @@ import org.togglz.core.Feature
 import org.togglz.core.repository.FeatureState
 
 @Document(collection = "togglz")
-data class TogglzFeature(@Id val feature: String,
-                         val enabled: Boolean,
-                         val strategyId: String?,
-                         val parameters: Map<String, String>)
-  : Comparable<TogglzFeature> {
+data class TogglzFeature(
+  @Id val feature: String,
+  val enabled: Boolean,
+  val strategyId: String?,
+  val parameters: Map<String, String>
+) : Comparable<TogglzFeature> {
 
   constructor(feature: Feature, featureState: FeatureState)
     : this(feature.name(), featureState.isEnabled, featureState.strategyId, featureState.parameterMap)
@@ -26,6 +27,6 @@ data class TogglzFeature(@Id val feature: String,
   }
 
   override fun compareTo(other: TogglzFeature): Int {
-    return feature.compareTo(other.feature);
+    return feature.compareTo(other.feature)
   }
 }
