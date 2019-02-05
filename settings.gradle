@@ -1,8 +1,9 @@
 rootProject.name = 'spring-boot-starter-breuninger'
 
-include "jobs"
-include "togglz"
+include "core"
 include "datadog"
-include "validation"
 include "example-admin"
 include "example-app"
+include "jobs"
+include "togglz"
+include "validation"
