@@ -1,6 +1,7 @@
 package com.breuninger.boot.example.app.products
 
 import com.breuninger.boot.example.app.Feature
+import com.breuninger.boot.validation.web.BindExceptionValidator
 import io.micrometer.core.annotation.Timed
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -9,11 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import javax.validation.Valid
 
 @RestController
 @RequestMapping("/products")
-class ProductsRestController {
+class ProductsRestController(private val validator: BindExceptionValidator) {
 
   @Timed("rest.products.findAll")
   @GetMapping
@@ -25,5 +25,9 @@ class ProductsRestController {
 
   @Timed("rest.products.save")
   @PostMapping
-  fun save(@RequestBody @Valid product: Product) = Mono.just(product)
+  fun save(@RequestBody body: Product): Mono<Product> {
+    val product = body.slugifyAndSanatize()
+    validator.validateAndThrowException(product)
+    return Mono.just(product)
+  }
 }
