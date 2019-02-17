@@ -1,6 +1,7 @@
 package com.breuninger.boot.togglz.autoconfigure
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -14,13 +15,12 @@ import org.togglz.core.spi.FeatureProvider
 
 @Configuration
 @EnableConfigurationProperties(TogglzProperties::class)
+@ConditionalOnProperty(prefix = "breuni.togglz", name = ["enabled"], havingValue = "true")
 class TogglzAutoConfiguration {
 
   @Bean
-  @ConditionalOnMissingBean
-  fun stateRepository(): StateRepository {
-    return InMemoryStateRepository()
-  }
+  @ConditionalOnMissingBean(StateRepository::class)
+  fun stateRepository(): StateRepository = InMemoryStateRepository()
 
   @Bean
   fun featureManager(togglzProperties: TogglzProperties, featureProvider: FeatureProvider,

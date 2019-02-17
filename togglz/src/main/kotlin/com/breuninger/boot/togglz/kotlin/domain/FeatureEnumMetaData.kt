@@ -3,7 +3,6 @@ package com.breuninger.boot.togglz.kotlin.domain
 import com.breuninger.boot.togglz.kotlin.util.EnumAnnotations
 import org.togglz.core.Feature
 import org.togglz.core.annotation.DefaultActivationStrategy
-import org.togglz.core.metadata.FeatureGroup
 import org.togglz.core.metadata.FeatureMetaData
 import org.togglz.core.metadata.enums.AnnotationFeatureGroup
 import org.togglz.core.repository.FeatureState
@@ -28,19 +27,11 @@ class FeatureEnumMetaData(featureEnum: Enum<*>, feature: Feature) : FeatureMetaD
     }
   }
 
-  override fun getLabel(): String {
-    return label
-  }
+  override fun getLabel() = label
 
-  override fun getDefaultFeatureState(): FeatureState {
-    return defaultFeatureState.copy()
-  }
+  override fun getDefaultFeatureState(): FeatureState = defaultFeatureState.copy()
 
-  override fun getGroups(): Set<FeatureGroup> {
-    return groups
-  }
+  override fun getGroups() = groups
 
-  override fun getAttributes(): Map<String, String> {
-    return unmodifiableMap(attributes)
-  }
+  override fun getAttributes(): Map<String, String> = unmodifiableMap(attributes)
 }

@@ -11,7 +11,6 @@ data class Product(
   @field:Length(min = 5, max = 10)
   val name: String
 ) {
-  fun slugifyAndSanatize(): Product {
-    return Product(SlugificationUtil.slugify(SanitizingUtil.sanitize(name)))
-  }
+
+  fun slugifyAndSanatize() = Product(SlugificationUtil.slugify(SanitizingUtil.sanitize(name)))
 }

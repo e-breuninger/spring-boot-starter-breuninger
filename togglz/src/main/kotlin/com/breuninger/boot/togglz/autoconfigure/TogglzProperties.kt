@@ -4,9 +4,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.validation.annotation.Validated
 import java.util.concurrent.TimeUnit
 
-@ConfigurationProperties(prefix = "togglz", ignoreUnknownFields = true)
+@ConfigurationProperties(prefix = "breuni.togglz")
 @Validated
 class TogglzProperties {
+
+  var enabled = false
 
   val cache = Cache()
 
@@ -19,6 +21,7 @@ class TogglzProperties {
   val mongo = Mongo()
 
   class Mongo {
+
     var enabled = false
   }
 }

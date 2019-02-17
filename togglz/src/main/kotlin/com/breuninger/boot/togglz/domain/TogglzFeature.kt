@@ -26,7 +26,5 @@ data class TogglzFeature(
     return featureState
   }
 
-  override fun compareTo(other: TogglzFeature): Int {
-    return feature.compareTo(other.feature)
-  }
+  override fun compareTo(other: TogglzFeature) = feature.compareTo(other.feature)
 }

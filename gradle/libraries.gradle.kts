@@ -6,7 +6,7 @@ val coreVersions = extra["coreVersions"] as Map<*, *>
 val libraryVersions = mapOf(
   "jackson-module-kotlin" to "2.9.8",
 
-  "spring-boot-admin-starter" to "2.1.2",
+  "spring-boot-admin-starter" to "2.1.3",
 
   "edison-hal" to "2.0.2",
 
@@ -14,7 +14,6 @@ val libraryVersions = mapOf(
 
   "reactor-kafka" to "1.1.0.RELEASE",
 
-  "hibernate-validator" to "6.0.14.Final",
   "unbescape" to "1.1.6.RELEASE",
   "owasp-java-html-sanitizer" to "20181114.1",
   "slugify" to "2.3"
@@ -26,6 +25,7 @@ val libraries = mapOf(
   "jackson-module-kotlin" to "com.fasterxml.jackson.module:jackson-module-kotlin:${libraryVersions["jackson-module-kotlin"]}",
 
   "spring-core" to "org.springframework:spring-core:${coreVersions["spring"]}",
+  "spring-boot-starter-aop" to "org.springframework.boot:spring-boot-starter-aop:${coreVersions["spring-boot"]}",
   "spring-boot-starter-actuator" to "org.springframework.boot:spring-boot-starter-actuator:${coreVersions["spring-boot"]}",
   "spring-boot-starter-webflux" to "org.springframework.boot:spring-boot-starter-webflux:${coreVersions["spring-boot"]}",
   "spring-boot-starter-data-mongodb-reactive" to "org.springframework.boot:spring-boot-starter-data-mongodb-reactive:${coreVersions["spring-boot"]}",
@@ -39,7 +39,6 @@ val libraries = mapOf(
 
   "reactor-kafka" to "io.projectreactor.kafka:reactor-kafka:${libraryVersions["reactor-kafka"]}",
 
-  "hibernate-validator" to "org.hibernate:hibernate-validator:${libraryVersions["hibernate-validator"]}",
   "unbescape" to "org.unbescape:unbescape:${libraryVersions["unbescape"]}",
   "owasp-java-html-sanitizer" to "com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:${libraryVersions["owasp-java-html-sanitizer"]}",
   "slugify" to "com.github.slugify:slugify:${libraryVersions["slugify"]}",

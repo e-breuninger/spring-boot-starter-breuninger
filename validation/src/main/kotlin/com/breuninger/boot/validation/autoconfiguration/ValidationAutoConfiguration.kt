@@ -5,6 +5,7 @@ import com.breuninger.boot.validation.web.GlobalErrorWebExceptionHandler
 import com.fasterxml.jackson.annotation.JsonInclude.Include.NON_ABSENT
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.ObjectProvider
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.autoconfigure.web.ResourceProperties
 import org.springframework.boot.autoconfigure.web.ServerProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -20,6 +21,7 @@ import java.util.stream.Collectors.toList
 
 @Configuration
 @EnableConfigurationProperties(ValidationProperties::class)
+@ConditionalOnProperty(prefix = "breuni.validation", name = ["enabled"], havingValue = "true")
 class ValidationAutoConfiguration {
 
   @Bean

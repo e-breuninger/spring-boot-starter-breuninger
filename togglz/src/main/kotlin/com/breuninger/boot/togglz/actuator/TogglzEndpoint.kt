@@ -11,14 +11,13 @@ import org.togglz.core.manager.FeatureManager
 class TogglzEndpoint(private val featureManager: FeatureManager) {
 
   @ReadOperation
-  fun getAllFeatures(): List<TogglzFeature> {
-    return featureManager.features.map {
-      val featureState = featureManager.getFeatureState(it)
-      TogglzFeature(it, featureState)
-    }.sorted()
-  }
+  fun getAllFeatures() = featureManager.features.map {
+    val featureState = featureManager.getFeatureState(it)
+    TogglzFeature(it, featureState)
+  }.sorted()
 
   @WriteOperation
+  @Throws(IllegalArgumentException::class)
   fun setFeatureState(@Selector featureName: String, enabled: Boolean): TogglzFeature {
     val feature = featureManager.features.find { it.name() == featureName }
       ?: throw IllegalArgumentException("Could not find feature with name $featureName")

@@ -4,7 +4,5 @@ import org.togglz.core.Feature
 
 data class FeatureEnum(private val featureEnum: Enum<*>) : Feature {
 
-  override fun name(): String {
-    return featureEnum.name
-  }
+  override fun name() = featureEnum.name
 }

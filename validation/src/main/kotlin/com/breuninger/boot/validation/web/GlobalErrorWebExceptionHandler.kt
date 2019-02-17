@@ -25,7 +25,6 @@ class GlobalErrorWebExceptionHandler(
     return ServerResponse.status(httpStatus)
       .contentType(MediaType.parseMediaType(validationProperties.errorMediaType))
       .syncBody(getWithoutStatus(errorAttributes))
-      .doOnNext { logError(request, httpStatus) }
   }
 
   private fun getWithoutStatus(errorAttributes: Map<String, Any>): Map<String, Any> {

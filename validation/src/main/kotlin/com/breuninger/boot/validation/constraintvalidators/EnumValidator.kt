@@ -16,15 +16,13 @@ class EnumValidator : ConstraintValidator<IsEnum, String> {
     allowNull = annotation.allowNull
   }
 
-  override fun isValid(value: String?, context: ConstraintValidatorContext): Boolean {
-    return value?.let {
-      availableEnumNames.any {
-        return if (ignoreCase) {
-          it.equals(value, ignoreCase = true)
-        } else {
-          it == value
-        }
+  override fun isValid(value: String?, context: ConstraintValidatorContext) = value?.let {
+    availableEnumNames.any {
+      return if (ignoreCase) {
+        it.equals(value, ignoreCase = true)
+      } else {
+        it == value
       }
-    } ?: allowNull
-  }
+    }
+  } ?: allowNull
 }

@@ -56,26 +56,22 @@ class GlobalErrorAttributes(private val objectMapper: ObjectMapper) : DefaultErr
     fieldValidationErrors[key] = validationErrors
   }
 
-  private fun determineHttpStatus(error: Throwable): HttpStatus {
+  private fun determineHttpStatus(error: Throwable) =
     if (error is ResponseStatusException) {
-      return error.status
+      error.status
+    } else {
+      val responseStatus = AnnotatedElementUtils.findMergedAnnotation(error.javaClass, ResponseStatus::class.java)
+      responseStatus?.code ?: HttpStatus.INTERNAL_SERVER_ERROR
     }
-    val responseStatus = AnnotatedElementUtils.findMergedAnnotation(error.javaClass, ResponseStatus::class.java)
-    return responseStatus?.code ?: HttpStatus.INTERNAL_SERVER_ERROR
+
+  private fun determineMessage(error: Throwable) = when (error) {
+    is WebExchangeBindException -> error.reason
+    is ResponseStatusException -> error.reason
+    else -> {
+      val responseStatus = AnnotatedElementUtils.findMergedAnnotation(error.javaClass, ResponseStatus::class.java)
+      responseStatus?.reason ?: error.message
+    }
   }
 
-  private fun determineMessage(error: Throwable): String? {
-    when (error) {
-      is WebExchangeBindException -> return error.reason
-      is ResponseStatusException -> return error.reason
-    }
-    val responseStatus = AnnotatedElementUtils.findMergedAnnotation(error.javaClass, ResponseStatus::class.java)
-    return responseStatus?.reason ?: error.message
-  }
-
-  private fun determineException(error: Throwable): Throwable {
-    return if (error is ResponseStatusException) {
-      error.cause ?: error
-    } else error
-  }
+  private fun determineException(error: Throwable) = if (error is ResponseStatusException) error.cause ?: error else error
 }

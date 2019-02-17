@@ -13,12 +13,10 @@ dependencies {
   compile(libraries["jackson-module-kotlin"] as String)
 
   compile(libraries["spring-boot-admin-starter-client"] as String)
-  compile(libraries["spring-boot-starter-actuator"] as String)
-  compile(libraries["spring-boot-starter-webflux"] as String)
-  compile(libraries["spring-boot-starter-data-mongodb-reactive"] as String)
   compile(project(":core"))
-  compile(project(":validation"))
+  compile(project(":jobs"))
   compile(project(":togglz"))
+  compile(project(":validation"))
 
   compile(libraries["reactor-kafka"] as String)
 

@@ -4,19 +4,8 @@
   "description": "Collection of independent libraries on top of Spring Boot to provide a faster setup of jvm microservices.",
   "scripts": {
     "dependency-update": "npm-check -E -u",
-    "precommit": "lint-staged",
     "cz": "git-cz",
     "commitmsg": "commitlint -e"
-  },
-  "lint-staged": {
-    "{**/,}*.{js,jsx}": [
-      "eslint --fix",
-      "git add"
-    ],
-    "{**/,}*.{css,scss}": [
-      "stylelint --fix",
-      "git add"
-    ]
   },
   "config": {
     "commitizen": {

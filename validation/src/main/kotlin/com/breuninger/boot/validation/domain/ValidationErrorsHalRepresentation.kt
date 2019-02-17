@@ -9,4 +9,5 @@ data class ValidationErrorsHalRepresentation(
   val status: Int,
   val message: String?,
   val errors: Map<String, List<ValidationError>>
-) : HalRepresentation(linkingTo().array(profile("http://spec.breuninger.com/profiles/error")).build())
+  // TODO add spec profile url
+) : HalRepresentation(linkingTo().array(profile("http://specs.breuninger.de/profiles/error")).build())

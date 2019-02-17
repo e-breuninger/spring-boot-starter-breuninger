@@ -7,14 +7,13 @@ import javax.validation.ConstraintValidatorContext
 
 class SafeIdValidator : ConstraintValidator<SafeId, String> {
 
+  companion object {
+
+    private val SAFE_ID_PATTERN = Pattern.compile("[a-zA-Z0-9\\-_]*")
+  }
+
   override fun initialize(safeId: SafeId?) {
   }
 
-  override fun isValid(id: String?, context: ConstraintValidatorContext): Boolean {
-    return id?.let { safeIdPattern.matcher(id).matches() } ?: true
-  }
-
-  companion object {
-    private val safeIdPattern = Pattern.compile("[a-zA-Z0-9\\-_]*")
-  }
+  override fun isValid(id: String?, context: ConstraintValidatorContext) = id?.let { SAFE_ID_PATTERN.matcher(it).matches() } ?: true
 }

@@ -4,7 +4,7 @@ project.apply {
 val coreVersions = extra["coreVersions"] as Map<*, *>
 
 val gradlePluginVersions = mapOf(
-  "versions" to "0.20.0"
+  "versions" to "0.21.0"
 )
 
 val gradlePlugins = mapOf(

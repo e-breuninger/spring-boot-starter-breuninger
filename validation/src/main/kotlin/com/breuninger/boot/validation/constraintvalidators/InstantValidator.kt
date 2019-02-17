@@ -11,14 +11,12 @@ class InstantValidator : ConstraintValidator<IsInstant, String> {
   override fun initialize(constraintAnnotation: IsInstant?) {
   }
 
-  override fun isValid(value: String?, context: ConstraintValidatorContext): Boolean {
-    return value?.let {
-      return try {
-        Instant.parse(value)
-        true
-      } catch (dateTimeParseException: DateTimeParseException) {
-        false
-      }
-    } ?: true
-  }
+  override fun isValid(value: String?, context: ConstraintValidatorContext) = value?.let {
+    return try {
+      Instant.parse(it)
+      true
+    } catch (dateTimeParseException: DateTimeParseException) {
+      false
+    }
+  } ?: true
 }

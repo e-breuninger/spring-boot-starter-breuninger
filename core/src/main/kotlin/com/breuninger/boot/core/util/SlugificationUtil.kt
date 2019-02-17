@@ -6,7 +6,5 @@ object SlugificationUtil {
 
   private val slugify = Slugify()
 
-  fun slugify(text: String): String {
-    return slugify.slugify(text)
-  }
+  fun slugify(text: String): String = slugify.slugify(text)
 }

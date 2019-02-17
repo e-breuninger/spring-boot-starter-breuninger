@@ -3,7 +3,6 @@ package com.breuninger.boot.togglz.kotlin
 import com.breuninger.boot.togglz.kotlin.domain.FeatureEnum
 import com.breuninger.boot.togglz.kotlin.domain.FeatureEnumMetaData
 import org.togglz.core.Feature
-import org.togglz.core.metadata.FeatureMetaData
 import org.togglz.core.spi.FeatureProvider
 import java.util.Collections.unmodifiableSet
 
@@ -16,11 +15,7 @@ class EnumClassFeatureProvider(featureClass: Class<out Enum<*>>) : FeatureProvid
     it.name to FeatureEnumMetaData(it, FeatureEnum(it))
   }.toMap()
 
-  override fun getFeatures(): Set<Feature> {
-    return unmodifiableSet(HashSet(features.values))
-  }
+  override fun getFeatures(): Set<Feature> = unmodifiableSet(HashSet(features.values))
 
-  override fun getMetaData(feature: Feature): FeatureMetaData? {
-    return metaData[feature.name()]
-  }
+  override fun getMetaData(feature: Feature) = metaData[feature.name()]
 }
