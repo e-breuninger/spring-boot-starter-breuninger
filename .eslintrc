@@ -279,6 +279,7 @@
     "newline-per-chained-call": "error",
     "no-alert": "off",
     "no-array-constructor": "error",
+    "no-async-promise-executor": "error",
     "no-await-in-loop": "error",
     "no-bitwise": "error",
     "no-buffer-constructor": "error",
@@ -376,6 +377,7 @@
         "ignore": []
       }
     ],
+    "no-misleading-character-class": "error",
     "no-mixed-operators": "off",
     "no-mixed-requires": [
       "error",
@@ -477,6 +479,7 @@
       "nofunc"
     ],
     "no-useless-call": "error",
+    "no-useless-catch": "error",
     "no-useless-computed-key": "error",
     "no-useless-concat": "error",
     "no-useless-constructor": "error",
@@ -540,6 +543,7 @@
         "enforceForRenamedProperties": false
       }
     ],
+    "prefer-named-capture-group": "error",
     "prefer-numeric-literals": "error",
     "prefer-object-spread": "error",
     "prefer-promise-reject-errors": [
@@ -569,7 +573,9 @@
       "as-needed"
     ],
     "require-await": "error",
+    "require-atomic-updates": "error",
     "require-jsdoc": "off",
+    "require-unicode-regexp": "error",
     "require-yield": "error",
     "rest-spread-spacing": [
       "error",
