@@ -16,7 +16,7 @@ management:
       api-key: "YOUR_KEY"
     tags:
       region: "us-east-1"
-      stack: prod
+      stack: "prod"
 
 breuni:
   jobs:

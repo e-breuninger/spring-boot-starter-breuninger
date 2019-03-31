@@ -7,7 +7,5 @@ dependencies {
   compile(libraries["kotlin-stdlib-jre8"] as String)
   compile(libraries["kotlin-reflect"] as String)
 
-  compile(libraries["edison-hal"] as String)
-
   compile(libraries["spring-boot-starter-webflux"] as String)
 }

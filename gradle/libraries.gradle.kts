@@ -8,8 +8,6 @@ val libraryVersions = mapOf(
 
   "spring-boot-admin-starter" to "2.1.3",
 
-  "edison-hal" to "2.0.2",
-
   "togglz" to "2.6.1.Final",
 
   "reactor-kafka" to "1.1.0.RELEASE",
@@ -32,8 +30,6 @@ val libraries = mapOf(
 
   "spring-boot-admin-starter-server" to "de.codecentric:spring-boot-admin-starter-server:${libraryVersions["spring-boot-admin-starter"]}",
   "spring-boot-admin-starter-client" to "de.codecentric:spring-boot-admin-starter-client:${libraryVersions["spring-boot-admin-starter"]}",
-
-  "edison-hal" to "de.otto.edison:edison-hal:${libraryVersions["edison-hal"]}",
 
   "togglz-spring-core" to "org.togglz:togglz-spring-core:${libraryVersions["togglz"]}",
 

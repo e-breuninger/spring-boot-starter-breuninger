@@ -1,7 +1,7 @@
 package com.breuninger.boot.validation.web
 
 import com.breuninger.boot.validation.domain.ValidationError
-import com.breuninger.boot.validation.domain.ValidationErrorsHalRepresentation
+import com.breuninger.boot.validation.domain.ValidationErrors
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.boot.web.reactive.error.DefaultErrorAttributes
@@ -20,7 +20,7 @@ class GlobalErrorAttributes(private val objectMapper: ObjectMapper) : DefaultErr
   override fun getErrorAttributes(request: ServerRequest, includeStackTrace: Boolean): Map<String, Any> {
     val error = getError(request)
     val errorStatus = determineHttpStatus(error)
-    val validationErrorsHalRepresentation = ValidationErrorsHalRepresentation(
+    val validationErrorsHalRepresentation = ValidationErrors(
       request.path(),
       errorStatus.value(),
       determineMessage(error),

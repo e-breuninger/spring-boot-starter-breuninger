@@ -11,6 +11,4 @@ class ValidationProperties {
   var enabled = false
 
   var errorMediaType = MediaType.APPLICATION_JSON_UTF8_VALUE
-
-  // TODO add spec profile url
 }
