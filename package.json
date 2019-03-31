@@ -1,6 +1,6 @@
 {
   "name": "spring-boot-starter-breuninger",
-  "version": "2.1.2.RELEASE",
+  "version": "2.1.2",
   "description": "Collection of independent libraries on top of Spring Boot to provide a faster setup of jvm microservices.",
   "scripts": {
     "dependency-update": "npm-check -E -u",
@@ -9,7 +9,7 @@
   },
   "config": {
     "commitizen": {
-      "path": "cz-conventional-changelog"
+      "path": "@commitlint/prompt"
     }
   },
   "repository": {
@@ -17,12 +17,12 @@
     "url": "git@github.com:e-breuninger/spring-boot-starter-breuninger.git"
   },
   "devDependencies": {
-    "@commitlint/cli": "7.4.0",
-    "commitizen": "3.0.5",
-    "cz-conventional-changelog": "2.1.0",
-    "eslint": "5.12.1",
+    "@commitlint/cli": "7.5.2",
+    "@commitlint/prompt": "7.5.0",
+    "commitizen": "3.0.7",
+    "eslint": "5.16.0",
     "husky": "1.3.1",
-    "lint-staged": "8.1.1",
+    "lint-staged": "8.1.5",
     "npm-check": "5.9.0",
     "stylelint": "9.10.1"
   },

@@ -32,6 +32,10 @@ module.exports = {
       'always',
       0
     ],
+    'header-full-stop': [
+      2,
+      'never'
+    ],
     'header-max-length': [
       2,
       'always',
@@ -42,10 +46,26 @@ module.exports = {
       'always',
       0
     ],
+    'scope-enum': [
+      2,
+      'always',
+      [
+        'core',
+        'example-admin',
+        'example-app',
+        'jobs',
+        'togglz',
+        'validation'
+      ]
+    ],
     'scope-case': [
       2,
       'always',
       'lower-case'
+    ],
+    'scope-empty': [
+      2,
+      'never'
     ],
     'scope-max-length': [
       2,
@@ -74,12 +94,29 @@ module.exports = {
     'subject-max-length': [
       2,
       'always',
-      Infinity
+      50
     ],
     'subject-min-length': [
       2,
       'always',
       0
+    ],
+    'type-enum': [
+      2,
+      'always',
+      [
+        'build',
+        'ci',
+        'chore',
+        'docs',
+        'feat',
+        'fix',
+        'perf',
+        'refactor',
+        'revert',
+        'style',
+        'test'
+      ]
     ],
     'type-case': [
       2,
@@ -99,22 +136,6 @@ module.exports = {
       2,
       'always',
       0
-    ],
-    'type-enum': [
-      2,
-      'always',
-      [
-        'build',
-        'ci',
-        'docs',
-        'feat',
-        'fix',
-        'perf',
-        'refactor',
-        'revert',
-        'style',
-        'test'
-      ]
     ]
   }
 };
