@@ -54,6 +54,7 @@ module.exports = {
         'example-admin',
         'example-app',
         'jobs',
+        'security',
         'togglz',
         'validation'
       ]
