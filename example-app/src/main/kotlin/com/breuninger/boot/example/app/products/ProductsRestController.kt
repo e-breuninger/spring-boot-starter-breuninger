@@ -2,6 +2,7 @@ package com.breuninger.boot.example.app.products
 
 import com.breuninger.boot.example.app.Feature
 import com.breuninger.boot.validation.web.BindExceptionValidator
+import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -14,7 +15,7 @@ import reactor.core.publisher.Mono
 @RequestMapping("/products")
 class ProductsRestController(private val validator: BindExceptionValidator) {
 
-  @GetMapping
+  @GetMapping(produces = [APPLICATION_JSON_VALUE])
   fun findAll() =
     if (Feature.REST_PRODUCTS_FINDALL.isActive())
       Flux.just(Product("Käse"), Product("Schinken"), Product("Brot"))

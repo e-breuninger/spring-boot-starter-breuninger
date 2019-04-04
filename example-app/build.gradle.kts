@@ -20,6 +20,8 @@ dependencies {
 
   compile(libraries["reactor-kafka"] as String)
 
+  compile(libraries["spring-boot-starter-thymeleaf"] as String)
+
   compile(libraries["spring-boot-devtools"] as String)
   compileOnly(libraries["spring-context-indexer"] as String)
 }
