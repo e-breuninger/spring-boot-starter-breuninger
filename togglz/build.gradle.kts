@@ -6,9 +6,12 @@ val libraries = extra["libraries"] as Map<*, *>
 dependencies {
   compile(libraries["kotlin-stdlib-jre8"] as String)
   compile(libraries["kotlin-reflect"] as String)
+  compile(libraries["jackson-module-kotlin"] as String)
 
   compile(libraries["togglz-spring-core"] as String)
-
+  
+  compile(libraries["spring-boot-starter-webflux"] as String)
+  compile(libraries["spring-boot-starter-thymeleaf"] as String)
   compile(libraries["spring-boot-starter-actuator"] as String)
   compile(libraries["spring-boot-starter-data-mongodb-reactive"] as String)
 
