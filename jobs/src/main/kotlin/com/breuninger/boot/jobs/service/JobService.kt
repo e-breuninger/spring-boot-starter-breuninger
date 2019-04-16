@@ -48,6 +48,10 @@ class JobService(private val jobRepository: JobRepository, private val mutexGrou
 
   fun updateState(jobId: JobId, key: String, value: String?) = jobRepository.updateState(jobId, key, value)
 
+  fun findAllJobs() = jobRepository.findAllJobs()
+
+  fun findOne(jobId: JobId) = jobRepository.findOne(jobId)
+
   private fun findMutexJobs(jobId: JobId) = mutexGroups
     .asSequence()
     .map { it.jobIds }

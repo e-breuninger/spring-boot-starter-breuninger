@@ -64,4 +64,7 @@ class MongoJobRepository(private val mongoTemplate: MongoTemplate) : JobReposito
     mongoTemplate.updateFirst<Job>(query(where("_id").`is`(jobId)), update(Job::state.name, state))
     Unit
   }
+
+  override fun findAllJobs(): List<Job> =  mongoTemplate.findAll(Job::class.java)
+
 }

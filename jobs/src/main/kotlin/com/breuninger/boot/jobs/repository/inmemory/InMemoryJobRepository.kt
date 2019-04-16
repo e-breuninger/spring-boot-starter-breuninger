@@ -48,4 +48,7 @@ class InMemoryJobRepository : JobRepository {
     jobs.replace(jobId, it.copy(state = state))
     Unit
   }
+
+  override fun findAllJobs(): List<Job> = ArrayList<Job>(jobs.values)
+
 }

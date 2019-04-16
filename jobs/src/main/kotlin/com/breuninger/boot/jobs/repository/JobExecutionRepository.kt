@@ -12,6 +12,8 @@ interface JobExecutionRepository {
 
   fun findAllWithoutMessages(): List<JobExecution>
 
+  fun findAll(): List<JobExecution>
+
   fun save(jobExecution: JobExecution): JobExecution
 
   fun remove(jobExecution: JobExecution)

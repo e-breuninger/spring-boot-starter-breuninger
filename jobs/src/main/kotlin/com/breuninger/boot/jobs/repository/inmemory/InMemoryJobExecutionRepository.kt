@@ -19,6 +19,8 @@ class InMemoryJobExecutionRepository : JobExecutionRepository {
     .sortedByDescending { it.started }
     .map { it.copy(messages = emptyList()) }
 
+  override fun findAll(): List<JobExecution> = ArrayList<JobExecution>(jobExecutions.values)
+
   override fun save(jobExecution: JobExecution): JobExecution {
     jobExecutions[jobExecution.id] = jobExecution
     return jobExecution

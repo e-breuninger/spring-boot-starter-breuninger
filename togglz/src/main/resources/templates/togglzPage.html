@@ -3,15 +3,29 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Products</title>
+  <title>Togglz</title>
+  <link rel="stylesheet" type="text/css" href="../bulma.min.css">
+  <link rel="stylesheet" type="text/css" href="../togglzStyles.css">
 </head>
 <body>
-<!--/*@thymesVar id="products" type="reactor.core.publisher.Flux<com.breuninger.boot.example.app.products.Product>"*/-->
-<!--/*@thymesVar id="product" type="com.breuninger.boot.example.app.products.Product"*/-->
-<h1>Products</h1>
-<p>Hier findest du tolle Produkte</p>
-<ul>
-  <li th:each="product : ${products}" th:text="${product.name}"></li>
-</ul>
+<!--/*@thymesVar id="togglzList" type="java.util.List<com.breuninger.boot.togglz.domain.TogglzFeature>"*/-->
+<!--/*@thymesVar id="togglz" type="com.breuninger.boot.togglz.domain.TogglzFeature"*/-->
+<div class="card panel">
+  <div class="card-header"><p class="card-header-title">Feature Toggles</p></div>
+  <div class="card-content content">
+    <table class="table">
+      <tr th:each="togglz : ${togglzList}">
+        <td>
+          <div class="switch">
+            <input type="checkbox" th:checked="${togglz.enabled}" th:id="${togglz.feature}" onclick="ontogglzchange(this)">
+            <span class="slider round"></span>
+          </div>
+        </td>
+        <td th:text="${togglz.feature}" class="switch-label"></td>
+      </tr>
+    </table>
+  </div>
+</div>
+<script type="text/javascript" src="../togglzScripts.js"></script>
 </body>
 </html>

@@ -30,6 +30,8 @@ class MongoJobExecutionRepository(private val mongoTemplate: MongoTemplate) : Jo
     return mongoTemplate.find(query)
   }
 
+  override fun findAll(): List<JobExecution> = mongoTemplate.findAll(JobExecution::class.java)
+
   override fun save(jobExecution: JobExecution) = mongoTemplate.save(jobExecution)
 
   override fun remove(jobExecution: JobExecution) {

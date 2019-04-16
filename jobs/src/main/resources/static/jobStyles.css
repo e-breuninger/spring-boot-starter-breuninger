@@ -1,0 +1,89 @@
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.collapsible {
+  cursor: pointer;
+  padding: .75rem;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.card-content {
+  display: none;
+  justify-content: space-between;
+}
+
+li {
+  list-style: none;
+}
+
+.enabled, .green {
+  background-color: green;
+  color: white;
+  border-radius: 4px;
+  padding: 2px 5px;
+  width: fit-content;
+}
+
+.disabled, .red {
+  background-color: red;
+  color: white;
+  border-radius: 4px;
+  padding: 2px 5px;
+  width: fit-content;
+}
+
+.yellow {
+  background-color: yellow;
+  color: black;
+  border-radius: 4px;
+  padding: 2px 5px;
+  width: fit-content;
+}
+
+.message-box {
+  width: 800px;
+  height: 400px;
+  overflow: auto;
+  background-color: #f9f9f9;
+  padding: 0 10px;
+  font-family: monospace;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.card {
+  width: 1200px;
+
+}
+
+.content table tbody tr:last-child td, .content table tbody tr:last-child th {
+  /*change this definition from bluma.min.css to .content table td, .content table th from bluma.min.css because thymeleaf
+  automatically creates a tbody*/
+  border: 1px solid #dbdbdb;
+  border-width: 0 0 1px;
+  padding: .5em .75em;
+  vertical-align: top;
+}
+
+.heading {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.flex{
+  display: flex;
+}
+
+.space-left{
+  margin-left: 10px;
+}
+

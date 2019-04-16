@@ -2,9 +2,7 @@ package com.breuninger.boot.jobs.service
 
 import com.breuninger.boot.jobs.domain.JobExecution
 import com.breuninger.boot.jobs.domain.JobExecution.Status
-import com.breuninger.boot.jobs.domain.JobExecution.Status.DEAD
-import com.breuninger.boot.jobs.domain.JobExecution.Status.OK
-import com.breuninger.boot.jobs.domain.JobExecution.Status.SKIPPED
+import com.breuninger.boot.jobs.domain.JobExecution.Status.*
 import com.breuninger.boot.jobs.domain.JobExecutionId
 import com.breuninger.boot.jobs.domain.JobExecutionMessage
 import com.breuninger.boot.jobs.domain.JobExecutionMessage.Level
@@ -52,4 +50,8 @@ class JobExecutionService(private val jobService: JobService, private val jobExe
     jobExecutionRepository.appendMessage(jobExecutionId, message)
     status?.let { jobExecutionRepository.updateStatus(jobExecutionId, it) }
   }
+
+  fun findAllJobExecutions() = jobExecutionRepository.findAll()
+
+  fun findOne(jobExecutionId: JobExecutionId) = jobExecutionRepository.findOne(jobExecutionId);
 }
