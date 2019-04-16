@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Job Overview</title>
+  <link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
+  <style>
+    body{
+      font-family: 'Titillium Web', sans-serif;
+    }
+
+    .collapsible {
+      background-color: #777;
+      color: white;
+      cursor: pointer;
+      padding: 18px;
+      width: 100%;
+      border: none;
+      text-align: left;
+      outline: none;
+      font-size: 15px;
+    }
+
+    .active, .collapsible:hover {
+      background-color: #555;
+    }
+
+    .content {
+      padding: 10px 18px;
+      display: none;
+      overflow: hidden;
+      background-color: #f1f1f1;
+    }
+
+    li {
+      list-style: none;
+    }
+
+    .enabled{
+      background-color: green;
+      color: white;
+      border-radius: 5px;
+      padding: 0 5px;
+    }
+
+    .disabled{
+      background-color: red;
+      color: white;
+      border-radius: 5px;
+      padding: 0 5px;
+    }
+
+  </style>
+</head>
+<body>
+<!--/*@thymesVar id="jobs" type="java.util.List<com.breuninger.boot.jobs.domain.Job>"*/-->
+<!--/*@thymesVar id="job" type="com.breuninger.boot.jobs.domain.Job"*/-->
+<h1>Products</h1>
+<p>Hier findest du alle Jobs</p>
+<ul>
+  <li th:each="job : ${jobs}" >
+    <button class="collapsible" th:text="${job.id.value}"></button>
+    <div class="content">
+      <div><label>Running Job Execution ID: </label><span th:text="${job.runningJobExecutionId}?${job.runningJobExecutionId.value}:'-'"></span></div>
+      <div><label>Status: </label> <span th:class="${job.disabled}?'disabled':'enabled'" th:text="${job.disabled}?'Disabled':'Enabled'"></span></div>
+      <div th:if="${job.disabled}"><label>Disabled Comment: </label> <span th:text="${job.disableComment}"></span></div>
+      <div th:if="${job.state.size() != 0}"><label>States</label><ul th:each="a : ${job.state.keySet()}"><li th:text="a + ': ' + ${job.state.get(a)}"></li></ul></div>
+    </div>
+  </li>
+</ul>
+
+<script>
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+      } else {
+        content.style.display = "block";
+      }
+    });
+  }
+</script>
+</body>
+</html>

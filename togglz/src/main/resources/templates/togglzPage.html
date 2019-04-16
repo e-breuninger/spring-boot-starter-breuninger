@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Products</title>
+</head>
+<body>
+<!--/*@thymesVar id="products" type="reactor.core.publisher.Flux<com.breuninger.boot.example.app.products.Product>"*/-->
+<!--/*@thymesVar id="product" type="com.breuninger.boot.example.app.products.Product"*/-->
+<h1>Products</h1>
+<p>Hier findest du tolle Produkte</p>
+<ul>
+  <li th:each="product : ${products}" th:text="${product.name}"></li>
+</ul>
+</body>
+</html>
