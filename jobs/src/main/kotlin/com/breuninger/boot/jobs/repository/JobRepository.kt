@@ -23,4 +23,8 @@ interface JobRepository {
   fun updateState(jobId: JobId, key: String, value: String?): Unit?
 
   fun findAllJobs(): List<Job>
+
+  fun disable(jobId: JobId, disableComment: String)
+
+  fun enable(jobId: JobId)
 }

@@ -13,15 +13,17 @@
 <!--/*@thymesVar id="jobDefs" type="java.util.Map<com.breuninger.boot.jobs.domain.JobId, com.breuninger.boot.jobs.domain.JobDefinition>"*/-->
 <div class="card panel" th:each="job : ${jobs}">
   <div class="card-header">
-    <button class="collapsible card-header-title" th:text="'Job: ' + ${job.id.value}" th:value="${job.id.value}"></button>
+    <button class="collapsible card-header-title" th:text="'Job: ' + ${job.id.value}" th:value="${job.id.value}" onclick="openCollapseCards(this)"></button>
   </div>
   <div th:id="${job.id.value}+'content'" class="card-content content" style="flex-direction: column">
     <table>
       <tr>
         <td>Running Job Execution ID</td>
-        <td><a th:if="${job.runningJobExecutionId}" th:text="${job.runningJobExecutionId.value}" th:href="'../jobexecutions/'+${job.runningJobExecutionId.value}"></a><span th:if="!${job.runningJobExecutionId}">-</span></td>
+        <td><a th:if="${job.runningJobExecutionId}" th:text="${job.runningJobExecutionId.value}"
+               th:href="'../jobexecutions/'+${job.runningJobExecutionId.value}"></a><span
+          th:if="!${job.runningJobExecutionId}">-</span></td>
         <td>
-          <button class="button is-primary" onclick="startJob(this)" th:disabled="${job.runningJobExecutionId}"
+          <button class="button is-primary" onclick="startJob(this)" th:disabled="${job.runningJobExecutionId} ? true : ${job.disabled}" th:id="${job.id.value} + 'start'"
                   th:value="${job.id.value}">Start job
           </button>
         </td>
@@ -29,26 +31,26 @@
       <tr>
         <td>Status</td>
         <td colspan="2">
-          <div th:class="${job.disabled}?'disabled':'enabled'"
+          <div th:id="${job.id.value}+'status'" th:class="${job.disabled}?'disabled':'enabled'"
                th:text="${job.disabled}?'Disabled':'Enabled'"></div>
         </td>
       </tr>
-      <tr>
+      <tr th:class="(${job.disabled}?'display-none')" th:id="${job.id.value}+'enabled'">
         <td colspan="3">
           <div class="flex"><input class="input" type="text" placeholder="Disabled Comment"
-                                   th:id="${job.id.value} + 'disabledcomment'"/>
-            <button class="button is-danger space-left" onclick="disableJob(true, this)" th:disabled="${job.disabled}"
-                    th:value="${job.id.value}">Disable job
+                                   th:id="${job.id.value} + 'disabledcommentinput'"/>
+            <button class="button is-danger space-left" onclick="disableJob(true, this)" th:value="${job.id.value}">
+              Disable job
             </button>
           </div>
         </td>
       </tr>
-      <tr th:if="${job.disabled}">
+      <tr th:class="(!${job.disabled}? 'display-none')" th:id="${job.id.value}+'disabled'">
         <td>Disabled Comment</td>
-        <td th:text="${job.disableComment}"></td>
+        <td th:id="${job.id.value} + 'disabledcomment'" th:text="${job.disableComment}"></td>
         <td>
-          <button class="button is-primary space-left" onclick="disableJob(false, this)" th:disabled="${job.disabled}"
-                  th:value="${job.id.value}">Enable job
+          <button class="button is-primary space-left" onclick="disableJob(false, this)" th:value="${job.id.value}">
+            Enable job
           </button>
         </td>
       </tr>
@@ -61,17 +63,6 @@
         </td>
       </tr>
     </table>
-    <!--  <div class="card-content-item"><label>Running Job Execution ID </label><span
-        th:text="${job.runningJobExecutionId}?${job.runningJobExecutionId.value}:'-'"></span></div>
-      <div class="card-content-item"><label>Status: </label> <span th:class="${job.disabled}?'disabled':'enabled'"
-                                                                   th:text="${job.disabled}?'Disabled':'Enabled'"></span></div>
-      <div class="card-content-item" th:if="${job.disabled}"><label>Disabled Comment: </label> <span
-        th:text="${job.disableComment}"></span></div>
-      <div class="card-content-item" th:if="${job.state.size() != 0}"><label>States</label>
-        <ul>
-          <li th:each="a : ${job.state.keySet()}" th:text="a + ': ' + ${job.state.get(a)}"></li>
-        </ul>
-      </div>-->
     <div class="card-content-item">
       <div class="card">
         <div class="card-header">
@@ -102,11 +93,3 @@
 <script src="../jobScripts.js"></script>
 </body>
 </html>
-<!--  val name: String,
-  val description: String,
-  val cron: String?,
-  val fixedDelay: Duration?,
-  val fixedRate: Duration?,
-  val restarts: Int,
-  val restartDelay: Duration?,
-  val timer: Timer? -->

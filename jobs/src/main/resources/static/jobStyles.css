@@ -79,11 +79,19 @@ li {
   text-transform: uppercase;
 }
 
-.flex{
+.flex {
   display: flex;
 }
 
-.space-left{
+.space-left {
   margin-left: 10px;
+}
+
+.display-none {
+  display: none;
+}
+
+.display-table-row {
+  display: table-row;
 }
 

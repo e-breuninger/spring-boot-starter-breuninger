@@ -13,8 +13,9 @@
 <!--/*@thymesVar id="jobExecution" type="com.breuninger.boot.jobs.domain.JobExecution"*/-->
 <div class="card panel" th:each="jobExecution : ${jobExecutions}">
   <div class="card-header">
-    <button class="collapsible card-header-title" th:value="${jobExecution.id.value} + 'card'"><label>Running Job Execution
-      ID: </label><span th:text="${jobExecution.id.value}"></span></button>
+    <button class="collapsible card-header-title" th:value="${jobExecution.id.value} + 'card'" onclick="openCollapseCards(this)">
+      <label>Running Job Execution
+        ID: </label><span th:text="${jobExecution.id.value}"></span></button>
   </div>
   <div th:id="${jobExecution.id.value} + 'cardcontent'" class="card-content content">
     <table>
@@ -26,7 +27,8 @@
         <td>Status</td>
         <td><span th:id="${jobExecution.id.value}+'status'"
                   th:class="(${jobExecution.status} == ${jobExecution.status.OK})?'green':((${jobExecution.status} == ${jobExecution.status.SKIPPED})?'yellow':'red')"
-                  th:text="${jobExecution.status.name()}"></span></td>
+                  th:text="((${jobExecution.status.name()} == 'OK') ? (!${jobExecution.stopped} ? 'Running' : 'OK') : ${jobExecution.status.name()})"></span>
+        </td>
       </tr>
       <tr>
         <td>Hostname</td>
@@ -52,7 +54,7 @@
         <td><label
           th:for="${jobExecution.id.value}+'input'" class="checkbox" th:disabled="${jobExecution.stopped}"><input
           th:id="${jobExecution.id.value}+'input'" type="checkbox"
-          onchange="updateEventCount(this)" th:value="${jobExecution.id.value}"/> Update Messages</label></td>
+          onchange="updateMessagesAndDates(this)" th:value="${jobExecution.id.value}"/> Update Messages</label></td>
       </tr>
       <tr class="card-content-item">
         <td>

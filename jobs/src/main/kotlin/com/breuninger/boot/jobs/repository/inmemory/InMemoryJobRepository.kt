@@ -51,4 +51,20 @@ class InMemoryJobRepository : JobRepository {
 
   override fun findAllJobs(): List<Job> = ArrayList<Job>(jobs.values)
 
+  override fun disable(jobId: JobId, disableComment: String) {
+    val job = findOne(jobId)
+    if(job != null) {
+      job.disableComment = disableComment
+      job.disabled = true
+    }
+  }
+
+  override fun enable(jobId: JobId) {
+    val job = findOne(jobId)
+    if(job != null) {
+      job.disableComment = ""
+      job.disabled = false
+    }
+  }
+
 }

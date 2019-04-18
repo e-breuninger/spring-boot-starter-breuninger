@@ -67,4 +67,13 @@ class MongoJobRepository(private val mongoTemplate: MongoTemplate) : JobReposito
 
   override fun findAllJobs(): List<Job> =  mongoTemplate.findAll(Job::class.java)
 
+  override fun disable(jobId: JobId, disableComment: String) {
+    mongoTemplate.updateFirst<Job>(query(where("_id").`is`(jobId)), update(Job::disableComment.name, disableComment))
+    mongoTemplate.updateFirst<Job>(query(where("_id").`is`(jobId)), update(Job::disabled.name, true))
+  }
+
+  override fun enable(jobId: JobId) {
+    mongoTemplate.updateFirst<Job>(query(where("_id").`is`(jobId)), update(Job::disableComment.name, ""))
+    mongoTemplate.updateFirst<Job>(query(where("_id").`is`(jobId)), update(Job::disabled.name, false))
+  }
 }

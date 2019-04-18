@@ -59,4 +59,12 @@ class JobService(private val jobRepository: JobRepository, private val mutexGrou
     .flatten()
     .filter { it != jobId }
     .toSet()
+
+  fun disableJob(disabled: Boolean, disabledComment: String, jobId: JobId){
+    if(disabled)
+      jobRepository.disable(jobId, disabledComment)
+    else
+      jobRepository.enable(jobId)
+
+  }
 }
