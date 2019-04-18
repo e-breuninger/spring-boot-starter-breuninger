@@ -4,11 +4,7 @@ import com.breuninger.boot.jobs.domain.JobBlockedException
 import com.breuninger.boot.jobs.domain.JobExecutionId
 import com.breuninger.boot.jobs.domain.JobMarker.jobMarkerFor
 import com.breuninger.boot.jobs.eventbus.domain.JobExecutionStateChangedEvent
-import com.breuninger.boot.jobs.eventbus.domain.JobExecutionStateChangedEvent.State.KEEP_ALIVE
-import com.breuninger.boot.jobs.eventbus.domain.JobExecutionStateChangedEvent.State.RESTART
-import com.breuninger.boot.jobs.eventbus.domain.JobExecutionStateChangedEvent.State.SKIPPED
-import com.breuninger.boot.jobs.eventbus.domain.JobExecutionStateChangedEvent.State.START
-import com.breuninger.boot.jobs.eventbus.domain.JobExecutionStateChangedEvent.State.STOP
+import com.breuninger.boot.jobs.eventbus.domain.JobExecutionStateChangedEvent.State.*
 import com.breuninger.boot.jobs.service.JobService
 import io.micrometer.core.aop.TimedAspect.DEFAULT_METRIC_NAME
 import io.micrometer.core.instrument.LongTaskTimer
@@ -41,7 +37,7 @@ class JobExecutor(
 
   private val jobRunnable = wrapWithLongTaskTimer(wrapWithTimer(delegate))
   private val definition = jobRunnable.definition()
-  private val jobId = definition.jobId
+  val jobId = definition.jobId
 
   private val jobMarker = jobMarkerFor(jobId)
 

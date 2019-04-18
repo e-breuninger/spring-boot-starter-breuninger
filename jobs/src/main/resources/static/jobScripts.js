@@ -104,7 +104,17 @@ function formatMessages(rawMessages) {
 }
 
 function startJob(button) {
-  $.post('jobstart?jobId=' + button.value);
+  $.post('jobstart?jobId=' + button.value, function (job) {
+    if(job && job.runningJobExecutionId) {
+      const jobExecutionLink = $('#' + button.value + 'executionid')[0];
+      jobExecutionLink.innerHTML = job.runningJobExecutionId.value;
+      jobExecutionLink.href = '../jobexecutions/' + job.runningJobExecutionId.value;
+
+      const jobExecutionLinkHeader = $('#' + button.value + 'executionidheader')[0];
+      jobExecutionLinkHeader.innerHTML = job.runningJobExecutionId.value;
+      jobExecutionLinkHeader.href = '../jobexecutions/' + job.runningJobExecutionId.value;
+    }
+  });
 }
 
 /**

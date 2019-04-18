@@ -20,7 +20,8 @@ class JobRegistrar(
   private val jobService: JobService,
   private val eventPublisher: ApplicationEventPublisher,
   private val scheduledExecutorService: ScheduledExecutorService,
-  private val meterRegistry: MeterRegistry
+  private val meterRegistry: MeterRegistry,
+  private val jobExecutorRegistry: JobExecutorRegistry
 ) : SchedulingConfigurer {
 
   override fun configureTasks(taskRegistrar: ScheduledTaskRegistrar) {
@@ -28,6 +29,7 @@ class JobRegistrar(
       val jobDefinition = it.definition()
       jobService.create(Job(jobDefinition.jobId))
       val jobExecutor = JobExecutor(it, jobService, eventPublisher, scheduledExecutorService, meterRegistry)
+      jobExecutorRegistry.register(jobDefinition.jobId, jobExecutor)
       jobDefinition.cron?.let { cron ->
         taskRegistrar.addCronTask(CronTask(jobExecutor, cron))
       }

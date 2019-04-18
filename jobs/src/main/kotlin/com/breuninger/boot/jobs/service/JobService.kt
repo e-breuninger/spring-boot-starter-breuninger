@@ -1,5 +1,7 @@
 package com.breuninger.boot.jobs.service
 
+import com.breuninger.boot.jobs.JobExecutor
+import com.breuninger.boot.jobs.JobExecutorRegistry
 import com.breuninger.boot.jobs.domain.Job
 import com.breuninger.boot.jobs.domain.JobBlockedException
 import com.breuninger.boot.jobs.domain.JobExecutionId
@@ -9,11 +11,17 @@ import com.breuninger.boot.jobs.repository.JobRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.scheduling.annotation.ScheduledAnnotationBeanPostProcessor
+import org.springframework.scheduling.config.ScheduledTaskRegistrar
 import org.springframework.stereotype.Service
 
 @Service
 @ConditionalOnProperty(prefix = "breuni.jobs", name = ["enabled"], havingValue = "true")
-class JobService(private val jobRepository: JobRepository, private val mutexGroups: Set<JobMutexGroup>) {
+class JobService(
+  private val jobRepository: JobRepository,
+  private val mutexGroups: Set<JobMutexGroup>,
+  private val jobExecutorRegistry: JobExecutorRegistry
+) {
 
   companion object {
 
@@ -66,5 +74,11 @@ class JobService(private val jobRepository: JobRepository, private val mutexGrou
     else
       jobRepository.enable(jobId)
 
+  }
+
+  fun startJob(jobId: JobId) {
+    val jobExecutor = jobExecutorRegistry.find(jobId)
+    if(jobExecutor != null)
+      Thread(jobExecutor).start()
   }
 }
