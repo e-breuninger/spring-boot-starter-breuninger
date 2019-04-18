@@ -6,6 +6,7 @@
   <title>Job Overview</title>
   <link rel="stylesheet" type="text/css" href="../bulma.min.css">
   <link rel="stylesheet" type="text/css" href="../jobStyles.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 </head>
 <body>
 <!--/*@thymesVar id="jobs" type="java.util.List<com.breuninger.boot.jobs.domain.Job>"*/-->
@@ -13,7 +14,14 @@
 <!--/*@thymesVar id="jobDefs" type="java.util.Map<com.breuninger.boot.jobs.domain.JobId, com.breuninger.boot.jobs.domain.JobDefinition>"*/-->
 <div class="card panel" th:each="job : ${jobs}">
   <div class="card-header">
-    <button class="collapsible card-header-title" th:text="'Job: ' + ${job.id.value}" th:value="${job.id.value}" onclick="openCollapseCards(this)"></button>
+    <button class="collapsible hero application-list-item__header flex flex-header" onclick="openCollapseCards(this)" th:value="${job.id.value}">
+      <div><i th:class="${job.disabled} ? 'fas fa-times' : 'fas fa-check'" th:id="${job.id.value}+'headerstate'"></i></div><div><span th:text="'Job: ' + ${job.id.value}"></span>
+      <br>
+      <a th:if="${job.runningJobExecutionId}"
+         th:text="${job.runningJobExecutionId.value}"
+         th:href="'../jobexecutions/'+${job.runningJobExecutionId.value}"></a>
+      <span th:if="!${job.runningJobExecutionId}">-</span></div>
+    </button>
   </div>
   <div th:id="${job.id.value}+'content'" class="card-content content" style="flex-direction: column">
     <table>
@@ -23,7 +31,8 @@
                th:href="'../jobexecutions/'+${job.runningJobExecutionId.value}"></a><span
           th:if="!${job.runningJobExecutionId}">-</span></td>
         <td>
-          <button class="button is-primary" onclick="startJob(this)" th:disabled="${job.runningJobExecutionId} ? true : ${job.disabled}" th:id="${job.id.value} + 'start'"
+          <button class="button is-primary" onclick="startJob(this)"
+                  th:disabled="${job.runningJobExecutionId} ? true : ${job.disabled}" th:id="${job.id.value} + 'start'"
                   th:value="${job.id.value}">Start job
           </button>
         </td>
@@ -66,7 +75,7 @@
     <div class="card-content-item">
       <div class="card">
         <div class="card-header">
-          <button class="collapsible card-header-title" th:value="${job.id.value} + 'definition'">Job Definition</button>
+          <button class="collapsible card-header-title" th:value="${job.id.value} + 'definition'" onclick="openCollapseCards(this)">Job Definition</button>
         </div>
         <div th:id="${job.id.value} + 'definitioncontent'" class="card-content">
           <div class="card-content-item-no-border has-text-centered"><p class="heading">Name</p>

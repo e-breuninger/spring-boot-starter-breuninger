@@ -7,15 +7,22 @@
   <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="../bulma.min.css">
   <link rel="stylesheet" type="text/css" href="../jobStyles.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 </head>
 <body>
 <!--/*@thymesVar id="jobExecutions" type="java.util.List<com.breuninger.boot.jobs.domain.JobExecution>"*/-->
 <!--/*@thymesVar id="jobExecution" type="com.breuninger.boot.jobs.domain.JobExecution"*/-->
 <div class="card panel" th:each="jobExecution : ${jobExecutions}">
   <div class="card-header">
-    <button class="collapsible card-header-title" th:value="${jobExecution.id.value} + 'card'" onclick="openCollapseCards(this)">
-      <label>Running Job Execution
-        ID: </label><span th:text="${jobExecution.id.value}"></span></button>
+    <button class="collapsible hero application-list-item__header flex flex-header" th:value="${jobExecution.id.value} + 'card'"
+            onclick="openCollapseCards(this)">
+      <div><i th:id="${jobExecution.id.value} + 'headerstate'" th:class="(${jobExecution.status.name()} == 'OK') ? (!${jobExecution.stopped} ? 'fas fa-spinner fa-spin' : 'fas fa-check') : ((${jobExecution.status.name()} == 'SKIPPED') ? 'fas fa-exclamation' : 'fas fa-times')"></i></div>
+      <div>
+        <span th:text="'Running Job Execution ID: ' + ${jobExecution.id.value}"></span>
+        <br>
+        <span class="second-level-headline" th:text="'Job ID: ' + ${jobExecution.jobId.value}"></span>
+      </div>
+    </button>
   </div>
   <div th:id="${jobExecution.id.value} + 'cardcontent'" class="card-content content">
     <table>
@@ -26,7 +33,7 @@
       <tr>
         <td>Status</td>
         <td><span th:id="${jobExecution.id.value}+'status'"
-                  th:class="(${jobExecution.status} == ${jobExecution.status.OK})?'green':((${jobExecution.status} == ${jobExecution.status.SKIPPED})?'yellow':'red')"
+                  th:class="(${jobExecution.status.name()} == 'OK')?'green':((${jobExecution.status.name()} == 'SKIPPED')?'yellow':'red')"
                   th:text="((${jobExecution.status.name()} == 'OK') ? (!${jobExecution.stopped} ? 'Running' : 'OK') : ${jobExecution.status.name()})"></span>
         </td>
       </tr>

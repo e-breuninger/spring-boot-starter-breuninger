@@ -10,7 +10,6 @@ body {
   text-align: left;
   outline: none;
   font-size: 16px;
-  font-weight: 700;
 }
 
 .card-content {
@@ -95,3 +94,33 @@ li {
   display: table-row;
 }
 
+.hide-last-child span:last-child, .hide-last-child a, .hide-last-child br, .hide-last-child div:first-child{
+  display: none;
+}
+
+a, .fa-check, .fa-spinner {
+  color: #00d1b2;
+}
+
+.flex-header {
+  flex-direction: initial;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.fas{
+  margin: 0 20px 0 10px;
+}
+
+.fa-times {
+  color: #ff3860;
+}
+
+fa-exclamation{
+  color: #ffdd57;
+}
+
+.second-level-headline{
+  font-size: 14px;
+  color: grey;
+}

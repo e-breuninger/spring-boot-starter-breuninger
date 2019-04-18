@@ -7,6 +7,9 @@ const timermap = new Map();
  */
 function openCollapseCards(button) {
   const content = $("#" + button.value + 'content')[0];
+  button.classList.toggle('card-header-title');
+  button.classList.toggle('is-primary')
+  button.classList.toggle('hide-last-child')
   if (content.style.display === "flex") {
     content.style.display = "none";
   } else {
@@ -15,8 +18,9 @@ function openCollapseCards(button) {
 }
 
 /**
- * Starts or stops the continuous update of messages and the last updated date and the stop date. The updating stops if the stop
+ * Starts or stops the continuous update of messages and some other job execution information. The updating stops if the stop
  * date is set.
+ *
  * @param input (emlement) the input element which was checked/unchecked
  */
 function updateMessagesAndDates(input) {
@@ -24,15 +28,21 @@ function updateMessagesAndDates(input) {
 
   const callJobExecutionUpdateFromServer = function () {
     $.get('messages?jobExecutionId=' + id, function (fragment) {
-      console.log(fragment);
       if (fragment) {
         const messageElement = $("#" + id)[0];
         messageElement.innerHTML = formatMessages(fragment.messages);
         messageElement.scrollTop = messageElement.scrollHeight;
+
         const statusElement = $("#" + id + "status")[0];
         statusElement.innerHTML = fragment.status == 'OK' && !fragment.stopped ? 'Running' : fragment.status;
-        const newClass = fragment.status === 'OK' ? 'green' : fragment.status === 'SKIPPED' ? 'yellow' : 'red'
+
+        const newClass = fragment.status === 'OK' ? 'green' : fragment.status === 'SKIPPED' ? 'yellow' : 'red';
         statusElement.className = newClass;
+
+        const headerstate = $('#' + id + 'headerstate')[0];
+        headerstate.className = fragment.status == 'OK' ? !fragment.stopped
+          ? 'fas fa-spinner fa-spin' : 'fas fa-check' : fragment.status == 'SKIPPED'
+          ? 'fas fa-exclamation' : 'fas fa-times';
 
         const options = {
           year: 'numeric',
@@ -142,5 +152,8 @@ function updateJob(jobId, jobData) {
 
   const startButton = $('#' + jobId + 'start')[0];
   startButton.disabled = jobData.runningJobExecutionId ? true : jobData.disabled;
+
+  const headerState = $('#' + jobId + 'headerstate')[0];
+  headerState.className = jobData.disabled ? "fas fa-times" : "fas fa-check";
 }
 
