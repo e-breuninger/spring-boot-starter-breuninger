@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
 @RequestMapping("/jobs")
-class JobOverviewController(
+class JobHTMLController(
   private val jobService: JobService,
   private val jobRunnables: List<JobRunnable>?
 ) {

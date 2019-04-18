@@ -104,7 +104,7 @@ function formatMessages(rawMessages) {
 }
 
 function startJob(button) {
-  $.post('jobstart?jobId=' + button.value, function (job) {
+  $.post('job/start?jobId=' + button.value, function (job) {
     if(job && job.runningJobExecutionId) {
       const jobExecutionLink = $('#' + button.value + 'executionid')[0];
       jobExecutionLink.innerHTML = job.runningJobExecutionId.value;
@@ -131,7 +131,7 @@ function disableJob(disable, button) {
     data: data,
     contentType: "text/plain",
     type: 'POST',
-    url: 'jobsdisable?jobId=' + button.value + '&disabled=' + disable,
+    url: 'job/disable?jobId=' + button.value + '&disabled=' + disable,
     success: function (fragment) {
       if (fragment) {
         updateJob(button.value, fragment)
