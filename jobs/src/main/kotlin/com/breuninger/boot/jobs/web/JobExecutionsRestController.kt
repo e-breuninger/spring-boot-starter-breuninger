@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*
 class JobExecutionsRestController(private val jobExecutionService: JobExecutionService) {
 
   @GetMapping
-  fun getEventCount(@RequestParam(value = "jobExecutionId") jobExecutionId: String): JobExecution? {
+  fun getCurrentExecutionState(@RequestParam(value = "jobExecutionId") jobExecutionId: String): JobExecution? {
 
     return jobExecutionService.findOne(JobExecutionId(jobExecutionId))
   }

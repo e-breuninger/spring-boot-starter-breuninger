@@ -17,7 +17,7 @@ class JobHTMLController(
 ) {
 
   @GetMapping
-  fun getProducts(model: Model): String {
+  fun getAllJobs(model: Model): String {
     model.addAttribute("jobs", jobService.findAllJobs())
     var jobDefintions = HashMap<JobId, JobDefinition>();
     jobRunnables?.map { jobRunnable ->  jobDefintions.set(jobRunnable.definition().jobId, jobRunnable.definition())}

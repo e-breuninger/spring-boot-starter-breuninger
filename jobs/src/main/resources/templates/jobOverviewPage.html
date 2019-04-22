@@ -21,9 +21,10 @@
       <div><span th:text="'Job: ' + ${job.id.value}"></span>
         <br>
         <a th:text="${job.runningJobExecutionId} ? ${job.runningJobExecutionId.value} : '-'"
-           th:href="${job.runningJobExecutionId} ? '../jobexecutions/'+${job.runningJobExecutionId.value} : '../jobexecutions'"
+           th:href="${job.runningJobExecutionId} ? '../jobexecutions/single/'+${job.runningJobExecutionId.value} : '../jobexecutions'"
            th:id="${job.id.value} + 'executionidheader'"></a>
       </div>
+      <div class="margin-left-auto"><a th:href="'../jobexecutions/multi/' + ${job.id.value}" class="fas fa-arrow-right"></a></div>
     </button>
   </div>
   <div th:id="${job.id.value}+'content'" class="card-content content" style="flex-direction: column">

@@ -13,7 +13,7 @@ class JobRestController(
 ) {
 
   @PostMapping("/start")
-  fun getEventCount(@RequestParam(value = "jobId") jobIdValue: String): Job? {
+  fun startJob(@RequestParam(value = "jobId") jobIdValue: String): Job? {
     val jobId = JobId(jobIdValue)
     jobService.startJob(jobId)
     //we just need a little bit of time until the job is started in a new thread and the id is saved so we can get it. this is ugly i know
@@ -22,7 +22,7 @@ class JobRestController(
   }
 
   @PostMapping ("/disable")
-  fun getEventCount(@RequestParam(value = "jobId") jobId: String, @RequestParam(value = "disabled") disabled: Boolean, @RequestBody(required = false) body: String?):Job? {
+  fun disableEnableJob(@RequestParam(value = "jobId") jobId: String, @RequestParam(value = "disabled") disabled: Boolean, @RequestBody(required = false) body: String?):Job? {
     jobService.disableJob(disabled,if(body != null) body else "",JobId(jobId))
     return  jobService.findOne(JobId(jobId))
   }
