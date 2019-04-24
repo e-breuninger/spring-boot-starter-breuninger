@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/messages", method = [RequestMethod.GET])
-class JobExecutionsRestController(private val jobExecutionService: JobExecutionService) {
+class JobExecutionRestController(private val jobExecutionService: JobExecutionService) {
 
   @GetMapping
   fun getCurrentExecutionState(@RequestParam(value = "jobExecutionId") jobExecutionId: String): JobExecution? {

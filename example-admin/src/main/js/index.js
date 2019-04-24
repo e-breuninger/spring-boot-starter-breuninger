@@ -1,32 +1,51 @@
 /* global SBA */
-import custom from './custom';
-import customEndpoint from './custom-endpoint';
 
-// tag::customization-ui-toplevel[]
-SBA.use({
-  install({viewRegistry}) {
-    viewRegistry.addView({
-      name: 'custom',  //<1>
-      path: '/custom', //<2>
-      component: custom, //<3>
-      label: 'Custom', //<4>
-      order: 1000, //<5>
-    });
-  }
-});
-// end::customization-ui-toplevel[]
+import jobsEndpoint from './jobs-endpoint';
+import jobExecutionsEndpoint from './jobExecutions-endpoint';
+import togglzEndpoint from './togglz-endpoint';
 
 // tag::customization-ui-endpoint[]
 SBA.use({
   install({viewRegistry}) {
     viewRegistry.addView({
-      name: 'instances/custom',
+      name: 'instances/togglz',
       parent: 'instances', // <1>
-      path: 'custom',
-      component: customEndpoint,
-      label: 'Custom',
+      path: 'togglz',
+      component: togglzEndpoint,
+      label: 'Togglz',
       order: 1000,
-      isEnabled: ({instance}) => instance.hasEndpoint('custom') // <2>
+      isEnabled: ({instance}) => instance.hasEndpoint('togglz')
+    });
+  }
+});
+// end::customization-ui-endpoint[]
+
+// tag::customization-ui-endpoint[]
+SBA.use({
+  install({viewRegistry}) {
+    viewRegistry.addView({
+      name: 'instances/jobs',
+      parent: 'instances', // <1>
+      path: 'jobs',
+      component: jobsEndpoint,
+      label: 'Jobs',
+      order: 1000,
+    });
+  }
+});
+// end::customization-ui-endpoint[]
+
+
+// tag::customization-ui-endpoint[]
+SBA.use({
+  install({viewRegistry}) {
+    viewRegistry.addView({
+      name: 'instances/jobExecutions',
+      parent: 'instances', // <1>
+      path: 'jobExecutions',
+      component: jobExecutionsEndpoint,
+      label: 'JobExecutions',
+      order: 1000,
     });
   }
 });

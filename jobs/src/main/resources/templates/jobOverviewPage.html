@@ -15,16 +15,16 @@
 <!--/*@thymesVar id="jobDefs" type="java.util.Map<com.breuninger.boot.jobs.domain.JobId, com.breuninger.boot.jobs.domain.JobDefinition>"*/-->
 <div class="card panel" th:each="job : ${jobs}">
   <div class="card-header">
-    <button class="collapsible hero application-list-item__header flex flex-header" onclick="openCollapseCards(this)"
+    <button class="collapsible hero application-list-item__header flex flex-header" onclick="openCollapseCards(this);"
             th:value="${job.id.value}">
       <div><i th:class="${job.disabled} ? 'fas fa-times' : 'fas fa-check'" th:id="${job.id.value}+'headerstate'"></i></div>
       <div><span th:text="'Job: ' + ${job.id.value}"></span>
         <br>
-        <a th:text="${job.runningJobExecutionId} ? ${job.runningJobExecutionId.value} : '-'"
+        <a th:text="${job.runningJobExecutionId} ? ${job.runningJobExecutionId.value} : '-'" onclick="stopPropagation(event);"
            th:href="${job.runningJobExecutionId} ? '../jobexecutions/single/'+${job.runningJobExecutionId.value} : '../jobexecutions'"
            th:id="${job.id.value} + 'executionidheader'"></a>
       </div>
-      <div class="margin-left-auto"><a th:href="'../jobexecutions/multi/' + ${job.id.value}" class="fas fa-arrow-right"></a></div>
+      <a class="margin-left-auto display-block fas fa-arrow-right" onclick="stopPropagation(event);" th:href="'../jobexecutions/multi/' + ${job.id.value}"></a>
     </button>
   </div>
   <div th:id="${job.id.value}+'content'" class="card-content content" style="flex-direction: column">

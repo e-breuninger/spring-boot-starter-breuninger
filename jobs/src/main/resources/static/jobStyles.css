@@ -94,7 +94,7 @@ li {
   display: table-row;
 }
 
-.hide-last-child span:last-child, .hide-last-child a, .hide-last-child br, .hide-last-child div:first-child{
+.hide-last-child span:last-child, .hide-last-child div a, .hide-last-child br, .hide-last-child div:first-child{
   display: none;
 }
 
@@ -116,7 +116,7 @@ a, .fa-check, .fa-spinner {
   color: #ff3860;
 }
 
-fa-exclamation{
+.fa-exclamation{
   color: #ffdd57;
 }
 
@@ -127,4 +127,8 @@ fa-exclamation{
 
 .margin-left-auto{
   margin-left: auto;
+}
+
+.display-block{
+  display: block;
 }

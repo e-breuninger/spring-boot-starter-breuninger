@@ -14,7 +14,7 @@ import kotlin.collections.ArrayList
 
 @Controller
 @RequestMapping("/jobexecutions")
-class JobExecutionsHtmlController(private val jobExecutionService: JobExecutionService) {
+class JobExecutionHtmlController(private val jobExecutionService: JobExecutionService) {
 
   @GetMapping
   fun getAllJobExecutions(model: Model): String {

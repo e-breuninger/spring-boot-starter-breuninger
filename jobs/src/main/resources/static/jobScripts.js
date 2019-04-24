@@ -167,3 +167,7 @@ function updateJob(jobId, jobData) {
   headerState.className = jobData.disabled ? "fas fa-times" : "fas fa-check";
 }
 
+function stopPropagation(e){
+  e.stopPropagation();
+  e.stopImmediatePropagation();
+}
