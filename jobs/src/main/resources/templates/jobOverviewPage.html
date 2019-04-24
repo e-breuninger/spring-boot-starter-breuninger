@@ -32,7 +32,7 @@
       <tr>
         <td>Running Job Execution ID</td>
         <td><a th:text="${job.runningJobExecutionId} ? ${job.runningJobExecutionId.value} : '-'"
-               th:href="${job.runningJobExecutionId} ? '../jobexecutions/'+${job.runningJobExecutionId.value} : '../jobexecutions'"
+               th:href="${job.runningJobExecutionId} ? '../jobexecutions/single/'+${job.runningJobExecutionId.value} : '../jobexecutions'"
                th:id="${job.id.value} + 'executionid'"></a></td>
         <td>
           <button class="button is-primary" onclick="startJob(this)"

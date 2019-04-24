@@ -27,7 +27,7 @@ function updateMessagesAndDates(input) {
   const id = input.value;
 
   const callJobExecutionUpdateFromServer = function () {
-    $.get('messages?jobExecutionId=' + id, function (fragment) {
+    $.get('../../messages?jobExecutionId=' + id, function (fragment) {
       if (fragment) {
         const messageElement = $("#" + id)[0];
         messageElement.innerHTML = formatMessages(fragment.messages);
@@ -108,11 +108,11 @@ function startJob(button) {
     if(job && job.runningJobExecutionId) {
       const jobExecutionLink = $('#' + button.value + 'executionid')[0];
       jobExecutionLink.innerHTML = job.runningJobExecutionId.value;
-      jobExecutionLink.href = '../jobexecutions/' + job.runningJobExecutionId.value;
+      jobExecutionLink.href = '../jobexecutions/single/' + job.runningJobExecutionId.value;
 
       const jobExecutionLinkHeader = $('#' + button.value + 'executionidheader')[0];
       jobExecutionLinkHeader.innerHTML = job.runningJobExecutionId.value;
-      jobExecutionLinkHeader.href = '../jobexecutions/' + job.runningJobExecutionId.value;
+      jobExecutionLinkHeader.href = '../jobexecutions/single/' + job.runningJobExecutionId.value;
     }
   });
 }
