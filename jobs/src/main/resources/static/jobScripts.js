@@ -8,13 +8,10 @@ const timermap = new Map();
 function openCollapseCards(button) {
   const content = $("#" + button.value + 'content')[0];
   button.classList.toggle('card-header-title');
-  button.classList.toggle('is-primary')
-  button.classList.toggle('hide-last-child')
-  if (content.style.display === "flex") {
-    content.style.display = "none";
-  } else {
-    content.style.display = "flex";
-  }
+  button.classList.toggle('is-primary');
+  button.classList.toggle('hide-last-child');
+  content.classList.toggle('flex');
+  content.classList.toggle('flex-wrap');
 }
 
 /**
@@ -53,10 +50,12 @@ function updateMessagesAndDates(input) {
           second: 'numeric'
         };
 
+        // update last updated date
         const lastUpdateElement = $("#" + id + 'update')[0];
         const lastUpdatedDate = new Date(fragment.lastUpdated).toLocaleDateString('de-DE', options).replace(',', '');
         lastUpdateElement.innerHTML = lastUpdatedDate;
 
+        // if stopped update stopped date
         if (fragment.stopped) {
           const stoppedElement = $("#" + id + 'stopped')[0];
           const stoppedDate = new Date(fragment.stopped).toLocaleDateString('de-DE', options).replace(',', '');
@@ -70,9 +69,9 @@ function updateMessagesAndDates(input) {
   };
 
   if (input.checked) {
-    //start interval to fetch changes every 5 seconds
+    //start interval to fetch changes every 1 second
     callJobExecutionUpdateFromServer();
-    const intervalId = setInterval(callJobExecutionUpdateFromServer, 5000);
+    const intervalId = setInterval(callJobExecutionUpdateFromServer, 1000);
     timermap.set(id, intervalId);
   } else {
     //stop interval
@@ -113,6 +112,9 @@ function startJob(button) {
       const jobExecutionLinkHeader = $('#' + button.value + 'executionidheader')[0];
       jobExecutionLinkHeader.innerHTML = job.runningJobExecutionId.value;
       jobExecutionLinkHeader.href = '../jobexecutions/single/' + job.runningJobExecutionId.value;
+
+      // update header status
+      updateJob(job.id.value, job)
     }
   });
 }
@@ -164,7 +166,8 @@ function updateJob(jobId, jobData) {
   startButton.disabled = jobData.runningJobExecutionId ? true : jobData.disabled;
 
   const headerState = $('#' + jobId + 'headerstate')[0];
-  headerState.className = jobData.disabled ? "fas fa-times" : "fas fa-check";
+  headerState.className = jobData.disabled ? 'fas fa-minus-circle' :
+    jobData.runningJobExecutionId ? 'fas fa-spinner fa-spin' : 'fas fa-check';
 }
 
 function stopPropagation(e){

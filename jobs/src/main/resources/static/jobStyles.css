@@ -46,7 +46,8 @@ li {
 }
 
 .message-box {
-  width: 800px;
+  width: 100%;
+  max-width: 800px;
   height: 400px;
   overflow: auto;
   background-color: #f9f9f9;
@@ -57,8 +58,12 @@ li {
 }
 
 .card {
-  width: 1200px;
+  max-width: 1200px;
+}
 
+.panel {
+  /* the content of the jobexecutions wont get smaller than this */
+  min-width: 418px;
 }
 
 .content table tbody tr:last-child td, .content table tbody tr:last-child th {
@@ -82,6 +87,10 @@ li {
   display: flex;
 }
 
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
 .space-left {
   margin-left: 10px;
 }
@@ -94,7 +103,7 @@ li {
   display: table-row;
 }
 
-.hide-last-child span:last-child, .hide-last-child div a, .hide-last-child br, .hide-last-child div:first-child{
+.hide-last-child span:last-child, .hide-last-child div a, .hide-last-child br, .hide-last-child div:first-child {
   display: none;
 }
 
@@ -108,7 +117,7 @@ a, .fa-check, .fa-spinner {
   align-items: center;
 }
 
-.fas{
+.fas {
   margin: 0 20px 0 10px;
 }
 
@@ -116,19 +125,55 @@ a, .fa-check, .fa-spinner {
   color: #ff3860;
 }
 
-.fa-exclamation{
+.fa-exclamation {
   color: #ffdd57;
 }
 
-.second-level-headline{
+.second-level-headline {
   font-size: 14px;
   color: grey;
 }
 
-.margin-left-auto{
+.margin-left-auto {
   margin-left: auto;
 }
 
-.display-block{
+.display-block {
   display: block;
+}
+
+.fa-minus-circle {
+  color: #7a7a7a;
+}
+
+.td-15 {
+  width: 15%;
+}
+
+.td-25 {
+  width: 25%;
+}
+
+.td-60 {
+  width: 60%;
+}
+
+.td-75 {
+  width: 75%;
+}
+
+.td-100 {
+  width: 100%;
+}
+
+.width-320 {
+  width: 320px !important;
+}
+
+.content pre {
+  white-space: normal;
+}
+
+.max-width-800 {
+  max-width: 800px;
 }

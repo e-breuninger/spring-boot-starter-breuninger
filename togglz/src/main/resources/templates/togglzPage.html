@@ -10,22 +10,26 @@
 <body>
 <!--/*@thymesVar id="togglzList" type="java.util.List<com.breuninger.boot.togglz.domain.TogglzFeature>"*/-->
 <!--/*@thymesVar id="togglz" type="com.breuninger.boot.togglz.domain.TogglzFeature"*/-->
-<div class="card panel">
-  <div class="card-header"><p class="card-header-title">Feature Toggles</p></div>
-  <div class="card-content content">
-    <table class="table">
-      <tr th:each="togglz : ${togglzList}">
-        <td>
-          <div class="switch">
-            <input type="checkbox" th:checked="${togglz.enabled}" th:id="${togglz.feature}" onclick="ontogglzchange(this)">
-            <span class="slider round"></span>
-          </div>
-        </td>
-        <td th:text="${togglz.feature}" class="switch-label"></td>
-      </tr>
-    </table>
+<section class="section">
+  <div class="column is-half-desktop">
+  <div class="card panel">
+    <div class="card-header"><p class="card-header-title">Feature Toggles</p></div>
+    <div class="card-content content">
+      <table class="table">
+        <tr th:each="togglz : ${togglzList}">
+          <td>
+            <label class="switch">
+              <input type="checkbox" th:checked="${togglz.enabled}" th:id="${togglz.feature}" onclick="ontogglzchange(this)">
+              <span class="slider round"></span>
+            </label>
+          </td>
+          <td th:text="${togglz.feature}" class="switch-label"></td>
+        </tr>
+      </table>
+    </div>
   </div>
-</div>
+  </div>
+</section>
 <script type="text/javascript" src="../togglzScripts.js"></script>
 </body>
 </html>
