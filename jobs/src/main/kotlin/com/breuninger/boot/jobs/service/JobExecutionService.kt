@@ -1,5 +1,6 @@
 package com.breuninger.boot.jobs.service
 
+import com.breuninger.boot.jobs.actuator.health.JobHealthIndicator
 import com.breuninger.boot.jobs.domain.JobExecution
 import com.breuninger.boot.jobs.domain.JobExecution.Status
 import com.breuninger.boot.jobs.domain.JobExecution.Status.*
@@ -16,7 +17,11 @@ import java.time.Instant.now
 
 @Service
 @ConditionalOnProperty(prefix = "breuni.jobs", name = ["enabled"], havingValue = "true")
-class JobExecutionService(private val jobService: JobService, private val jobExecutionRepository: JobExecutionRepository) {
+class JobExecutionService(
+  private val jobService: JobService,
+  private val jobExecutionRepository: JobExecutionRepository,
+  private val jobHealthIndicator: JobHealthIndicator
+) {
 
   fun findAllWithoutMessages() = jobExecutionRepository.findAllWithoutMessages()
 
@@ -29,6 +34,9 @@ class JobExecutionService(private val jobService: JobService, private val jobExe
   fun stop(jobId: JobId, jobExecutionId: JobExecutionId) {
     jobExecutionRepository.stop(jobExecutionId)
     jobService.releaseRunLock(jobId, jobExecutionId)
+    val jobExecution = findOne(jobExecutionId)
+    if(jobExecution != null)
+      jobHealthIndicator.setJobExecutionStatus(jobId, jobExecution.status)
   }
 
   fun appendMessage(jobExecutionId: JobExecutionId, message: JobExecutionMessage) {
