@@ -1,5 +1,6 @@
 body {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 1px;
 }
 
 .collapsible {
@@ -171,7 +172,7 @@ a, .fa-check, .fa-spinner {
 }
 
 .content pre {
-  white-space: normal;
+  white-space: pre-wrap;
 }
 
 .max-width-800 {

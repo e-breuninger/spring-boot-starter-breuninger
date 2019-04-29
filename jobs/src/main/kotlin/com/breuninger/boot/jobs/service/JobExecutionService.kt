@@ -53,5 +53,5 @@ class JobExecutionService(private val jobService: JobService, private val jobExe
 
   fun findAllJobExecutions() = jobExecutionRepository.findAll()
 
-  fun findOne(jobExecutionId: JobExecutionId) = jobExecutionRepository.findOne(jobExecutionId);
+  fun findOne(jobExecutionId: JobExecutionId) = jobExecutionRepository.findOne(jobExecutionId)
 }

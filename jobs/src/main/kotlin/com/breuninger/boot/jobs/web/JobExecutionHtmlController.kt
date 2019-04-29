@@ -18,7 +18,7 @@ class JobExecutionHtmlController(private val jobExecutionService: JobExecutionSe
 
   @GetMapping
   fun getAllJobExecutions(model: Model): String {
-    model.addAttribute("jobExecutions", jobExecutionService.findAllJobExecutions())
+    model.addAttribute("jobExecutions", jobExecutionService.findAllJobExecutions().take(100))
 
     return "jobExecutionOverviewPage"
   }
@@ -42,7 +42,7 @@ class JobExecutionHtmlController(private val jobExecutionService: JobExecutionSe
     if (jobId == null)
       model.addAttribute("jobExecutions", Collections.EMPTY_LIST)
     else {
-      val jobExecutions: List<JobExecution> = jobExecutionService.findAllJobExecutions().filter { it.jobId.value == jobId }
+      val jobExecutions: List<JobExecution> = jobExecutionService.findAllJobExecutions().filter { it.jobId.value == jobId }.take(100)
       model.addAttribute("jobExecutions", jobExecutions)
     }
     return "jobExecutionOverviewPage"

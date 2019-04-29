@@ -13,99 +13,98 @@
 <!--/*@thymesVar id="jobs" type="java.util.List<com.breuninger.boot.jobs.domain.Job>"*/-->
 <!--/*@thymesVar id="job" type="com.breuninger.boot.jobs.domain.Job"*/-->
 <!--/*@thymesVar id="jobDefs" type="java.util.Map<com.breuninger.boot.jobs.domain.JobId, com.breuninger.boot.jobs.domain.JobDefinition>"*/-->
-<!--/*@thymesVar id="jobExecutions" type="java.util.Map<com.breuninger.boot.jobs.domain.JobExecutionId, com.breuninger.boot.jobs.domain.JobExecution>"*/-->
-<section class="section">
-  <div class="card panel" th:each="job : ${jobs}">
-    <div class="card-header">
-      <button class="collapsible hero application-list-item__header flex flex-header" onclick="openCollapseCards(this);"
-              th:value="${job.id.value}">
-        <div><i th:class="${job.disabled} ? 'fas fa-minus-circle' : (${job.runningJobExecutionId} ? 'fas fa-spinner fa-spin' :  'fas fa-check')" th:id="${job.id.value}+'headerstate'"></i></div>
-        <div><span th:text="${job.id.value}"></span>
-          <br>
-          <a th:text="${job.runningJobExecutionId} ? ${job.runningJobExecutionId.value} : '-'" onclick="stopPropagation(event);"
-             th:href="${job.runningJobExecutionId} ? '../jobexecutions/single/'+${job.runningJobExecutionId.value} : '../jobexecutions'"
-             th:id="${job.id.value} + 'executionidheader'"></a>
+<div class="card panel" th:each="job : ${jobs}">
+  <div class="card-header">
+    <button class="collapsible hero application-list-item__header flex flex-header" onclick="openCollapseCards(this);"
+            th:value="${job.id.value}">
+      <div><i
+        th:class="${job.disabled} ? 'fas fa-minus-circle' : (${job.runningJobExecutionId} ? 'fas fa-spinner fa-spin' :  'fas fa-check')"
+        th:id="${job.id.value}+'headerstate'"></i></div>
+      <div><span th:text="${job.id.value}"></span>
+        <br>
+        <a th:text="${job.runningJobExecutionId} ? ${job.runningJobExecutionId.value} : '-'" onclick="stopPropagation(event);"
+           th:href="${job.runningJobExecutionId} ? '../jobexecutions/single/'+${job.runningJobExecutionId.value} : '../jobexecutions'"
+           th:id="${job.id.value} + 'executionidheader'"></a>
+      </div>
+      <a class="margin-left-auto display-block fas fa-arrow-right" onclick="stopPropagation(event);"
+         th:href="'../jobexecutions/multi/' + ${job.id.value}"></a>
+    </button>
+  </div>
+  <div th:id="${job.id.value}+'content'" class="card-content content" style="flex-direction: column">
+    <table>
+      <tr>
+        <td class="td-25">Description</td>
+        <td class="td-75" colspan="2" th:text="${jobDefs.get(job.id).description}"></td>
+      </tr>
+      <tr>
+        <td class="td-25">Running Job Execution ID</td>
+        <td class="td-60"><a th:text="${job.runningJobExecutionId} ? ${job.runningJobExecutionId.value} : '-'"
+                             th:href="${job.runningJobExecutionId} ? '../jobexecutions/single/'+${job.runningJobExecutionId.value} : '../jobexecutions'"
+                             th:id="${job.id.value} + 'executionid'"></a></td>
+        <td class="td-15">
+          <button class="button is-primary" onclick="startJob(this)"
+                  th:disabled="${job.runningJobExecutionId} ? true : ${job.disabled}" th:id="${job.id.value} + 'start'"
+                  th:value="${job.id.value}">Start job
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td class="td-25">Status</td>
+        <td class="td-75" colspan="2">
+          <div th:id="${job.id.value}+'status'" th:class="${job.disabled}?'disabled':'enabled'"
+               th:text="${job.disabled}?'Disabled':'Enabled'"></div>
+        </td>
+      </tr>
+      <tr th:class="(${job.disabled}?'display-none')" th:id="${job.id.value}+'enabled'">
+        <td class="td-100" colspan="3">
+          <div class="flex"><input class="input" type="text" placeholder="Disabled Comment"
+                                   th:id="${job.id.value} + 'disabledcommentinput'"/>
+            <button class="button is-danger space-left" onclick="disableJob(true, this)" th:value="${job.id.value}">
+              Disable job
+            </button>
+          </div>
+        </td>
+      </tr>
+      <tr th:class="(!${job.disabled}? 'display-none')" th:id="${job.id.value}+'disabled'">
+        <td class="td-25">Disabled Comment</td>
+        <td class="td-60" th:id="${job.id.value} + 'disabledcomment'" th:text="${job.disableComment}"></td>
+        <td class="td-15">
+          <button class="button is-primary space-left" onclick="disableJob(false, this)" th:value="${job.id.value}">
+            Enable job
+          </button>
+        </td>
+      </tr>
+      <tr th:if="${job.state.size() != 0}">
+        <td class="td-25">States</td>
+        <td class="td-75" colspan="2">
+          <ul>
+            <li th:each="a : ${job.state.keySet()}" th:text="a + ': ' + ${job.state.get(a)}"></li>
+          </ul>
+        </td>
+      </tr>
+    </table>
+    <div class="card-content-item">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-title">Job Definition
+          </div>
         </div>
-        <a class="margin-left-auto display-block fas fa-arrow-right" onclick="stopPropagation(event);"
-           th:href="'../jobexecutions/multi/' + ${job.id.value}"></a>
-      </button>
-    </div>
-    <div th:id="${job.id.value}+'content'" class="card-content content" style="flex-direction: column">
-      <table>
-        <tr>
-          <td class="td-25">Description</td>
-          <td class="td-75" colspan="2" th:text="${jobDefs.get(job.id).description}"></td>
-        </tr>
-        <tr>
-          <td class="td-25">Running Job Execution ID</td>
-          <td class="td-60"><a th:text="${job.runningJobExecutionId} ? ${job.runningJobExecutionId.value} : '-'"
-                 th:href="${job.runningJobExecutionId} ? '../jobexecutions/single/'+${job.runningJobExecutionId.value} : '../jobexecutions'"
-                 th:id="${job.id.value} + 'executionid'"></a></td>
-          <td class="td-15">
-            <button class="button is-primary" onclick="startJob(this)"
-                    th:disabled="${job.runningJobExecutionId} ? true : ${job.disabled}" th:id="${job.id.value} + 'start'"
-                    th:value="${job.id.value}">Start job
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td class="td-25">Status</td>
-          <td class="td-75" colspan="2">
-            <div th:id="${job.id.value}+'status'" th:class="${job.disabled}?'disabled':'enabled'"
-                 th:text="${job.disabled}?'Disabled':'Enabled'"></div>
-          </td>
-        </tr>
-        <tr th:class="(${job.disabled}?'display-none')" th:id="${job.id.value}+'enabled'">
-          <td class="td-100" colspan="3">
-            <div class="flex"><input class="input" type="text" placeholder="Disabled Comment"
-                                     th:id="${job.id.value} + 'disabledcommentinput'"/>
-              <button class="button is-danger space-left" onclick="disableJob(true, this)" th:value="${job.id.value}">
-                Disable job
-              </button>
-            </div>
-          </td>
-        </tr>
-        <tr th:class="(!${job.disabled}? 'display-none')" th:id="${job.id.value}+'disabled'">
-          <td class="td-25">Disabled Comment</td>
-          <td class="td-60" th:id="${job.id.value} + 'disabledcomment'" th:text="${job.disableComment}"></td>
-          <td class="td-15">
-            <button class="button is-primary space-left" onclick="disableJob(false, this)" th:value="${job.id.value}">
-              Enable job
-            </button>
-          </td>
-        </tr>
-        <tr th:if="${job.state.size() != 0}">
-          <td class="td-25">States</td>
-          <td class="td-75" colspan="2">
-            <ul>
-              <li th:each="a : ${job.state.keySet()}" th:text="a + ': ' + ${job.state.get(a)}"></li>
-            </ul>
-          </td>
-        </tr>
-      </table>
-      <div class="card-content-item">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-header-title">Job Definition
-            </div>
-          </div>
-          <div class="card-content flex">
-            <div class="card-content-item-no-border has-text-centered"><p class="heading">Cron</p>
-              <p th:text="${jobDefs.get(job.id).cron}?${jobDefs.get(job.id).cron}:'-'"></p></div>
-            <div class="card-content-item-no-border has-text-centered"><p class="heading">Fixed Delay</p>
-              <p th:text="${jobDefs.get(job.id).fixedDelay}?(${jobDefs.get(job.id).fixedDelay.seconds}+'s'):'-'"></p></div>
-            <div class="card-content-item-no-border has-text-centered"><p class="heading">Fixed Rate</p>
-              <p th:text="${jobDefs.get(job.id).fixedRate}?(${jobDefs.get(job.id).fixedRate.seconds}+'s'):'-'"></p></div>
-            <div class="card-content-item-no-border has-text-centered"><p class="heading">Restarts</p>
-              <p th:text="${jobDefs.get(job.id).restarts}?${jobDefs.get(job.id).restarts}:'-'"></p></div>
-            <div class="card-content-item-no-border has-text-centered"><p class="heading">Restart Delay</p>
-              <p th:text="${jobDefs.get(job.id).restartDelay}?${jobDefs.get(job.id).restartDelay}:'-'"></p></div>
-          </div>
+        <div class="card-content flex">
+          <div class="card-content-item-no-border has-text-centered"><p class="heading">Cron</p>
+            <p th:text="${jobDefs.get(job.id).cron}?${jobDefs.get(job.id).cron}:'-'"></p></div>
+          <div class="card-content-item-no-border has-text-centered"><p class="heading">Fixed Delay</p>
+            <p th:text="${jobDefs.get(job.id).fixedDelay}?(${jobDefs.get(job.id).fixedDelay.seconds}+'s'):'-'"></p></div>
+          <div class="card-content-item-no-border has-text-centered"><p class="heading">Fixed Rate</p>
+            <p th:text="${jobDefs.get(job.id).fixedRate}?(${jobDefs.get(job.id).fixedRate.seconds}+'s'):'-'"></p></div>
+          <div class="card-content-item-no-border has-text-centered"><p class="heading">Restarts</p>
+            <p th:text="${jobDefs.get(job.id).restarts}?${jobDefs.get(job.id).restarts}:'-'"></p></div>
+          <div class="card-content-item-no-border has-text-centered"><p class="heading">Restart Delay</p>
+            <p th:text="${jobDefs.get(job.id).restartDelay}?${jobDefs.get(job.id).restartDelay}:'-'"></p></div>
         </div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="../jobScripts.js"></script>

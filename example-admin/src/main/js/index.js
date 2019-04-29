@@ -3,8 +3,50 @@
 import jobsEndpoint from './jobs-endpoint';
 import jobExecutionsEndpoint from './jobExecutions-endpoint';
 import togglzEndpoint from './togglz-endpoint';
+import jobExecutionsView from './jobExecutions-view';
+import togglzView from './togglz-view';
+import jobsView from './jobs-view';
 
-// tag::customization-ui-endpoint[]
+// togglz toplevel view
+SBA.use({
+  install({viewRegistry}) {
+    viewRegistry.addView({
+      name: 'togglz',  //<1>
+      path: '/togglz', //<2>
+      component: togglzView, //<3>
+      label: 'Togglz', //<4>
+      order: 1000, //<5>
+    });
+  }
+});
+
+// jobs toplevel view
+SBA.use({
+  install({viewRegistry}) {
+    viewRegistry.addView({
+      name: 'jobs',  //<1>
+      path: '/jobs', //<2>
+      component: jobsView, //<3>
+      label: 'Jobs', //<4>
+      order: 1000, //<5>
+    });
+  }
+});
+
+// jobs toplevel view
+SBA.use({
+  install({viewRegistry}) {
+    viewRegistry.addView({
+      name: 'jobExecutions',  //<1>
+      path: '/jobExecutions', //<2>
+      component: jobExecutionsView, //<3>
+      label: 'Job Executions', //<4>
+      order: 1000, //<5>
+    });
+  }
+});
+
+// togglz endpoint
 SBA.use({
   install({viewRegistry}) {
     viewRegistry.addView({
@@ -18,9 +60,8 @@ SBA.use({
     });
   }
 });
-// end::customization-ui-endpoint[]
 
-// tag::customization-ui-endpoint[]
+// jobs endpoint
 SBA.use({
   install({viewRegistry}) {
     viewRegistry.addView({
@@ -33,10 +74,8 @@ SBA.use({
     });
   }
 });
-// end::customization-ui-endpoint[]
 
-
-// tag::customization-ui-endpoint[]
+// jobexecutions endpoint
 SBA.use({
   install({viewRegistry}) {
     viewRegistry.addView({
@@ -49,4 +88,3 @@ SBA.use({
     });
   }
 });
-// end::customization-ui-endpoint[]

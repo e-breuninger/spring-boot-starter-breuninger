@@ -1,7 +1,7 @@
 <template>
-  <div class="togglz">
+  <section class="togglz section">
     <iframe :src="text"/>
-  </div>
+  </section>
 </template>
 
 <script>

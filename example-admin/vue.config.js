@@ -31,5 +31,15 @@ module.exports = {
     config.plugins.delete('html');
     config.plugins.delete('preload');
     config.plugins.delete('prefetch');
+  },
+  configureWebpack: {
+    plugins: [
+      new CopyPlugin([{
+        from: resolve(__dirname, 'src/main/js/routes.txt'),
+        to: resolve(__dirname, 'src/main/resources/META-INF/spring-boot-admin-server-ui/extensions/test'),
+        toType: 'dir',
+        ignore: ['*.scss']
+      }])
+    ]
   }
 };

@@ -1,7 +1,7 @@
 <template>
-  <div class="jobs">
+  <section class="jobs section">
     <iframe :src="text"/>
-  </div>
+  </section>
 </template>
 
 <script>

@@ -13,70 +13,69 @@
 <body>
 <!--/*@thymesVar id="jobExecutions" type="java.util.List<com.breuninger.boot.jobs.domain.JobExecution>"*/-->
 <!--/*@thymesVar id="jobExecution" type="com.breuninger.boot.jobs.domain.JobExecution"*/-->
-<section class="section">
-  <div class="card panel" th:each="jobExecution : ${jobExecutions}">
-    <div class="card-header">
-      <button class="collapsible hero application-list-item__header flex flex-header" th:value="${jobExecution.id.value} + 'card'"
-              onclick="openCollapseCards(this)">
-        <div><i th:id="${jobExecution.id.value} + 'headerstate'"
-                th:class="(${jobExecution.status.name()} == 'OK') ? (!${jobExecution.stopped} ? 'fas fa-spinner fa-spin' : 'fas fa-check') : ((${jobExecution.status.name()} == 'SKIPPED') ? 'fas fa-exclamation' : 'fas fa-times')"></i>
-        </div>
-        <div>
-          <span th:text="'Running Job Execution ID: ' + ${jobExecution.id.value}"></span>
-          <br>
-          <span class="second-level-headline" th:text="'Job ID: ' + ${jobExecution.jobId.value}"></span>
-        </div>
-      </button>
-    </div>
-    <div th:id="${jobExecution.id.value} + 'cardcontent'" class="card-content content">
-      <table class="width-320">
-        <tr>
-          <td>Job ID</td>
-          <td th:text="${jobExecution.jobId.value}"></td>
-        </tr>
-        <tr>
-          <td>Status</td>
-          <td><span th:id="${jobExecution.id.value}+'status'"
-                    th:class="(${jobExecution.status.name()} == 'OK')?'green':((${jobExecution.status.name()} == 'SKIPPED')?'yellow':'red')"
-                    th:text="((${jobExecution.status.name()} == 'OK') ? (!${jobExecution.stopped} ? 'Running' : 'OK') : ${jobExecution.status.name()})"></span>
-          </td>
-        </tr>
-        <tr>
-          <td>Hostname</td>
-          <td th:text="${jobExecution.hostname}"></td>
-        </tr>
-        <tr>
-          <td>Started</td>
-          <td th:text="${#dates.format(jobExecution.started, 'dd.MM.yyyy HH:mm:ss')}"></td>
-        </tr>
-        <tr>
-          <td>Last Update</td>
-          <td th:id="${jobExecution.id.value} + 'update'"
-              th:text="${#dates.format(jobExecution.lastUpdated, 'dd.MM.yyyy HH:mm:ss')}"></td>
-        </tr>
-        <tr>
-          <td>Stopped</td>
-          <td th:id="${jobExecution.id.value} + 'stopped'"
-              th:text="(${jobExecution.stopped}?${#dates.format(jobExecution.stopped, 'dd.MM.yyyy HH:mm:ss')}:'-')"></td>
-        </tr>
-      </table>
-      <table class="max-width-800">
-        <tr>
-          <td><label
-            th:for="${jobExecution.id.value}+'input'" class="checkbox" th:disabled="${jobExecution.stopped}"><input
-            th:id="${jobExecution.id.value}+'input'" type="checkbox"
-            onchange="updateMessagesAndDates(this)" th:value="${jobExecution.id.value}"/> Update Messages</label></td>
-        </tr>
-        <tr class="card-content-item">
-          <td>
+<div class="card panel" th:each="jobExecution : ${jobExecutions}">
+  <div class="card-header">
+    <button class="collapsible hero application-list-item__header flex flex-header" th:value="${jobExecution.id.value} + 'card'"
+            onclick="openCollapseCards(this)">
+      <div><i th:id="${jobExecution.id.value} + 'headerstate'"
+              th:class="(${jobExecution.status.name()} == 'OK') ? (!${jobExecution.stopped} ? 'fas fa-spinner fa-spin' : 'fas fa-check') : ((${jobExecution.status.name()} == 'SKIPPED') ? 'fas fa-exclamation' : 'fas fa-times')"></i>
+      </div>
+      <div>
+        <span th:text="'Running Job Execution ID: ' + ${jobExecution.id.value}"></span>
+        <br>
+        <a class="" th:text="'Job ID: ' + ${jobExecution.jobId.value}" th:href="'../../jobs/' + ${jobExecution.jobId.value}"
+           onclick="stopPropagation(event)"></a>
+      </div>
+    </button>
+  </div>
+  <div th:id="${jobExecution.id.value} + 'cardcontent'" class="card-content content">
+    <table class="width-320">
+      <tr>
+        <td>Job ID</td>
+        <td th:text="${jobExecution.jobId.value}"></td>
+      </tr>
+      <tr>
+        <td>Status</td>
+        <td><span th:id="${jobExecution.id.value}+'status'"
+                  th:class="(${jobExecution.status.name()} == 'OK')?'green':((${jobExecution.status.name()} == 'SKIPPED')?'yellow':'red')"
+                  th:text="((${jobExecution.status.name()} == 'OK') ? (!${jobExecution.stopped} ? 'Running' : 'OK') : ${jobExecution.status.name()})"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>Hostname</td>
+        <td th:text="${jobExecution.hostname}"></td>
+      </tr>
+      <tr>
+        <td>Started</td>
+        <td th:text="${#dates.format(jobExecution.started, 'dd.MM.yyyy HH:mm:ss')}"></td>
+      </tr>
+      <tr>
+        <td>Last Update</td>
+        <td th:id="${jobExecution.id.value} + 'update'"
+            th:text="${#dates.format(jobExecution.lastUpdated, 'dd.MM.yyyy HH:mm:ss')}"></td>
+      </tr>
+      <tr>
+        <td>Stopped</td>
+        <td th:id="${jobExecution.id.value} + 'stopped'"
+            th:text="(${jobExecution.stopped}?${#dates.format(jobExecution.stopped, 'dd.MM.yyyy HH:mm:ss')}:'-')"></td>
+      </tr>
+    </table>
+    <table class="max-width-800">
+      <tr>
+        <td><label
+          th:for="${jobExecution.id.value}+'input'" class="checkbox" th:disabled="${jobExecution.stopped}"><input
+          th:id="${jobExecution.id.value}+'input'" type="checkbox"
+          onchange="updateMessagesAndDates(this)" th:value="${jobExecution.id.value}"/> Update Messages</label></td>
+      </tr>
+      <tr class="card-content-item">
+        <td>
         <pre class="message-box" th:id="${jobExecution.id.value}"><div th:each="message : ${jobExecution.messages}"
                                                                        th:text="${#dates.format(message.timestamp, 'yyyy-MM-dd HH:mm:ss')} + ' ' + ${message.level} + ' --- '+ ${message.message}"></div></pre>
-          </td>
-        </tr>
-      </table>
-    </div>
+        </td>
+      </tr>
+    </table>
   </div>
-</section>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="../../jobScripts.js"></script>
