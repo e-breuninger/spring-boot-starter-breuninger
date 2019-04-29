@@ -10,11 +10,11 @@ class JobExecutorRegistry {
 
   private val jobExecutorMap: ConcurrentMap<JobId, JobExecutor> = ConcurrentHashMap()
 
-  fun register(jobId: JobId,jobExecutor: JobExecutor){
-    jobExecutorMap.set(jobId,jobExecutor)
+  fun register(jobId: JobId, jobExecutor: JobExecutor) {
+    jobExecutorMap.set(jobId, jobExecutor)
   }
 
-  fun find (jobId: JobId): JobExecutor? {
+  fun find(jobId: JobId): JobExecutor? {
     return jobExecutorMap.get(jobId)
   }
 }
