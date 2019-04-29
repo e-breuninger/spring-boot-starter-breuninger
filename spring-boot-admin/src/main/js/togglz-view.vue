@@ -18,7 +18,7 @@
                   <i :class="instance.statusInfo.status === 'UP' ? faCheckClass: faMinusCircle" />
                 </td>
                 <td>
-                  <a :href="instance.registration.serviceUrl">{{ instance.registration.serviceUrl }}</a>
+                  <div class="link" @click.stop="showDetails(instance)">{{ instance.registration.serviceUrl }}</div>
                 </td>
                 <td>
                   <iframe
@@ -52,6 +52,11 @@
     }),
     async created() {
       this.apps = await this.applications;
+    },
+    methods: {
+      showDetails(instance) {
+        this.$router.push({name: 'instances/details', params: {instanceId: instance.id}});
+      }
     }
   };
 </script>
@@ -61,7 +66,7 @@
 
   iframe {
     width: 800px;
-    height: 350px;
+    height: 350px !important;
   }
 
   .title {
@@ -78,5 +83,10 @@
 
   .fa-minus-circle {
     color: #7a7a7a;
+  }
+
+  .link {
+    color: #00d1b2;
+    cursor: pointer;
   }
 </style>

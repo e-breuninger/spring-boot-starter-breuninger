@@ -2,10 +2,10 @@ const {resolve} = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  outputDir: 'src/main/resources/META-INF/spring-boot-admin-server-ui/extensions/test',
+  outputDir: 'src/main/resources/META-INF/spring-boot-admin-server-ui/extensions/admin',
   chainWebpack: config => {
     config.entryPoints.delete('app');
-    config.entry('test').add('./src/main/js/index.js');
+    config.entry('admin').add('./src/main/js/index.js');
     config.externals({
       vue: {
         commonjs: 'vue',
@@ -36,7 +36,7 @@ module.exports = {
     plugins: [
       new CopyPlugin([{
         from: resolve(__dirname, 'src/main/js/routes.txt'),
-        to: resolve(__dirname, 'src/main/resources/META-INF/spring-boot-admin-server-ui/extensions/test'),
+        to: resolve(__dirname, 'src/main/resources/META-INF/spring-boot-admin-server-ui/extensions/admin'),
         toType: 'dir',
         ignore: ['*.scss']
       }])
