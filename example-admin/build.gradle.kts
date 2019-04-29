@@ -14,6 +14,7 @@ dependencies {
 
   compile(libraries["spring-boot-admin-starter-server"] as String)
   compile(libraries["spring-boot-starter-webflux"] as String)
+  compile(project(":spring-boot-admin"))
 
   compileOnly(libraries["spring-context-indexer"] as String)
 }
