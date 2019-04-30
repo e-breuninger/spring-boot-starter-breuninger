@@ -11,6 +11,7 @@ body {
   text-align: left;
   outline: none;
   font-size: 16px;
+  background: white;
 }
 
 .card-content {

@@ -1,3 +1,9 @@
+import com.moowork.gradle.node.npm.NpmTask
+
+apply {
+  plugin("com.moowork.node")
+}
+
 apply {
   from("$rootDir/gradle/libraries.gradle.kts")
 }
@@ -16,3 +22,12 @@ dependencies {
 
   annotationProcessor(libraries["spring-boot-configuration-processor"] as String)
 }
+
+task<NpmTask>("buildJs") {
+  dependsOn("npmInstall")
+  setArgs(listOf("run", "build"))
+}
+
+tasks.getByName("build")
+  .dependsOn("buildJs")
+
