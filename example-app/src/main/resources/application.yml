@@ -7,7 +7,8 @@ spring:
   data.mongodb.database: "kotlin-spring-poc"
 
 management:
-  endpoints.web.exposure.include: "*"
+  endpoints:
+    web.exposure.include: "*"
   # https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-metrics.html#production-ready-metrics-custom
   # https://docs.spring.io/spring-metrics/docs/current/public/datadog
   metrics:
@@ -17,6 +18,9 @@ management:
     tags:
       region: "us-east-1"
       stack: "prod"
+  endpoint:
+    health:
+      show-details: always
 
 breuni:
   jobs:
@@ -30,3 +34,4 @@ breuni:
       time-to-live: "30"
       time-unit: "seconds"
   validation.enabled: "true"
+

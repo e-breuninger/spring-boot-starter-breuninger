@@ -15,16 +15,18 @@ class JobHealthIndicator: HealthIndicator  {
 
   override fun health(): Health {
     var healthy: Boolean = true
-    var failedExecutions: Int = 0
+    var map: MutableMap<String, Health> = HashMap()
     jobExecutionStatusMap.forEach{(jobId, status) -> if(status == JobExecution.Status.DEAD || status == JobExecution.Status.ERROR) {
+      map.set(jobId.value, Health.down().build())
       healthy = false
-      failedExecutions++
+    }else{
+      map.set(jobId.value, Health.up().build())
     }}
 
     if(healthy)
-      return Health.up().build()
+      return Health.up().withDetails(map).build()
 
-    return Health.down().withDetail("Failed JobExecutions", failedExecutions).build()
+    return Health.down().withDetails(map).build()
   }
 
   fun setJobExecutionStatus(jobId: JobId, status: JobExecution.Status){
