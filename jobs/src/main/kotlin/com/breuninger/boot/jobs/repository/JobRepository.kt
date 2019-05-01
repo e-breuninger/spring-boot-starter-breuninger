@@ -5,6 +5,7 @@ import com.breuninger.boot.jobs.domain.JobBlockedException
 import com.breuninger.boot.jobs.domain.JobExecutionId
 import com.breuninger.boot.jobs.domain.JobId
 
+// TODO(BS): sort methods
 interface JobRepository {
 
   fun findOne(jobId: JobId): Job?
@@ -22,9 +23,11 @@ interface JobRepository {
 
   fun updateState(jobId: JobId, key: String, value: String?): Unit?
 
-  fun findAllJobs(): List<Job>
+  fun findAll(): List<Job>
 
-  fun disable(jobId: JobId, disableComment: String)
+  fun findAll(jobId: JobId): List<Job>
 
-  fun enable(jobId: JobId)
+  fun disable(jobId: JobId, disableComment: String): Unit?
+
+  fun enable(jobId: JobId): Unit?
 }

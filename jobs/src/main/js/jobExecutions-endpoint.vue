@@ -1,6 +1,6 @@
 <template>
   <section class="jobExecutions section">
-    <iframe :src="text"/>
+    <iframe :src="text" />
   </section>
 </template>
 
@@ -16,7 +16,7 @@
       text: ''
     }),
     async created() {
-      this.text = await this.instance.registration.serviceUrl + 'jobexecutions';
+      this.text = `${await this.instance.registration.serviceUrl}jobexecutions`;
     }
   };
 </script>

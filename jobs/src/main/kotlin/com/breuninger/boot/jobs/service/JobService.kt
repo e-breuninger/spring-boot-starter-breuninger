@@ -1,20 +1,18 @@
 package com.breuninger.boot.jobs.service
 
-import com.breuninger.boot.jobs.JobExecutor
-import com.breuninger.boot.jobs.JobExecutorRegistry
 import com.breuninger.boot.jobs.domain.Job
 import com.breuninger.boot.jobs.domain.JobBlockedException
 import com.breuninger.boot.jobs.domain.JobExecutionId
 import com.breuninger.boot.jobs.domain.JobId
 import com.breuninger.boot.jobs.domain.JobMutexGroup
+import com.breuninger.boot.jobs.repository.JobExecutorRegistry
 import com.breuninger.boot.jobs.repository.JobRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
-import org.springframework.scheduling.annotation.ScheduledAnnotationBeanPostProcessor
-import org.springframework.scheduling.config.ScheduledTaskRegistrar
 import org.springframework.stereotype.Service
 
+// TODO(BS): sort methods
 @Service
 @ConditionalOnProperty(prefix = "breuni.jobs", name = ["enabled"], havingValue = "true")
 class JobService(
@@ -56,7 +54,9 @@ class JobService(
 
   fun updateState(jobId: JobId, key: String, value: String?) = jobRepository.updateState(jobId, key, value)
 
-  fun findAllJobs() = jobRepository.findAllJobs()
+  fun findAll() = jobRepository.findAll()
+
+  fun findAll(jobId: JobId) = jobRepository.findAll(jobId)
 
   fun findOne(jobId: JobId) = jobRepository.findOne(jobId)
 
@@ -68,6 +68,7 @@ class JobService(
     .filter { it != jobId }
     .toSet()
 
+  // TODO(BS): can do that better
   fun disableJob(disabled: Boolean, disabledComment: String, jobId: JobId){
     if(disabled)
       jobRepository.disable(jobId, disabledComment)
@@ -76,8 +77,9 @@ class JobService(
 
   }
 
+  // TODO(BS): can do that better
   fun startJob(jobId: JobId) {
-    val jobExecutor = jobExecutorRegistry.find(jobId)
+    val jobExecutor = jobExecutorRegistry.findOne(jobId)
     if(jobExecutor != null)
       Thread(jobExecutor).start()
   }

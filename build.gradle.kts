@@ -44,8 +44,8 @@ subprojects {
   }
 }
 
-// TODO add linting
-// TODO add testing
-// TODO add coverage
-// TODO add signing
-// TODO add nexus release
+// TODO(BS): add linting
+// TODO(BS): add testing
+// TODO(BS): add coverage
+// TODO(BS): add signing
+// TODO(BS): add nexus release

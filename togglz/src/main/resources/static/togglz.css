@@ -23,7 +23,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: #cccccc;
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -41,11 +41,11 @@ body {
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #2196f3;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px #2196f3;
 }
 
 input:checked + .slider:before {
@@ -54,7 +54,6 @@ input:checked + .slider:before {
   transform: translateX(13px);
 }
 
-/* Rounded sliders */
 .slider.round {
   border-radius: 17px;
 }
@@ -72,26 +71,8 @@ input:checked + .slider:before {
 }
 
 .content table tbody tr:last-child td, .content table tbody tr:last-child th {
-  /*change this definition from bluma.min.css to .content table td, .content table th from bluma.min.css because thymeleaf
-  automatically creates a tbody*/
   border: 1px solid #dbdbdb;
   border-width: 0 0 1px;
   padding: .5em .75em;
   vertical-align: top;
 }
-
-/*.card-header {
-  box-shadow: 0 1px 2px rgba(10, 10, 10, .1);
-  font-size: 16px;
-  font-weight: 700;
-  padding: .75rem;
-}
-
-.card-content{
-  padding: 1.5rem;
-}
-
-.card-content-item {
-  padding: 12px 8px;
-  border-bottom: 1px solid rgb(128, 128, 128);
-}*/

@@ -30,4 +30,3 @@ task<NpmTask>("buildJs") {
 
 tasks.getByName("build")
   .dependsOn("buildJs")
-

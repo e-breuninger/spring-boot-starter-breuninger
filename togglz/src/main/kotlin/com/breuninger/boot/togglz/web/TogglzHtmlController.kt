@@ -9,11 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
 @RequestMapping("/togglz")
-class TogglzHtmlController(private val mongoTemplate: MongoTemplate) { //umbauen hier auf StateRepository funktioniert nicht das ist keine eigene Klasse und die Klasse bietet keine Schnittstelle um alle Features abzufragen
+// TODO(BS): we need to use sth different, which is not directly connected to mongodb...
+class TogglzHtmlController(private val mongoTemplate: MongoTemplate) {
 
   @GetMapping
   fun getTogglz(model: Model): String {
-    model.addAttribute("togglzList",  mongoTemplate.findAll(TogglzFeature::class.java))
-    return "togglzPage"
+    model.addAttribute("togglz",  mongoTemplate.findAll(TogglzFeature::class.java))
+    return "togglz"
   }
 }

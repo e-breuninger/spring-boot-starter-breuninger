@@ -29,7 +29,7 @@ class ManualTriggeredJob : JobRunnable {
 
   fun logShitToConsole(): Boolean {
     repeat(Random.nextInt(10, 60)) {
-      TimedLongProductJob.LOG.info(JOB_MARKER, "MANUAL IT WORKS")
+      LOG.info(JOB_MARKER, "MANUAL IT WORKS")
       Thread.sleep(1000)
     }
     return true

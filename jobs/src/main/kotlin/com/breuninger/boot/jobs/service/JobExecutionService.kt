@@ -3,7 +3,9 @@ package com.breuninger.boot.jobs.service
 import com.breuninger.boot.jobs.actuator.health.JobHealthIndicator
 import com.breuninger.boot.jobs.domain.JobExecution
 import com.breuninger.boot.jobs.domain.JobExecution.Status
-import com.breuninger.boot.jobs.domain.JobExecution.Status.*
+import com.breuninger.boot.jobs.domain.JobExecution.Status.DEAD
+import com.breuninger.boot.jobs.domain.JobExecution.Status.OK
+import com.breuninger.boot.jobs.domain.JobExecution.Status.SKIPPED
 import com.breuninger.boot.jobs.domain.JobExecutionId
 import com.breuninger.boot.jobs.domain.JobExecutionMessage
 import com.breuninger.boot.jobs.domain.JobExecutionMessage.Level
@@ -15,6 +17,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
 import java.time.Instant.now
 
+// TODO(BS): sort methods
 @Service
 @ConditionalOnProperty(prefix = "breuni.jobs", name = ["enabled"], havingValue = "true")
 class JobExecutionService(
@@ -33,10 +36,11 @@ class JobExecutionService(
 
   fun stop(jobId: JobId, jobExecutionId: JobExecutionId) {
     jobExecutionRepository.stop(jobExecutionId)
+    // TODO(BS): releaseRunLock should return the execution and update health indication here, remove findOne...
     jobService.releaseRunLock(jobId, jobExecutionId)
-    val jobExecution = findOne(jobExecutionId)
-    if(jobExecution != null)
-      jobHealthIndicator.setJobExecutionStatus(jobId, jobExecution.status)
+    findOne(jobExecutionId)?.let {
+      jobHealthIndicator.setJobExecutionStatus(jobId, it.status)
+    }
   }
 
   fun appendMessage(jobExecutionId: JobExecutionId, message: JobExecutionMessage) {
@@ -59,7 +63,9 @@ class JobExecutionService(
     status?.let { jobExecutionRepository.updateStatus(jobExecutionId, it) }
   }
 
-  fun findAllJobExecutions() = jobExecutionRepository.findAll()
+  fun findAll(jobId: JobId?) = jobExecutionRepository.findAll(jobId)
+
+  fun findAll(jobExecutionId: JobExecutionId) = jobExecutionRepository.findAll(jobExecutionId)
 
   fun findOne(jobExecutionId: JobExecutionId) = jobExecutionRepository.findOne(jobExecutionId)
 }

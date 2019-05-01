@@ -4,6 +4,7 @@ import com.breuninger.boot.jobs.domain.JobExecution
 import com.breuninger.boot.jobs.domain.JobExecution.Status
 import com.breuninger.boot.jobs.domain.JobExecutionId
 import com.breuninger.boot.jobs.domain.JobExecutionMessage
+import com.breuninger.boot.jobs.domain.JobId
 import com.breuninger.boot.jobs.repository.JobExecutionRepository
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.data.mongodb.core.MongoTemplate
@@ -18,9 +19,13 @@ import org.springframework.stereotype.Repository
 import java.time.Instant
 import java.time.Instant.now
 
+// TODO(BS): sort methods
 @Repository
 @ConditionalOnProperty(prefix = "breuni.jobs", name = ["mongo.enabled"], havingValue = "true")
 class MongoJobExecutionRepository(private val mongoTemplate: MongoTemplate) : JobExecutionRepository {
+  override fun findAll(jobExecutionId: JobExecutionId): List<JobExecution> {
+    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+  }
 
   override fun findOne(jobExecutionId: JobExecutionId) = mongoTemplate.findById<JobExecution>(jobExecutionId)
 
@@ -30,7 +35,11 @@ class MongoJobExecutionRepository(private val mongoTemplate: MongoTemplate) : Jo
     return mongoTemplate.find(query)
   }
 
-  override fun findAll(): List<JobExecution> = mongoTemplate.findAll(JobExecution::class.java).sortedBy{ it.lastUpdated }.reversed()
+  // TODO(BS): can do that better with mongo query and not sorting afterwards
+  // TODO(BS): need to add jobId filter if not null
+  override fun findAll(jobId: JobId?): List<JobExecution> = mongoTemplate.findAll(JobExecution::class.java)
+    .sortedBy { it.lastUpdated }
+    .reversed()
 
   override fun save(jobExecution: JobExecution) = mongoTemplate.save(jobExecution)
 

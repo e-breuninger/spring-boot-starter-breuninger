@@ -1,6 +1,7 @@
 package com.breuninger.boot.jobs
 
 import com.breuninger.boot.jobs.domain.Job
+import com.breuninger.boot.jobs.repository.JobExecutorRegistry
 import com.breuninger.boot.jobs.service.JobService
 import io.micrometer.core.instrument.MeterRegistry
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty

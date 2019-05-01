@@ -13,7 +13,7 @@ val libraryVersions = mapOf(
   "reactor-kafka" to "1.1.0.RELEASE",
 
   "unbescape" to "1.1.6.RELEASE",
-  "owasp-java-html-sanitizer" to "20181114.1",
+  "owasp-java-html-sanitizer" to "20190325.1",
   "slugify" to "2.3"
 )
 

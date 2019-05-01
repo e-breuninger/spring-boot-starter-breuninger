@@ -8,28 +8,31 @@ import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
+// TODO(BS): check this class
 @Component
-class JobHealthIndicator: HealthIndicator  {
+class JobHealthIndicator : HealthIndicator {
 
-  private val jobExecutionStatusMap: ConcurrentMap<JobId, JobExecution.Status> = ConcurrentHashMap()
+  private val jobExecutionStatus: ConcurrentMap<JobId, JobExecution.Status> = ConcurrentHashMap()
 
   override fun health(): Health {
-    var healthy: Boolean = true
-    var map: MutableMap<String, Health> = HashMap()
-    jobExecutionStatusMap.forEach{(jobId, status) -> if(status == JobExecution.Status.DEAD || status == JobExecution.Status.ERROR) {
-      map.set(jobId.value, Health.down().build())
-      healthy = false
-    }else{
-      map.set(jobId.value, Health.up().build())
-    }}
-
-    if(healthy)
-      return Health.up().withDetails(map).build()
-
-    return Health.down().withDetails(map).build()
+    var healthy = true
+    val map: MutableMap<String, Health> = HashMap()
+    jobExecutionStatus.forEach { (jobId, status) ->
+      if (status == JobExecution.Status.DEAD || status == JobExecution.Status.ERROR) {
+        map[jobId.value] = Health.down().build()
+        healthy = false
+      } else {
+        map[jobId.value] = Health.up().build()
+      }
+    }
+    return if (healthy) {
+      Health.up().withDetails(map).build()
+    } else {
+      Health.down().withDetails(map).build()
+    }
   }
 
-  fun setJobExecutionStatus(jobId: JobId, status: JobExecution.Status){
-    jobExecutionStatusMap.set(jobId,status)
+  fun setJobExecutionStatus(jobId: JobId, status: JobExecution.Status) {
+    jobExecutionStatus[jobId] = status
   }
 }

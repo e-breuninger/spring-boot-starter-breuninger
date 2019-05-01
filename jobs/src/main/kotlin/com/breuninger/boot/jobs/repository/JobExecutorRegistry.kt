@@ -1,5 +1,6 @@
-package com.breuninger.boot.jobs
+package com.breuninger.boot.jobs.repository
 
+import com.breuninger.boot.jobs.JobExecutor
 import com.breuninger.boot.jobs.domain.JobId
 import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
@@ -11,10 +12,10 @@ class JobExecutorRegistry {
   private val jobExecutorMap: ConcurrentMap<JobId, JobExecutor> = ConcurrentHashMap()
 
   fun register(jobId: JobId, jobExecutor: JobExecutor) {
-    jobExecutorMap.set(jobId, jobExecutor)
+    jobExecutorMap[jobId] = jobExecutor
   }
 
-  fun find(jobId: JobId): JobExecutor? {
-    return jobExecutorMap.get(jobId)
+  fun findOne(jobId: JobId): JobExecutor? {
+    return jobExecutorMap[jobId]
   }
 }

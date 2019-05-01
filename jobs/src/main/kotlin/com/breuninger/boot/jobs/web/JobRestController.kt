@@ -3,27 +3,33 @@ package com.breuninger.boot.jobs.web
 import com.breuninger.boot.jobs.domain.Job
 import com.breuninger.boot.jobs.domain.JobId
 import com.breuninger.boot.jobs.service.JobService
-import org.springframework.web.bind.annotation.*
-
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/job", method = [RequestMethod.POST])
-class JobRestController(
-  private val jobService: JobService
-) {
+@RequestMapping("/job")
+class JobRestController(private val jobService: JobService) {
 
-  @PostMapping("/start")
-  fun startJob(@RequestParam(value = "jobId") jobIdValue: String): Job? {
+  @PostMapping("/{jobId}/start")
+  fun startJob(@PathVariable(value = "jobId") jobIdValue: String): Job? {
     val jobId = JobId(jobIdValue)
     jobService.startJob(jobId)
-    //we just need a little bit of time until the job is started in a new thread and the id is saved so we can get it. this is ugly i know
+    // TODO(BS): I think we can change this
     Thread.sleep(200)
     return jobService.findOne(jobId)
   }
 
-  @PostMapping ("/disable")
-  fun disableEnableJob(@RequestParam(value = "jobId") jobId: String, @RequestParam(value = "disabled") disabled: Boolean, @RequestBody(required = false) body: String?):Job? {
-    jobService.disableJob(disabled,if(body != null) body else "",JobId(jobId))
-    return  jobService.findOne(JobId(jobId))
+  // TODO(BS): this interface looks strange - maybe put message and disabled into the body as a json
+  @PostMapping("/{jobId}/disable")
+  fun disableEnableJob(@PathVariable(value = "jobId") jobIdValue: String,
+                       @RequestParam disabled: Boolean,
+                       @RequestBody(required = false) body: String?): Job? {
+    val jobId = JobId(jobIdValue)
+    jobService.disableJob(disabled, body ?: "", jobId)
+    return jobService.findOne(jobId)
   }
 }

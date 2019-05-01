@@ -69,8 +69,6 @@ li {
 }
 
 .content table tbody tr:last-child td, .content table tbody tr:last-child th {
-  /*change this definition from bluma.min.css to .content table td, .content table th from bluma.min.css because thymeleaf
-  automatically creates a tbody*/
   border: 1px solid #dbdbdb;
   border-width: 0 0 1px;
   padding: .5em .75em;

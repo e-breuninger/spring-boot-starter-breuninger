@@ -9,7 +9,11 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
 
+// TODO(BS): sort methods
 class InMemoryJobRepository : JobRepository {
+  override fun findAll(jobId: JobId): List<Job> {
+    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+  }
 
   companion object {
 
@@ -34,7 +38,8 @@ class InMemoryJobRepository : JobRepository {
       jobs.replace(jobId, it.copy(runningJobExecutionId = null))
       Unit
     } else {
-      throw JobBlockedException("Tried to release runLock of $jobId but different execution ${it.runningJobExecutionId} was running")
+      throw JobBlockedException(
+        "Tried to release runLock of $jobId but different execution ${it.runningJobExecutionId} was running")
     }
   }
 
@@ -49,22 +54,19 @@ class InMemoryJobRepository : JobRepository {
     Unit
   }
 
-  override fun findAllJobs(): List<Job> = ArrayList<Job>(jobs.values)
+  override fun findAll(): List<Job> = ArrayList<Job>(jobs.values)
 
-  override fun disable(jobId: JobId, disableComment: String) {
-    val job = findOne(jobId)
-    if(job != null) {
-      job.disableComment = disableComment
-      job.disabled = true
+  // TODO(BS): can do that better
+  override fun disable(jobId: JobId, disableComment: String) =
+    findOne(jobId)?.let {
+      jobs.replace(it.id, it.copy(disableComment = disableComment, disabled = true))
+      Unit
     }
-  }
 
-  override fun enable(jobId: JobId) {
-    val job = findOne(jobId)
-    if(job != null) {
-      job.disableComment = ""
-      job.disabled = false
+  // TODO(BS): can do that better
+  override fun enable(jobId: JobId) =
+    findOne(jobId)?.let {
+      jobs.replace(it.id, it.copy(disableComment = "", disabled = false))
+      Unit
     }
-  }
-
 }

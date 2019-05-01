@@ -1,13 +1,13 @@
 <template>
   <section class="togglz section">
-    <iframe :src="text"/>
+    <iframe :src="text" />
   </section>
 </template>
 
 <script>
   export default {
     props: {
-      instance: { //<1>
+      instance: {
         type: Object,
         required: true
       }
@@ -16,7 +16,7 @@
       text: ''
     }),
     async created() {
-      this.text = await this.instance.registration.serviceUrl + 'togglz';
+      this.text = `${await this.instance.registration.serviceUrl}togglz`;
     }
   };
 </script>

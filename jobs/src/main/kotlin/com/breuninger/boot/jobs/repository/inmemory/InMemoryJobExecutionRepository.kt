@@ -4,12 +4,17 @@ import com.breuninger.boot.jobs.domain.JobExecution
 import com.breuninger.boot.jobs.domain.JobExecution.Status
 import com.breuninger.boot.jobs.domain.JobExecutionId
 import com.breuninger.boot.jobs.domain.JobExecutionMessage
+import com.breuninger.boot.jobs.domain.JobId
 import com.breuninger.boot.jobs.repository.JobExecutionRepository
 import java.time.Instant
 import java.time.Instant.now
 import java.util.concurrent.ConcurrentHashMap
 
+// TODO(BS): sort methods
 class InMemoryJobExecutionRepository : JobExecutionRepository {
+  override fun findAll(jobExecutionId: JobExecutionId): List<JobExecution> {
+    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+  }
 
   private val jobExecutions = ConcurrentHashMap<JobExecutionId, JobExecution>()
 
@@ -19,7 +24,8 @@ class InMemoryJobExecutionRepository : JobExecutionRepository {
     .sortedByDescending { it.started }
     .map { it.copy(messages = emptyList()) }
 
-  override fun findAll(): List<JobExecution> = ArrayList<JobExecution>(jobExecutions.values)
+  // TODO(BS): need to add jobId filter if not null
+  override fun findAll(jobId: JobId?): List<JobExecution> = ArrayList<JobExecution>(jobExecutions.values)
 
   override fun save(jobExecution: JobExecution): JobExecution {
     jobExecutions[jobExecution.id] = jobExecution

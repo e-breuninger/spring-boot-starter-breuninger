@@ -18,9 +18,13 @@ import org.springframework.data.mongodb.core.query.Update.update
 import org.springframework.data.mongodb.core.updateFirst
 import org.springframework.stereotype.Repository
 
+// TODO(BS): sort methods
 @Repository
 @ConditionalOnProperty(prefix = "breuni.jobs", name = ["mongo.enabled"], havingValue = "true")
 class MongoJobRepository(private val mongoTemplate: MongoTemplate) : JobRepository {
+  override fun findAll(jobId: JobId): List<Job> {
+    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+  }
 
   companion object {
 
@@ -65,13 +69,15 @@ class MongoJobRepository(private val mongoTemplate: MongoTemplate) : JobReposito
     Unit
   }
 
-  override fun findAllJobs(): List<Job> =  mongoTemplate.findAll(Job::class.java)
+  override fun findAll(): List<Job> = mongoTemplate.findAll(Job::class.java)
 
+  // TODO(BS): combine update statement
   override fun disable(jobId: JobId, disableComment: String) {
     mongoTemplate.updateFirst<Job>(query(where("_id").`is`(jobId)), update(Job::disableComment.name, disableComment))
     mongoTemplate.updateFirst<Job>(query(where("_id").`is`(jobId)), update(Job::disabled.name, true))
   }
 
+  // TODO(BS): combine update statement
   override fun enable(jobId: JobId) {
     mongoTemplate.updateFirst<Job>(query(where("_id").`is`(jobId)), update(Job::disableComment.name, ""))
     mongoTemplate.updateFirst<Job>(query(where("_id").`is`(jobId)), update(Job::disabled.name, false))
