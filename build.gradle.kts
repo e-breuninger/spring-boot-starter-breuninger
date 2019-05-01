@@ -26,8 +26,8 @@ subprojects {
   }
 
   configure<JavaPluginConvention> {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_12
+    targetCompatibility = JavaVersion.VERSION_12
   }
 
   repositories {

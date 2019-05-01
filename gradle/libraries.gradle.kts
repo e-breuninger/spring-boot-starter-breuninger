@@ -6,7 +6,7 @@ val coreVersions = extra["coreVersions"] as Map<*, *>
 val libraryVersions = mapOf(
   "jackson-module-kotlin" to "2.9.8",
 
-  "spring-boot-admin-starter" to "2.1.3",
+  "spring-boot-admin-starter" to "2.1.4",
 
   "togglz" to "2.6.1.Final",
 
