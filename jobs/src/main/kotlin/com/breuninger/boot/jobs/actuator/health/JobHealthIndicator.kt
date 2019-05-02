@@ -22,20 +22,17 @@ class JobHealthIndicator : HealthIndicator {
     }
   }
 
-  private fun toDetails(jobId: JobId, status: JobExecution.Status) =
-    if (isDown(status)) {
-      jobId.value to Health.down().build()
-    } else {
-      jobId.value to Health.up().build()
-    }
+  private fun toDetails(jobId: JobId, status: JobExecution.Status) = if (isDown(status)) {
+    jobId.value to Health.down().build()
+  } else {
+    jobId.value to Health.up().build()
+  }
 
-  private fun anyJobExecutionIsDown() =
-    jobExecutionStatus.any {
-      isDown(it.value)
-    }
+  private fun anyJobExecutionIsDown() = jobExecutionStatus.any {
+    isDown(it.value)
+  }
 
-  private fun isDown(status: JobExecution.Status) =
-    status == JobExecution.Status.DEAD || status == JobExecution.Status.ERROR
+  private fun isDown(status: JobExecution.Status) = status == JobExecution.Status.DEAD || status == JobExecution.Status.ERROR
 
   fun setJobExecutionStatus(jobId: JobId, status: JobExecution.Status) {
     jobExecutionStatus[jobId] = status

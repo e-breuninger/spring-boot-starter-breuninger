@@ -25,6 +25,7 @@ class InMemoryJobExecutionRepository : JobExecutionRepository {
     .sortedByDescending { it.started }
     .map { it.copy(messages = emptyList()) }
 
+  // TODO(KA): better name and tests
   // TODO(BS): secure that this is not happening to the next repository
   // TODO(BS): sort, reverse
   // TODO(BS): take 100

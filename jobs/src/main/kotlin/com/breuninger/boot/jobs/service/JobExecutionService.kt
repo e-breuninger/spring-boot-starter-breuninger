@@ -18,6 +18,8 @@ import com.breuninger.boot.jobs.domain.JobMutexGroup
 import com.breuninger.boot.jobs.repository.JobExecutionRepository
 import com.breuninger.boot.jobs.repository.JobExecutorRegistry
 import com.breuninger.boot.jobs.repository.JobRepository
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
 import java.time.Instant.now
@@ -32,6 +34,11 @@ class JobExecutionService(
   private val jobExecutorRegistry: JobExecutorRegistry,
   private val mutexGroups: Set<JobMutexGroup>
 ) {
+
+  companion object {
+
+    val LOG: Logger = LoggerFactory.getLogger(JobExecutionService::class.java)
+  }
 
   fun findAllWithoutMessages() = jobExecutionRepository.findAllWithoutMessages()
 
@@ -74,7 +81,7 @@ class JobExecutionService(
     .toSet()
 
   fun releaseRunLock(jobId: JobId, jobExecutionId: JobExecutionId): JobExecution? {
-    JobService.LOG.info("Releasing runLock of $jobId")
+    LOG.info("Releasing runLock of $jobId")
     return jobRepository.releaseRunLock(jobId, jobExecutionId)?.let { jobExecutionRepository.findOne(jobExecutionId) }
   }
 

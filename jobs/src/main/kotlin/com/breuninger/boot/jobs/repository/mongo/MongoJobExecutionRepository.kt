@@ -36,6 +36,7 @@ class MongoJobExecutionRepository(private val mongoTemplate: MongoTemplate) : Jo
     return mongoTemplate.find(query)
   }
 
+  // TODO(KA): better name and tests
   // TODO(BS): can do that better with mongo query and not sorting afterwards
   // TODO(BS): need to add jobId filter if not null
   // TODO(BS): take 100

@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 class JobExecutionRestController(private val jobExecutionService: JobExecutionService) {
 
   @GetMapping("/{jobExecutionId}", produces = [APPLICATION_JSON_VALUE])
-  fun find(@PathVariable jobExecutionId: String) =
-    jobExecutionService.findOne(JobExecutionId(jobExecutionId))
+  fun find(@PathVariable jobExecutionId: String) = jobExecutionService.findOne(JobExecutionId(jobExecutionId))
 
   @PostMapping
   fun create(@RequestParam(value = "jobId") jobIdValue: String) = jobExecutionService.create(JobId(jobIdValue))
