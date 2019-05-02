@@ -16,7 +16,7 @@
                 <div class="link" @click.stop="showDetails(instance)">{{ instance.registration.serviceUrl }}</div>
               </td>
               <td>
-                <iframe v-if="instance.statusInfo.status === 'UP'" :src="instance.registration.serviceUrl + 'jobexecutions'" />
+                <iframe v-if="instance.statusInfo.status === 'UP'" :src="instance.registration.serviceUrl + 'jobExecutions'" />
               </td>
             </tr>
             </tbody>

@@ -1,5 +1,15 @@
 // TODO(BS): check this file
 const timermap = new Map();
+const faSpinner = 'fas fa-spinner fa-spin';
+const faCheck = 'fas fa-check';
+const faExclamation = 'fas fa-exclamation';
+const faTimes = 'fas fa-times';
+const faMinusCircle = 'fas fa-minus-circle';
+const displayTableRow = 'display-table-row';
+const displayNone = 'display-none';
+const statusOk = 'OK';
+const statusSkipped = 'SKIPPED';
+const localeDE = 'de-DE';
 
 function openCollapseCards(button) {
   const content = $(`#${button.value}content`)[0];
@@ -14,20 +24,19 @@ function updateMessagesAndDates(input) {
   const id = input.value;
 
   const callJobExecutionUpdateFromServer = () => {
-    $.get(`../../messages?jobExecutionId=${id}`, fragment => {
+    $.get(`../../jobExecutions/${id}`, fragment => {
       if (fragment) {
         const messageElement = $(`#${id}`)[0];
         messageElement.innerHTML = formatMessages(fragment.messages);
         messageElement.scrollTop = messageElement.scrollHeight;
 
         const statusElement = $(`#${id}status`)[0];
-        statusElement.innerHTML = fragment.status === 'OK' && !fragment.stopped ? 'Running' : fragment.status;
+        statusElement.innerHTML = fragment.status === statusOk && !fragment.stopped ? 'Running' : fragment.status;
+        statusElement.className = fragment.status === statusOk ? 'green' : fragment.status === statusSkipped ? 'yellow' : 'red';
 
-        statusElement.className = fragment.status === 'OK' ? 'green' : fragment.status === 'SKIPPED' ? 'yellow' : 'red';
-
-        $(`#${id}headerstate`)[0].className = fragment.status === 'OK' ?
-          !fragment.stopped ? 'fas fa-spinner fa-spin' : 'fas fa-check' :
-          fragment.status === 'SKIPPED' ? 'fas fa-exclamation' : 'fas fa-times';
+        $(`#${id}headerstate`)[0].className = fragment.status === statusOk ?
+          !fragment.stopped ? faSpinner : faCheck :
+          fragment.status === statusSkipped ? faExclamation : faTimes;
 
         const options = {
           year: 'numeric',
@@ -39,13 +48,11 @@ function updateMessagesAndDates(input) {
         };
 
         // update last updated date
-        const lastUpdateElement = $(`#${id}update`)[0];
-        lastUpdateElement.innerHTML = new Date(fragment.lastUpdated).toLocaleDateString('de-DE', options).replace(',', '');
+        $(`#${id}update`)[0].textContent = new Date(fragment.lastUpdated).toLocaleDateString(localeDE, options).replace(',', '');
 
         // if stopped update stopped date
         if (fragment.stopped) {
-          const stoppedElement = $(`#${id}stopped`)[0];
-          stoppedElement.innerHTML = new Date(fragment.stopped).toLocaleDateString('de-DE', options).replace(',', '');
+          $(`#${id}stopped`)[0].textContent = new Date(fragment.stopped).toLocaleDateString(localeDE, options).replace(',', '');
           input.checked = false;
           clearInterval(timermap.get(id));
           timermap.delete(id);
@@ -81,14 +88,14 @@ function formatMessages(rawMessages) {
 }
 
 function startJob(button) {
-  $.post(`job/start?jobId=${button.value}`, job => {
+  $.post(`jobExecutions/jobId=${button.value}`, job => {
     if (job && job.runningJobExecutionId) {
       const jobExecutionLink = $(`#${button.value}executionid`)[0];
-      jobExecutionLink.innerHTML = job.runningJobExecutionId.value;
+      jobExecutionLink.textContent = job.runningJobExecutionId.value;
       jobExecutionLink.href = `../jobexecutions/single/${job.runningJobExecutionId.value}`;
 
       const jobExecutionLinkHeader = $(`#${button.value}executionidheader`)[0];
-      jobExecutionLinkHeader.innerHTML = job.runningJobExecutionId.value;
+      jobExecutionLinkHeader.textContent = job.runningJobExecutionId.value;
       jobExecutionLinkHeader.href = `../jobexecutions/single/${job.runningJobExecutionId.value}`;
 
       // update header status
@@ -99,11 +106,12 @@ function startJob(button) {
 
 function disableJob(disable, button) {
   const data = $(`#${button.value}disabledcommentinput`)[0].value;
+  const body = {jobId: button.value, disabled: disable, disableComment: data};
   $.ajax({
-    data: data,
+    data: body,
     contentType: 'text/plain',
-    type: 'POST',
-    url: `job/disable?jobId=${button.value}&disabled=${disable}`,
+    type: 'PUT',
+    url: `jobs/${button.value}&disabled=${disable}`,
     success: fragment => {
       if (fragment) {
         updateJob(button.value, fragment);
@@ -118,22 +126,13 @@ function updateJob(jobId, jobData) {
   statusElement.innerHTML = jobData.disabled ? 'Disabled' : 'Enabled';
   statusElement.className = jobData.disabled ? 'disabled' : 'enabled';
 
-  const disabledElement = $(`#${jobId}disabled`)[0];
-  disabledElement.className = jobData.disabled ? 'display-table-row' : 'display-none';
+  $(`#${jobId}disabledcomment`)[0].textContent = jobData.disableComment;
 
-  const disabledCommentElement = $(`#${jobId}disabledcomment`)[0];
-  disabledCommentElement.innerHTML = jobData.disableComment;
+  $(`#${jobId}disabled`)[0].className = jobData.disabled ? displayTableRow : displayNone;
+  $(`#${jobId}enabled`)[0].className = jobData.disabled ? displayNone : displayTableRow;
+  $(`#${jobId}headerstate`)[0].className = jobData.disabled ? faMinusCircle : jobData.runningJobExecutionId ? faSpinner : faCheck;
 
-  const enabledElement = $(`#${jobId}enabled`)[0];
-  enabledElement.className = jobData.disabled ? 'display-none' : 'display-table-row';
-
-  const startButton = $(`#${jobId}start`)[0];
-  startButton.disabled = jobData.runningJobExecutionId ? true : jobData.disabled;
-
-  const headerState = $(`#${jobId}headerstate`)[0];
-  headerState.className = jobData.disabled ?
-    'fas fa-minus-circle' :
-    jobData.runningJobExecutionId ? 'fas fa-spinner fa-spin' : 'fas fa-check';
+  $(`#${jobId}start`)[0].disabled = jobData.runningJobExecutionId ? true : jobData.disabled;
 }
 
 function stopPropagation(e) {

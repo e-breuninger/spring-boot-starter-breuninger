@@ -16,7 +16,7 @@
       text: ''
     }),
     async created() {
-      this.text = `${await this.instance.registration.serviceUrl}jobexecutions`;
+      this.text = `${await this.instance.registration.serviceUrl}jobExecutions`;
     }
   };
 </script>
