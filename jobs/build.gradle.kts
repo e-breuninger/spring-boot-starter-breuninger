@@ -1,4 +1,5 @@
 import com.moowork.gradle.node.npm.NpmTask
+import sun.tools.jar.resources.jar
 
 apply {
   plugin("com.moowork.node")
@@ -17,6 +18,8 @@ dependencies {
   compile(libraries["spring-boot-starter-webflux"] as String)
   compile(libraries["spring-boot-starter-actuator"] as String)
   compile(libraries["spring-boot-starter-data-mongodb-reactive"] as String)
+  testCompile(libraries["junit-jupiter-api"] as String)
+  testCompile(libraries["junit-jupiter-engine"] as String)
 
   compile(libraries["spring-boot-starter-aop"] as String)
 
@@ -30,3 +33,11 @@ task<NpmTask>("buildJs") {
 
 tasks.getByName("build")
   .dependsOn("buildJs")
+
+tasks {
+  jar {
+    from ("src/main/resources/META-INF") {
+      into ("META-INF")
+    }
+  }
+}

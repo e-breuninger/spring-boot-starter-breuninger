@@ -20,6 +20,8 @@ dependencies {
   compile(libraries["spring-boot-starter-thymeleaf"] as String)
   compile(libraries["spring-boot-starter-actuator"] as String)
   compile(libraries["spring-boot-starter-data-mongodb-reactive"] as String)
+  compile(libraries["junit-jupiter-api"] as String)
+  compile(libraries["junit-jupiter-engine"] as String)
 
   annotationProcessor(libraries["spring-boot-configuration-processor"] as String)
 }
@@ -31,3 +33,11 @@ task<NpmTask>("buildJs") {
 
 tasks.getByName("build")
   .dependsOn("buildJs")
+
+tasks {
+  jar {
+    from ("src/main/resources/META-INF") {
+      into ("META-INF")
+    }
+  }
+}
