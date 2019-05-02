@@ -1,5 +1,4 @@
 import com.moowork.gradle.node.npm.NpmTask
-import sun.tools.jar.resources.jar
 
 apply {
   plugin("com.moowork.node")
