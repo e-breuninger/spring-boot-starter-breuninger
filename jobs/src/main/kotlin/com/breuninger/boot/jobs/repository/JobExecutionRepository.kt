@@ -16,8 +16,6 @@ interface JobExecutionRepository {
 
   fun findAll(jobId: JobId?): List<JobExecution>
 
-  fun findAll(jobExecutionId: JobExecutionId): List<JobExecution>
-
   fun save(jobExecution: JobExecution): JobExecution
 
   fun remove(jobExecution: JobExecution)

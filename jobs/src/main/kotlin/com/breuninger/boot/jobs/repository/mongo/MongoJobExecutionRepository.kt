@@ -24,10 +24,6 @@ import java.time.Instant.now
 @ConditionalOnProperty(prefix = "breuni.jobs", name = ["mongo.enabled"], havingValue = "true")
 class MongoJobExecutionRepository(private val mongoTemplate: MongoTemplate) : JobExecutionRepository {
 
-  override fun findAll(jobExecutionId: JobExecutionId): List<JobExecution> {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-  }
-
   override fun findOne(jobExecutionId: JobExecutionId) = mongoTemplate.findById<JobExecution>(jobExecutionId)
 
   override fun findAllWithoutMessages(): List<JobExecution> {

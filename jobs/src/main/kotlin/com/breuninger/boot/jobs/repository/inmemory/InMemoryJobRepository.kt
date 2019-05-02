@@ -12,20 +12,16 @@ import java.util.concurrent.ConcurrentHashMap
 // TODO(BS): sort methods
 class InMemoryJobRepository : JobRepository {
 
-  override fun update(jobId: JobId, job: Job): Job? {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-  }
-
-  override fun findAll(jobId: JobId): List<Job> {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-  }
-
   companion object {
 
     val LOG: Logger = LoggerFactory.getLogger(InMemoryJobRepository::class.java)
   }
 
   private val jobs = ConcurrentHashMap<JobId, Job>()
+
+  override fun update(jobId: JobId, job: Job): Job? {
+    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+  }
 
   override fun findOne(jobId: JobId): Job? = jobs[jobId]
 

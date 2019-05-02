@@ -22,7 +22,7 @@ class JobExecutionHtmlController(private val jobExecutionService: JobExecutionSe
 
   @GetMapping("/{jobExecutionId}")
   fun find(@PathVariable jobExecutionId: String, model: Model): String {
-    model.addAttribute("jobExecutions", jobExecutionService.findAll(JobExecutionId(jobExecutionId)))
+    model.addAttribute("jobExecutions", listOfNotNull(jobExecutionService.findOne(JobExecutionId(jobExecutionId))))
     return "jobExecutions"
   }
 }

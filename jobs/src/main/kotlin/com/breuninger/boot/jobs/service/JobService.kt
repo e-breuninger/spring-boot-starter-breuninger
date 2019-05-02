@@ -27,8 +27,6 @@ class JobService(private val jobRepository: JobRepository) {
   // TODO(BS): filter with currently existing jobs in definition or just get by all jobs that have definitions...
   fun findAll() = jobRepository.findAll()
 
-  fun findAll(jobId: JobId) = jobRepository.findAll(jobId)
-
   fun findOne(jobId: JobId) = jobRepository.findOne(jobId)
 
   fun update(jobId: JobId, job: Job) = jobRepository.update(jobId, job)

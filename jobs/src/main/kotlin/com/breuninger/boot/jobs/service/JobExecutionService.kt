@@ -107,8 +107,6 @@ class JobExecutionService(
 
   fun findAll(jobId: JobId?) = jobExecutionRepository.findAll(jobId)
 
-  fun findAll(jobExecutionId: JobExecutionId) = jobExecutionRepository.findAll(jobExecutionId)
-
   fun findOne(jobExecutionId: JobExecutionId) = jobExecutionRepository.findOne(jobExecutionId)
 
   fun create(jobId: JobId) = jobExecutorRegistry.findOne(jobId)?.let { Thread(it).start() }

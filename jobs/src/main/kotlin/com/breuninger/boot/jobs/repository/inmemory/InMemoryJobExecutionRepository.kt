@@ -13,10 +13,6 @@ import java.util.concurrent.ConcurrentHashMap
 // TODO(BS): sort methods
 class InMemoryJobExecutionRepository : JobExecutionRepository {
 
-  override fun findAll(jobExecutionId: JobExecutionId): List<JobExecution> {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-  }
-
   private val jobExecutions = ConcurrentHashMap<JobExecutionId, JobExecution>()
 
   override fun findOne(jobExecutionId: JobExecutionId) = jobExecutions[jobExecutionId]

@@ -22,7 +22,7 @@ class JobHtmlController(private val jobService: JobService, private val jobRunna
 
   @GetMapping("/{jobId}")
   fun find(@PathVariable jobId: String, model: Model): String {
-    model.addAttribute("jobs", jobService.findAll(JobId(jobId)))
+    model.addAttribute("jobs", listOfNotNull(jobService.findOne(JobId(jobId))))
     model.addAttribute("jobDefinitions", jobRunnables?.map { it.definition().jobId to it.definition() }?.toMap())
     return "jobs"
   }

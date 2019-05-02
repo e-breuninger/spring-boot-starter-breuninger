@@ -25,7 +25,5 @@ interface JobRepository {
 
   fun findAll(): List<Job>
 
-  fun findAll(jobId: JobId): List<Job>
-
   fun update(jobId: JobId, job: Job): Job?
 }

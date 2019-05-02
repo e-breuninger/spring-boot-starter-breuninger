@@ -23,17 +23,13 @@ import org.springframework.stereotype.Repository
 @ConditionalOnProperty(prefix = "breuni.jobs", name = ["mongo.enabled"], havingValue = "true")
 class MongoJobRepository(private val mongoTemplate: MongoTemplate) : JobRepository {
 
-  override fun update(jobId: JobId, job: Job): Job? {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-  }
-
-  override fun findAll(jobId: JobId): List<Job> {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-  }
-
   companion object {
 
     val LOG: Logger = LoggerFactory.getLogger(MongoJobRepository::class.java)
+  }
+
+  override fun update(jobId: JobId, job: Job): Job? {
+    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
   override fun findOne(jobId: JobId) = mongoTemplate.findById<Job>(jobId)
