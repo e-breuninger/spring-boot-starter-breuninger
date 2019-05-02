@@ -1,4 +1,4 @@
-import com.moowork.gradle.node.npm.NpmTask
+import com.moowork.gradle.node.yarn.YarnTask
 
 apply {
   plugin("com.moowork.node")
@@ -26,9 +26,13 @@ dependencies {
   annotationProcessor(libraries["spring-boot-configuration-processor"] as String)
 }
 
-task<NpmTask>("buildJs") {
-  dependsOn("npmInstall")
-  setArgs(listOf("run", "build"))
+task<YarnTask>("yarnInstall") {
+  setArgs(listOf("install"))
+}
+
+task<YarnTask>("buildJs") {
+  dependsOn("yarnInstall")
+  setArgs(listOf("build"))
 }
 
 tasks.getByName("build")

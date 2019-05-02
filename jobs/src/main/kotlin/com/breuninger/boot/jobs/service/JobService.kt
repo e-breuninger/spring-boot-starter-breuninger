@@ -24,6 +24,7 @@ class JobService(private val jobRepository: JobRepository) {
 
   fun updateState(jobId: JobId, key: String, value: String?) = jobRepository.updateState(jobId, key, value)
 
+  // TODO(BS): filter with currently existing jobs in definition or just get by all jobs that have definitions...
   fun findAll() = jobRepository.findAll()
 
   fun findAll(jobId: JobId) = jobRepository.findAll(jobId)

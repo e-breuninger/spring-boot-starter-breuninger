@@ -1,8 +1,8 @@
 /.idea/
-/.gradle/
-/node_modules/
 
+.gradle/
 build/
+node_modules/
 out/
 
 .DS_Store

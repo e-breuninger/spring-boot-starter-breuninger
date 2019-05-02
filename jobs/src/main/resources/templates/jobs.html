@@ -19,12 +19,12 @@
     <button class="collapsible hero application-list-item__header flex flex-header" onclick="openCollapseCards(this);"
             th:value="${job.id.value}">
       <div><i
-        th:class="${job.disabled} ? 'fas fa-minus-circle' : (${job.runningJobExecutionId} ? 'fas fa-spinner fa-spin' :  'fas fa-check')"
+        th:class="${job.disabled} ? 'fas fa-minus-circle' : (${job.runningJobExecutionId} ? 'fas fa-spinner fa-spin' : 'fas fa-check')"
         th:id="${job.id.value}+'headerstate'"></i></div>
       <div><span th:text="${job.id.value}"></span>
         <br>
         <a onclick="stopPropagation(event);"
-           th:href="${job.runningJobExecutionId} ? '../jobExecutions/'+${job.runningJobExecutionId.value} : '../jobExecutions'"
+           th:href="${job.runningJobExecutionId} ? '../jobExecutions/' + ${job.runningJobExecutionId.value} : '../jobExecutions'"
            th:id="${job.id.value} + 'executionidheader'"
            th:text="${job.runningJobExecutionId} ? ${job.runningJobExecutionId.value} : '-'"></a>
       </div>

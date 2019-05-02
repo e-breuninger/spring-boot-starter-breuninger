@@ -88,7 +88,7 @@ function formatMessages(rawMessages) {
 }
 
 function startJob(button) {
-  $.post(`jobExecutions/jobId=${button.value}`, job => {
+  $.post(`jobExecutions?jobId=${button.value}`, job => {
     if (job && job.runningJobExecutionId) {
       const jobExecutionLink = $(`#${button.value}executionid`)[0];
       jobExecutionLink.textContent = job.runningJobExecutionId.value;
@@ -106,7 +106,11 @@ function startJob(button) {
 
 function disableJob(disable, button) {
   const data = $(`#${button.value}disabledcommentinput`)[0].value;
-  const body = {jobId: button.value, disabled: disable, disableComment: data};
+  const body = {
+    jobId: button.value,
+    disabled: disable,
+    disableComment: data
+  };
   $.ajax({
     data: body,
     contentType: 'text/plain',
