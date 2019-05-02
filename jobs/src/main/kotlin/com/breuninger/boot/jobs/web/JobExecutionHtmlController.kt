@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam
 class JobExecutionHtmlController(private val jobExecutionService: JobExecutionService) {
 
   @GetMapping
-  fun getJobExecutions(@RequestParam(required = false) jobId: String?, model: Model): String {
-    model.addAttribute("jobExecutions", jobExecutionService.findAll(jobId?.let { JobId(it) }).take(100))
+  fun findAll(@RequestParam(required = false) jobId: String?, model: Model): String {
+    model.addAttribute("jobExecutions", jobExecutionService.findAll(jobId?.let { JobId(it) }))
     return "jobExecutions"
   }
 
   @GetMapping("/{jobExecutionId}")
-  fun getJobExecution(@PathVariable jobExecutionId: String, model: Model): String {
+  fun find(@PathVariable jobExecutionId: String, model: Model): String {
     model.addAttribute("jobExecutions", jobExecutionService.findAll(JobExecutionId(jobExecutionId)))
     return "jobExecutions"
   }

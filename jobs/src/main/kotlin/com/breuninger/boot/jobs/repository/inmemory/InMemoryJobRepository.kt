@@ -11,6 +11,11 @@ import java.util.concurrent.ConcurrentHashMap
 
 // TODO(BS): sort methods
 class InMemoryJobRepository : JobRepository {
+
+  override fun update(jobId: JobId, job: Job): Job? {
+    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+  }
+
   override fun findAll(jobId: JobId): List<Job> {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
@@ -44,7 +49,7 @@ class InMemoryJobRepository : JobRepository {
   }
 
   override fun findState(jobId: JobId, key: String) = findOne(jobId)?.let {
-    it.state[key]
+    it.state?.get(key)
   }
 
   override fun updateState(jobId: JobId, key: String, value: String?) = findOne(jobId)?.let {
@@ -55,18 +60,4 @@ class InMemoryJobRepository : JobRepository {
   }
 
   override fun findAll(): List<Job> = ArrayList<Job>(jobs.values)
-
-  // TODO(BS): can do that better
-  override fun disable(jobId: JobId, disableComment: String) =
-    findOne(jobId)?.let {
-      jobs.replace(it.id, it.copy(disableComment = disableComment, disabled = true))
-      Unit
-    }
-
-  // TODO(BS): can do that better
-  override fun enable(jobId: JobId) =
-    findOne(jobId)?.let {
-      jobs.replace(it.id, it.copy(disableComment = "", disabled = false))
-      Unit
-    }
 }

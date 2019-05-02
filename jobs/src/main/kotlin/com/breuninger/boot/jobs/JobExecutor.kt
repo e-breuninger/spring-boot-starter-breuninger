@@ -9,7 +9,7 @@ import com.breuninger.boot.jobs.eventbus.domain.JobExecutionStateChangedEvent.St
 import com.breuninger.boot.jobs.eventbus.domain.JobExecutionStateChangedEvent.State.SKIPPED
 import com.breuninger.boot.jobs.eventbus.domain.JobExecutionStateChangedEvent.State.START
 import com.breuninger.boot.jobs.eventbus.domain.JobExecutionStateChangedEvent.State.STOP
-import com.breuninger.boot.jobs.service.JobService
+import com.breuninger.boot.jobs.service.JobExecutionService
 import io.micrometer.core.aop.TimedAspect.DEFAULT_METRIC_NAME
 import io.micrometer.core.instrument.LongTaskTimer
 import io.micrometer.core.instrument.MeterRegistry
@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit.SECONDS
 
 class JobExecutor(
   private val delegate: JobRunnable,
-  private val jobService: JobService,
+  private val jobExecutionService: JobExecutionService,
   private val eventPublisher: ApplicationEventPublisher,
   private val scheduledExecutorService: ScheduledExecutorService,
   private val meterRegistry: MeterRegistry
@@ -50,7 +50,7 @@ class JobExecutor(
   override fun run() {
     try {
       val jobExecutionId = JobExecutionId()
-      jobService.acquireRunLock(jobId, jobExecutionId)
+      jobExecutionService.acquireRunLock(jobId, jobExecutionId)
       try {
         start(jobExecutionId)
         executeAndRestart(jobExecutionId, definition.restarts, definition.restartDelay)
@@ -158,7 +158,7 @@ class JobExecutor(
     override fun definition() = jobRunnableToTime.definition()
 
     override fun execute() = definition().timer?.let {
-      if(it.longTask) {
+      if (it.longTask) {
         val longTaskTimer = LongTaskTimer.builder("${if (it.name.isEmpty()) DEFAULT_METRIC_NAME else it.name}.longTask")
           .tag("class", delegate.javaClass.name)
           .tag("method", delegate.actuatorEndpointPublicMethodName())
@@ -175,8 +175,7 @@ class JobExecutor(
           } catch (ignored: Exception) {
           }
         }
-      }
-      else {
+      } else {
         jobRunnableToTime.execute()
       }
     } ?: jobRunnableToTime.execute()

@@ -27,7 +27,7 @@ class PersistJobExecutionStateChangedEventListener(
     val jobExecutionId = jobExecutionStateChangedEvent.jobExecutionId
     try {
       when (jobExecutionStateChangedEvent.state) {
-        START -> jobExecutionService.createOrUpdate(JobExecution(jobExecutionId, jobId))
+        START -> jobExecutionService.save(JobExecution(jobExecutionId, jobId))
         KEEP_ALIVE -> jobExecutionService.keepAlive(jobExecutionId)
         RESTART -> jobExecutionService.markRestarted(jobExecutionId)
         SKIPPED -> {

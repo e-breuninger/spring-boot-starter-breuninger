@@ -2,6 +2,7 @@ package com.breuninger.boot.jobs
 
 import com.breuninger.boot.jobs.domain.Job
 import com.breuninger.boot.jobs.repository.JobExecutorRegistry
+import com.breuninger.boot.jobs.service.JobExecutionService
 import com.breuninger.boot.jobs.service.JobService
 import io.micrometer.core.instrument.MeterRegistry
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -19,6 +20,7 @@ import java.util.concurrent.ScheduledExecutorService
 class JobRegistrar(
   private val jobRunnables: List<JobRunnable>?,
   private val jobService: JobService,
+  private val jobExecutionService: JobExecutionService,
   private val eventPublisher: ApplicationEventPublisher,
   private val scheduledExecutorService: ScheduledExecutorService,
   private val meterRegistry: MeterRegistry,
@@ -29,7 +31,7 @@ class JobRegistrar(
     jobRunnables?.map {
       val jobDefinition = it.definition()
       jobService.create(Job(jobDefinition.jobId))
-      val jobExecutor = JobExecutor(it, jobService, eventPublisher, scheduledExecutorService, meterRegistry)
+      val jobExecutor = JobExecutor(it, jobExecutionService, eventPublisher, scheduledExecutorService, meterRegistry)
       jobExecutorRegistry.register(jobDefinition.jobId, jobExecutor)
       jobDefinition.cron?.let { cron ->
         taskRegistrar.addCronTask(CronTask(jobExecutor, cron))

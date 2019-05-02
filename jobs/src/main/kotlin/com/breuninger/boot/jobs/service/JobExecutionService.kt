@@ -1,6 +1,8 @@
 package com.breuninger.boot.jobs.service
 
 import com.breuninger.boot.jobs.actuator.health.JobHealthIndicator
+import com.breuninger.boot.jobs.domain.Job
+import com.breuninger.boot.jobs.domain.JobBlockedException
 import com.breuninger.boot.jobs.domain.JobExecution
 import com.breuninger.boot.jobs.domain.JobExecution.Status
 import com.breuninger.boot.jobs.domain.JobExecution.Status.DEAD
@@ -12,7 +14,10 @@ import com.breuninger.boot.jobs.domain.JobExecutionMessage.Level
 import com.breuninger.boot.jobs.domain.JobExecutionMessage.Level.INFO
 import com.breuninger.boot.jobs.domain.JobExecutionMessage.Level.WARNING
 import com.breuninger.boot.jobs.domain.JobId
+import com.breuninger.boot.jobs.domain.JobMutexGroup
 import com.breuninger.boot.jobs.repository.JobExecutionRepository
+import com.breuninger.boot.jobs.repository.JobExecutorRegistry
+import com.breuninger.boot.jobs.repository.JobRepository
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
 import java.time.Instant.now
@@ -21,14 +26,16 @@ import java.time.Instant.now
 @Service
 @ConditionalOnProperty(prefix = "breuni.jobs", name = ["enabled"], havingValue = "true")
 class JobExecutionService(
-  private val jobService: JobService,
   private val jobExecutionRepository: JobExecutionRepository,
-  private val jobHealthIndicator: JobHealthIndicator
+  private val jobRepository: JobRepository,
+  private val jobHealthIndicator: JobHealthIndicator,
+  private val jobExecutorRegistry: JobExecutorRegistry,
+  private val mutexGroups: Set<JobMutexGroup>
 ) {
 
   fun findAllWithoutMessages() = jobExecutionRepository.findAllWithoutMessages()
 
-  fun createOrUpdate(jobExecution: JobExecution) = jobExecutionRepository.save(jobExecution)
+  fun save(jobExecution: JobExecution) = jobExecutionRepository.save(jobExecution)
 
   fun remove(jobExecution: JobExecution) = jobExecutionRepository.remove(jobExecution)
 
@@ -36,11 +43,39 @@ class JobExecutionService(
 
   fun stop(jobId: JobId, jobExecutionId: JobExecutionId) {
     jobExecutionRepository.stop(jobExecutionId)
-    // TODO(BS): releaseRunLock should return the execution and update health indication here, remove findOne...
-    jobService.releaseRunLock(jobId, jobExecutionId)
-    findOne(jobExecutionId)?.let {
+    releaseRunLock(jobId, jobExecutionId)?.let {
       jobHealthIndicator.setJobExecutionStatus(jobId, it.status)
     }
+  }
+
+  @Throws(JobBlockedException::class)
+  fun acquireRunLock(jobId: JobId, jobExecutionId: JobExecutionId): Job {
+    jobRepository.acquireRunLock(jobId, jobExecutionId)?.let { job ->
+      when {
+        job.disabled -> {
+          releaseRunLock(jobId, jobExecutionId)
+          throw JobBlockedException("JobRunnable '$jobId' is currently disabled")
+        }
+        else -> jobRepository.findRunning(findMutexJobs(jobId))?.let {
+          releaseRunLock(jobId, jobExecutionId)
+          throw JobBlockedException("JobRunnable '$jobId' blocked by currently running job '$it'")
+        }
+      }
+      return job
+    } ?: throw JobBlockedException("JobRunnable '$jobId' is already running")
+  }
+
+  private fun findMutexJobs(jobId: JobId) = mutexGroups
+    .asSequence()
+    .map { it.jobIds }
+    .filter { it.contains(jobId) }
+    .flatten()
+    .filter { it != jobId }
+    .toSet()
+
+  fun releaseRunLock(jobId: JobId, jobExecutionId: JobExecutionId): JobExecution? {
+    JobService.LOG.info("Releasing runLock of $jobId")
+    return jobRepository.releaseRunLock(jobId, jobExecutionId)?.let { jobExecutionRepository.findOne(jobExecutionId) }
   }
 
   fun appendMessage(jobExecutionId: JobExecutionId, message: JobExecutionMessage) {
@@ -68,4 +103,6 @@ class JobExecutionService(
   fun findAll(jobExecutionId: JobExecutionId) = jobExecutionRepository.findAll(jobExecutionId)
 
   fun findOne(jobExecutionId: JobExecutionId) = jobExecutionRepository.findOne(jobExecutionId)
+
+  fun create(jobId: JobId) = jobExecutorRegistry.findOne(jobId)?.let { Thread(it).start() }
 }

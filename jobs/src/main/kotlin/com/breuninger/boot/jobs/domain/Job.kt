@@ -9,7 +9,7 @@ data class Job(
   val runningJobExecutionId: JobExecutionId?,
   val disabled: Boolean,
   val disableComment: String,
-  val state: Map<String, String>
+  val state: Map<String, String>?
 ) {
 
   constructor(jobId: JobId) : this(jobId, null, false, "", emptyMap())

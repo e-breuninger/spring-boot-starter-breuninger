@@ -15,6 +15,7 @@ val libraryVersions = mapOf(
   "unbescape" to "1.1.6.RELEASE",
   "owasp-java-html-sanitizer" to "20190325.1",
   "slugify" to "2.3",
+
   "junit" to "5.3.1"
 )
 
@@ -44,6 +45,7 @@ val libraries = mapOf(
   "spring-boot-devtools" to "org.springframework.boot:spring-boot-devtools:${coreVersions["spring-boot"]}",
   "spring-context-indexer" to "org.springframework:spring-context-indexer:${coreVersions["spring"]}",
   "spring-boot-configuration-processor" to "org.springframework.boot:spring-boot-configuration-processor:${coreVersions["spring-boot"]}",
+  
   "junit-jupiter-api" to "org.junit.jupiter:junit-jupiter-api:${libraryVersions["junit"]}",
   "junit-jupiter-engine" to "org.junit.jupiter:junit-jupiter-engine:${libraryVersions["junit"]}"
 )

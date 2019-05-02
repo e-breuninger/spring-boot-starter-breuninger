@@ -1,19 +1,19 @@
 package com.breuninger.boot.togglz.web
 
-import com.breuninger.boot.togglz.repository.TogglzStateRepository
+import com.breuninger.boot.togglz.domain.TogglzFeature
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.togglz.core.manager.FeatureManager
 
 @Controller
 @RequestMapping("/togglz")
-// TODO(BS): we need to use sth different, which is not directly connected to mongodb...
-class TogglzHtmlController(private val togglzStateRepository: TogglzStateRepository) {
+class TogglzHtmlController(private val featureManager: FeatureManager) {
 
   @GetMapping
-  fun getTogglz(model: Model): String {
-    model.addAttribute("togglz",  togglzStateRepository.findAll())
+  fun findAll(model: Model): String {
+    model.addAttribute("togglz", featureManager.features.map { TogglzFeature(it, featureManager.getFeatureState(it)) })
     return "togglz"
   }
 }

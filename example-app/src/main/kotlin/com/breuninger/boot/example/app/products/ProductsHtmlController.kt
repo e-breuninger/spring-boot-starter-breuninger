@@ -12,7 +12,7 @@ import reactor.core.publisher.Flux
 class ProductsHtmlController {
 
   @GetMapping
-  fun getProducts(model: Model): String {
+  fun findAll(model: Model): String {
     model.addAttribute("products", ReactiveDataDriverContextVariable(
       Flux.just(Product("Käse"), Product("Schinken"), Product("Brot")))
     )

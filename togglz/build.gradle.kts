@@ -15,13 +15,14 @@ dependencies {
   compile(libraries["jackson-module-kotlin"] as String)
 
   compile(libraries["togglz-spring-core"] as String)
-  
+
   compile(libraries["spring-boot-starter-webflux"] as String)
   compile(libraries["spring-boot-starter-thymeleaf"] as String)
   compile(libraries["spring-boot-starter-actuator"] as String)
   compile(libraries["spring-boot-starter-data-mongodb-reactive"] as String)
-  compile(libraries["junit-jupiter-api"] as String)
-  compile(libraries["junit-jupiter-engine"] as String)
+
+  testCompile(libraries["junit-jupiter-api"] as String)
+  testCompile(libraries["junit-jupiter-engine"] as String)
 
   annotationProcessor(libraries["spring-boot-configuration-processor"] as String)
 }
@@ -36,8 +37,8 @@ tasks.getByName("build")
 
 tasks {
   jar {
-    from ("src/main/resources/META-INF") {
-      into ("META-INF")
+    from("src/main/resources/META-INF") {
+      into("META-INF")
     }
   }
 }

@@ -23,6 +23,7 @@ import java.time.Instant.now
 @Repository
 @ConditionalOnProperty(prefix = "breuni.jobs", name = ["mongo.enabled"], havingValue = "true")
 class MongoJobExecutionRepository(private val mongoTemplate: MongoTemplate) : JobExecutionRepository {
+
   override fun findAll(jobExecutionId: JobExecutionId): List<JobExecution> {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
@@ -37,6 +38,7 @@ class MongoJobExecutionRepository(private val mongoTemplate: MongoTemplate) : Jo
 
   // TODO(BS): can do that better with mongo query and not sorting afterwards
   // TODO(BS): need to add jobId filter if not null
+  // TODO(BS): take 100
   override fun findAll(jobId: JobId?): List<JobExecution> = mongoTemplate.findAll(JobExecution::class.java)
     .sortedBy { it.lastUpdated }
     .reversed()

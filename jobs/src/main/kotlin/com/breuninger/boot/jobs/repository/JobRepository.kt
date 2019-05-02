@@ -27,7 +27,5 @@ interface JobRepository {
 
   fun findAll(jobId: JobId): List<Job>
 
-  fun disable(jobId: JobId, disableComment: String): Unit?
-
-  fun enable(jobId: JobId): Unit?
+  fun update(jobId: JobId, job: Job): Job?
 }

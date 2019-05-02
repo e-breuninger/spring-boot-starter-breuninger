@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 // TODO(BS): sort methods
 class InMemoryJobExecutionRepository : JobExecutionRepository {
+
   override fun findAll(jobExecutionId: JobExecutionId): List<JobExecution> {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
@@ -24,6 +25,9 @@ class InMemoryJobExecutionRepository : JobExecutionRepository {
     .sortedByDescending { it.started }
     .map { it.copy(messages = emptyList()) }
 
+  // TODO(BS): secure that this is not happening to the next repository
+  // TODO(BS): sort, reverse
+  // TODO(BS): take 100
   // TODO(BS): need to add jobId filter if not null
   override fun findAll(jobId: JobId?): List<JobExecution> = ArrayList<JobExecution>(jobExecutions.values)
 
