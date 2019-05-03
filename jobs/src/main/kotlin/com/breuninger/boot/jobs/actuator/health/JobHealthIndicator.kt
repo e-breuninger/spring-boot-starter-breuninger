@@ -14,7 +14,7 @@ class JobHealthIndicator : HealthIndicator {
   private val jobExecutionStatus: ConcurrentMap<JobId, JobExecution.Status> = ConcurrentHashMap()
 
   override fun health(): Health {
-    val health = Health.unknown().withDetails(jobExecutionStatus.map { toDetails(it.key, it.value) }.toMap<String, Health>())
+    val health = Health.unknown().withDetails(jobExecutionStatus.map { toHealth(it.key, it.value) }.toMap<String, Health>())
     return if (anyJobExecutionIsDown()) {
       health.down().build()
     } else {
@@ -22,7 +22,7 @@ class JobHealthIndicator : HealthIndicator {
     }
   }
 
-  private fun toDetails(jobId: JobId, status: JobExecution.Status) = if (isDown(status)) {
+  private fun toHealth(jobId: JobId, status: JobExecution.Status) = if (isDown(status)) {
     jobId.value to Health.down().build()
   } else {
     jobId.value to Health.up().build()

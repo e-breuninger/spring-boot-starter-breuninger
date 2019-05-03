@@ -23,6 +23,7 @@ dependencies {
 
   testCompile(libraries["junit-jupiter-api"] as String)
   testCompile(libraries["junit-jupiter-engine"] as String)
+  testCompile(libraries["mockk"] as String)
 
   annotationProcessor(libraries["spring-boot-configuration-processor"] as String)
 }

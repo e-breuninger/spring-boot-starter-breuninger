@@ -106,15 +106,15 @@ function startJob(button) {
 
 function disableJob(disable, button) {
   const body = {
-    jobId: button.value,
+    id: {value: button.value},
     disabled: disable,
     disableComment: $(`#${button.value}disabledcommentinput`)[0].value
   };
   $.ajax({
-    data: body,
-    contentType: 'text/plain',
+    data: JSON.stringify(body),
+    contentType: 'application/json',
     type: 'PUT',
-    url: `jobs/${button.value}&disabled=${disable}`,
+    url: `jobs/${button.value}`,
     success: fragment => {
       if (fragment) {
         updateJob(button.value, fragment);

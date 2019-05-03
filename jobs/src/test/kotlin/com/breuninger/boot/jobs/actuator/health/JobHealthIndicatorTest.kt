@@ -4,9 +4,10 @@ import com.breuninger.boot.jobs.domain.JobExecution
 import com.breuninger.boot.jobs.domain.JobId
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.springframework.boot.actuate.health.Health
 import org.springframework.boot.actuate.health.Status
 
-class TestJobHealthIndicator {
+internal class JobHealthIndicatorTest {
 
   private val healthIndicator = JobHealthIndicator()
 
@@ -14,11 +15,14 @@ class TestJobHealthIndicator {
   fun `ensure health is up when every execution is up`() {
     healthIndicator.setJobExecutionStatus(JobId("test"), JobExecution.Status.OK)
     healthIndicator.setJobExecutionStatus(JobId("foo"), JobExecution.Status.OK)
-    healthIndicator.setJobExecutionStatus(JobId("bar"), JobExecution.Status.OK)
+    healthIndicator.setJobExecutionStatus(JobId("bar"), JobExecution.Status.SKIPPED)
 
     val actualHealth = healthIndicator.health()
 
     assertEquals(Status.UP, actualHealth.status)
+    assertEquals(Status.UP, (actualHealth.details["test"] as Health).status)
+    assertEquals(Status.UP, (actualHealth.details["foo"] as Health).status)
+    assertEquals(Status.UP, (actualHealth.details["bar"] as Health).status)
   }
 
   @Test
@@ -30,6 +34,9 @@ class TestJobHealthIndicator {
     val actualHealth = healthIndicator.health()
 
     assertEquals(Status.DOWN, actualHealth.status)
+    assertEquals(Status.UP, (actualHealth.details["test"] as Health).status)
+    assertEquals(Status.UP, (actualHealth.details["foo"] as Health).status)
+    assertEquals(Status.DOWN, (actualHealth.details["bar"] as Health).status)
   }
 
   @Test
@@ -41,6 +48,9 @@ class TestJobHealthIndicator {
     val actualHealth = healthIndicator.health()
 
     assertEquals(Status.DOWN, actualHealth.status)
+    assertEquals(Status.UP, (actualHealth.details["test"] as Health).status)
+    assertEquals(Status.UP, (actualHealth.details["foo"] as Health).status)
+    assertEquals(Status.DOWN, (actualHealth.details["bar"] as Health).status)
   }
 
   @Test
@@ -52,5 +62,8 @@ class TestJobHealthIndicator {
     val actualHealth = healthIndicator.health()
 
     assertEquals(Status.DOWN, actualHealth.status)
+    assertEquals(Status.DOWN, (actualHealth.details["test"] as Health).status)
+    assertEquals(Status.DOWN, (actualHealth.details["foo"] as Health).status)
+    assertEquals(Status.DOWN, (actualHealth.details["bar"] as Health).status)
   }
 }

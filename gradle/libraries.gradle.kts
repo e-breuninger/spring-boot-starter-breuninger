@@ -16,7 +16,8 @@ val libraryVersions = mapOf(
   "owasp-java-html-sanitizer" to "20190325.1",
   "slugify" to "2.3",
 
-  "junit" to "5.4.2"
+  "junit" to "5.4.2",
+  "mockk" to "1.9.3.kotlin12"
 )
 
 val libraries = mapOf(
@@ -47,7 +48,8 @@ val libraries = mapOf(
   "spring-boot-configuration-processor" to "org.springframework.boot:spring-boot-configuration-processor:${coreVersions["spring-boot"]}",
   
   "junit-jupiter-api" to "org.junit.jupiter:junit-jupiter-api:${libraryVersions["junit"]}",
-  "junit-jupiter-engine" to "org.junit.jupiter:junit-jupiter-engine:${libraryVersions["junit"]}"
+  "junit-jupiter-engine" to "org.junit.jupiter:junit-jupiter-engine:${libraryVersions["junit"]}",
+  "mockk" to "io.mockk:mockk:${libraryVersions["mockk"]}"
 )
 
 extra["libraryVersions"] = libraryVersions

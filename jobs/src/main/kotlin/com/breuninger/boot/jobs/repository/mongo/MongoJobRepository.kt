@@ -28,8 +28,11 @@ class MongoJobRepository(private val mongoTemplate: MongoTemplate) : JobReposito
     val LOG: Logger = LoggerFactory.getLogger(MongoJobRepository::class.java)
   }
 
+  // TODO(BS): only one mongo call
   override fun update(jobId: JobId, job: Job): Job? {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    mongoTemplate.updateFirst<Job>(query(where("_id").`is`(jobId)),
+      update(Job::disabled.name, job.disabled).set(Job::disableComment.name, job.disableComment))
+    return findOne(jobId)
   }
 
   override fun findOne(jobId: JobId) = mongoTemplate.findById<Job>(jobId)
