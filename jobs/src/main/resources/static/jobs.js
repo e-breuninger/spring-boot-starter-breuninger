@@ -126,7 +126,7 @@ function disableJob(disable, button) {
 
 function updateJob(jobId, jobData) {
   const statusElement = $(`#${jobId}status`)[0];
-  statusElement.innerHTML = jobData.disabled ? 'Disabled' : 'Enabled';
+  statusElement.textContent = jobData.disabled ? 'Disabled' : 'Enabled';
   statusElement.className = jobData.disabled ? 'disabled' : 'enabled';
 
   $(`#${jobId}disabledcomment`)[0].textContent = jobData.disableComment;
