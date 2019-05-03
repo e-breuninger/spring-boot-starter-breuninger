@@ -91,7 +91,7 @@ class JobExecutionService(
   }
 
   fun stop(jobId: JobId, jobExecutionId: JobExecutionId) {
-    jobExecutionRepository.stop(jobExecutionId)
+    jobExecutionRepository.stop(jobExecutionId, now())
     releaseRunLock(jobId, jobExecutionId)?.let {
       jobHealthIndicator.setJobExecutionStatus(jobId, it.status)
     }

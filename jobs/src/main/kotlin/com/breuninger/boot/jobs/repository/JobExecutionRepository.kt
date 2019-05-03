@@ -23,7 +23,7 @@ interface JobExecutionRepository {
 
   fun appendMessage(jobExecutionId: JobExecutionId, message: JobExecutionMessage): Unit?
 
-  fun stop(jobExecutionId: JobExecutionId): Unit?
+  fun stop(jobExecutionId: JobExecutionId, stopped: Instant): Unit?
 
   fun remove(jobExecution: JobExecution)
 }

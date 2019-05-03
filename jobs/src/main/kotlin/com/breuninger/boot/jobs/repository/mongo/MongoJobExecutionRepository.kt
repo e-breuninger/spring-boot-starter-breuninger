@@ -19,7 +19,6 @@ import org.springframework.data.mongodb.core.query.Update.update
 import org.springframework.data.mongodb.core.updateFirst
 import org.springframework.stereotype.Repository
 import java.time.Instant
-import java.time.Instant.now
 
 @Repository
 @ConditionalOnProperty(prefix = "breuni.jobs", name = ["mongo.enabled"], havingValue = "true")
@@ -55,8 +54,7 @@ class MongoJobExecutionRepository(private val mongoTemplate: MongoTemplate) : Jo
         .addToSet(JobExecution::messages.name, message))
   }
 
-  override fun stop(jobExecutionId: JobExecutionId) {
-    val stopped = now()
+  override fun stop(jobExecutionId: JobExecutionId, stopped: Instant) {
     mongoTemplate.updateFirst<JobExecution>(query(where("_id").`is`(jobExecutionId)),
       update(JobExecution::stopped.name, stopped)
         .set(JobExecution::lastUpdated.name, stopped))

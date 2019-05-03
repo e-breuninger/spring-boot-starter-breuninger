@@ -7,7 +7,6 @@ import com.breuninger.boot.jobs.domain.JobExecutionMessage
 import com.breuninger.boot.jobs.domain.JobId
 import com.breuninger.boot.jobs.repository.JobExecutionRepository
 import java.time.Instant
-import java.time.Instant.now
 import java.util.concurrent.ConcurrentHashMap
 
 class InMemoryJobExecutionRepository : JobExecutionRepository {
@@ -47,9 +46,7 @@ class InMemoryJobExecutionRepository : JobExecutionRepository {
     Unit
   }
 
-  override fun stop(jobExecutionId: JobExecutionId) = findOne(jobExecutionId)?.let {
-    // TODO(BS): this should be inside the service...
-    val stopped = now()
+  override fun stop(jobExecutionId: JobExecutionId, stopped: Instant) = findOne(jobExecutionId)?.let {
     jobExecutions.replace(jobExecutionId, it.copy(stopped = stopped, lastUpdated = stopped))
     Unit
   }
