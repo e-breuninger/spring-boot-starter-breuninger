@@ -24,7 +24,7 @@ function updateMessagesAndDates(input) {
   const id = input.value;
 
   const callJobExecutionUpdateFromServer = () => {
-    $.get(`../../jobExecutions/${id}`, fragment => {
+    $.getJSON(`../../jobExecutions/${id}`, fragment => {
       if (fragment) {
         const messageElement = $(`#${id}`)[0];
         messageElement.innerHTML = formatMessages(fragment.messages);
@@ -105,11 +105,10 @@ function startJob(button) {
 }
 
 function disableJob(disable, button) {
-  const data = $(`#${button.value}disabledcommentinput`)[0].value;
   const body = {
     jobId: button.value,
     disabled: disable,
-    disableComment: data
+    disableComment: $(`#${button.value}disabledcommentinput`)[0].value
   };
   $.ajax({
     data: body,
