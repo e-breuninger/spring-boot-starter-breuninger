@@ -18,7 +18,6 @@ import org.springframework.data.mongodb.core.query.Update.update
 import org.springframework.data.mongodb.core.updateFirst
 import org.springframework.stereotype.Repository
 
-// TODO(BS): sort methods
 @Repository
 @ConditionalOnProperty(prefix = "breuni.jobs", name = ["mongo.enabled"], havingValue = "true")
 class MongoJobRepository(private val mongoTemplate: MongoTemplate) : JobRepository {
@@ -28,24 +27,26 @@ class MongoJobRepository(private val mongoTemplate: MongoTemplate) : JobReposito
     val LOG: Logger = LoggerFactory.getLogger(MongoJobRepository::class.java)
   }
 
-  // TODO(BS): only one mongo call
-  override fun update(jobId: JobId, job: Job): Job? {
-    mongoTemplate.updateFirst<Job>(query(where("_id").`is`(jobId)),
-      update(Job::disabled.name, job.disabled).set(Job::disableComment.name, job.disableComment))
-    return findOne(jobId)
-  }
-
   override fun findOne(jobId: JobId) = mongoTemplate.findById<Job>(jobId)
 
   override fun findRunning(jobIds: Set<JobId>) =
     mongoTemplate.findOne<Job>(query(where("_id").`in`(jobIds).and(Job::runningJobExecutionId.name).exists(true)))
 
-  override fun insert(job: Job) {
-    try {
-      mongoTemplate.insert(job)
-    } catch (exception: Exception) {
-      LOG.info("Job already created")
-    }
+  override fun findAll(): List<Job> = mongoTemplate.findAll(Job::class.java)
+
+  override fun insert(job: Job) = try {
+    mongoTemplate.insert(job)
+    Unit
+  } catch (exception: Exception) {
+    LOG.info("Job already created")
+  }
+
+  // TODO(BS): only one mongo call
+  override fun updateDisableState(jobId: JobId, job: Job): Job? {
+    mongoTemplate.updateFirst<Job>(query(where("_id").`is`(jobId)),
+      update(Job::disabled.name, job.disabled)
+        .set(Job::disableComment.name, job.disableComment))
+    return findOne(jobId)
   }
 
   override fun acquireRunLock(jobId: JobId, jobExecutionId: JobExecutionId) =
@@ -72,6 +73,4 @@ class MongoJobRepository(private val mongoTemplate: MongoTemplate) : JobReposito
     mongoTemplate.updateFirst<Job>(query(where("_id").`is`(jobId)), update(Job::state.name, state))
     Unit
   }
-
-  override fun findAll(): List<Job> = mongoTemplate.findAll(Job::class.java)
 }

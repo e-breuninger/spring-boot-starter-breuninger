@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.RequestMapping
 @RequestMapping("/jobs")
 class JobHtmlController(private val jobService: JobService, private val jobRunnables: List<JobRunnable>?) {
 
-  @GetMapping
-  fun findAll(model: Model): String {
-    model.addAttribute("jobs", jobService.findAll())
+  @GetMapping("/{jobId}")
+  fun find(@PathVariable jobId: String, model: Model): String {
+    model.addAttribute("jobs", listOfNotNull(jobService.findOne(JobId(jobId))))
     model.addAttribute("jobDefinitions", jobRunnables?.map { it.definition().jobId to it.definition() }?.toMap())
     return "jobs"
   }
 
-  @GetMapping("/{jobId}")
-  fun find(@PathVariable jobId: String, model: Model): String {
-    model.addAttribute("jobs", listOfNotNull(jobService.findOne(JobId(jobId))))
+  @GetMapping
+  fun findAll(model: Model): String {
+    model.addAttribute("jobs", jobService.findAll())
     model.addAttribute("jobDefinitions", jobRunnables?.map { it.definition().jobId to it.definition() }?.toMap())
     return "jobs"
   }

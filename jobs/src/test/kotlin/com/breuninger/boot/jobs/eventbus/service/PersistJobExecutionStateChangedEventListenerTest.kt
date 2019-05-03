@@ -16,15 +16,13 @@ import org.junit.jupiter.api.Test
 
 // TODO implement
 internal class PersistJobExecutionStateChangedEventListenerTest {
-  val jobExecutionService = mockk<JobExecutionService>()
-  val jobRunnable = mockk<JobRunnable>()
-  val jobDefinition = mockk<JobDefinition>()
-  val jobExecutionId = JobExecutionId("bar")
-  val jobId = JobId("foo")
-  val persistJobExecutionStateChangedEventListener = PersistJobExecutionStateChangedEventListener(jobExecutionService)
 
-  fun createJobExecutionStateChangedEvent(state: JobExecutionStateChangedEvent.State) =
-    JobExecutionStateChangedEvent(jobRunnable, jobExecutionId, state)
+  private val jobExecutionService = mockk<JobExecutionService>()
+  private val jobRunnable = mockk<JobRunnable>()
+  private val jobDefinition = mockk<JobDefinition>()
+  private val jobExecutionId = JobExecutionId("bar")
+  private val jobId = JobId("foo")
+  private val persistJobExecutionStateChangedEventListener = PersistJobExecutionStateChangedEventListener(jobExecutionService)
 
   @BeforeEach
   fun before() {
@@ -34,42 +32,57 @@ internal class PersistJobExecutionStateChangedEventListenerTest {
     every { jobExecutionService.markSkipped(jobExecutionId) } returns Unit
     every { jobExecutionService.keepAlive(jobExecutionId) } returns Unit
     every { jobExecutionService.stop(jobId, jobExecutionId) } returns Unit
-    every { jobExecutionService.save(any()) } returns JobExecution(jobExecutionId,jobId)
+    every { jobExecutionService.save(any()) } returns JobExecution(jobExecutionId, jobId)
   }
 
   @Test
   fun `ensure jobExecutionService save is called once`() {
     val jobExecutionStateChangedEvent = createJobExecutionStateChangedEvent(JobExecutionStateChangedEvent.State.START)
+
     persistJobExecutionStateChangedEventListener.consumeJobExecutionStateChanged(jobExecutionStateChangedEvent)
+
     verify(exactly = 1) { jobExecutionService.save(any()) }
   }
 
   @Test
   fun `ensure jobExecutionService keepAlive is called once`() {
     val jobExecutionStateChangedEvent = createJobExecutionStateChangedEvent(JobExecutionStateChangedEvent.State.KEEP_ALIVE)
+
     persistJobExecutionStateChangedEventListener.consumeJobExecutionStateChanged(jobExecutionStateChangedEvent)
+
     verify(exactly = 1) { jobExecutionService.keepAlive(jobExecutionId) }
   }
 
   @Test
   fun `ensure jobExecutionService markRestarted is called once`() {
     val jobExecutionStateChangedEvent = createJobExecutionStateChangedEvent(JobExecutionStateChangedEvent.State.RESTART)
+
     persistJobExecutionStateChangedEventListener.consumeJobExecutionStateChanged(jobExecutionStateChangedEvent)
+
     verify(exactly = 1) { jobExecutionService.markRestarted(jobExecutionId) }
   }
 
   @Test
   fun `ensure jobExecutionService markSkipped and stop are called once`() {
     val jobExecutionStateChangedEvent = createJobExecutionStateChangedEvent(JobExecutionStateChangedEvent.State.SKIPPED)
+
     persistJobExecutionStateChangedEventListener.consumeJobExecutionStateChanged(jobExecutionStateChangedEvent)
-    verifySequence {  jobExecutionService.markSkipped(jobExecutionId)
-                      jobExecutionService.stop(jobId, jobExecutionId) }
+
+    verifySequence {
+      jobExecutionService.markSkipped(jobExecutionId)
+      jobExecutionService.stop(jobId, jobExecutionId)
+    }
   }
 
   @Test
   fun `ensure jobExecutionService stop is called once`() {
     val jobExecutionStateChangedEvent = createJobExecutionStateChangedEvent(JobExecutionStateChangedEvent.State.STOP)
+
     persistJobExecutionStateChangedEventListener.consumeJobExecutionStateChanged(jobExecutionStateChangedEvent)
+
     verify(exactly = 1) { jobExecutionService.stop(jobId, jobExecutionId) }
   }
+
+  private fun createJobExecutionStateChangedEvent(state: JobExecutionStateChangedEvent.State) =
+    JobExecutionStateChangedEvent(jobRunnable, jobExecutionId, state)
 }

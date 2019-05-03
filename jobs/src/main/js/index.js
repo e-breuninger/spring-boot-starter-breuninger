@@ -1,4 +1,3 @@
-// TODO(KA): Endpoint and View are not allowed to have same path or the wrong menu items will be highlighted
 import jobsView from './jobs-view';
 import jobExecutionsView from './jobExecutions-view';
 import jobsEndpoint from './jobs-endpoint';

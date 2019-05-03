@@ -9,7 +9,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
 
-// TODO(BS): sort methods
 class InMemoryJobRepository : JobRepository {
 
   companion object {
@@ -19,16 +18,17 @@ class InMemoryJobRepository : JobRepository {
 
   private val jobs = ConcurrentHashMap<JobId, Job>()
 
-  // TODO(KA): implement
-  override fun update(jobId: JobId, job: Job): Job? {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-  }
-
   override fun findOne(jobId: JobId): Job? = jobs[jobId]
 
   override fun findRunning(jobIds: Set<JobId>) = jobs.values.find { jobIds.contains(it.id) && it.isRunning() }
 
+  override fun findAll(): List<Job> = ArrayList<Job>(jobs.values)
+
   override fun insert(job: Job) = findOne(job.id)?.let { LOG.info("Job already created") } ?: run { jobs[job.id] = job }
+
+  override fun updateDisableState(jobId: JobId, job: Job) = jobs[jobId]?.let {
+    jobs.replace(jobId, it.copy(disabled = job.disabled, disableComment = job.disableComment))
+  }
 
   override fun acquireRunLock(jobId: JobId, jobExecutionId: JobExecutionId) = findOne(jobId)?.let {
     if (it.isRunning()) null else jobs.replace(jobId, it.copy(runningJobExecutionId = jobExecutionId))
@@ -55,6 +55,4 @@ class InMemoryJobRepository : JobRepository {
     jobs.replace(jobId, it.copy(state = state))
     Unit
   }
-
-  override fun findAll(): List<Job> = ArrayList<Job>(jobs.values)
 }
