@@ -17,7 +17,7 @@ class InMemoryJobExecutionRepository : JobExecutionRepository {
 
   override fun findOne(jobExecutionId: JobExecutionId) = jobExecutions[jobExecutionId]
 
-  override fun findAllWithoutMessages() = jobExecutions.values
+  override fun findAllIgnoreMessages() = jobExecutions.values
     .sortedByDescending { it.started }
     .map { it.copy(messages = emptyList()) }
 
@@ -26,7 +26,13 @@ class InMemoryJobExecutionRepository : JobExecutionRepository {
   // TODO(BS): sort, reverse
   // TODO(BS): take 100
   // TODO(BS): need to add jobId filter if not null
-  override fun findAll(jobId: JobId?): List<JobExecution> = ArrayList<JobExecution>(jobExecutions.values)
+  override fun findHundredSortedDescending(jobId: JobId?): List<JobExecution> = ArrayList<JobExecution>(jobExecutions.values).filter {
+    if (jobId == null) {
+      true
+    } else {
+      it.jobId == jobId
+    }
+  }.sortedByDescending { it.lastUpdated }.take(100)
 
   override fun save(jobExecution: JobExecution): JobExecution {
     jobExecutions[jobExecution.id] = jobExecution

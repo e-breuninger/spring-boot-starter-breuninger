@@ -40,7 +40,7 @@ class JobExecutionService(
     val LOG: Logger = LoggerFactory.getLogger(JobExecutionService::class.java)
   }
 
-  fun findAllWithoutMessages() = jobExecutionRepository.findAllWithoutMessages()
+  fun findAllIgnoreMessages() = jobExecutionRepository.findAllIgnoreMessages()
 
   fun save(jobExecution: JobExecution) = jobExecutionRepository.save(jobExecution)
 
@@ -105,7 +105,7 @@ class JobExecutionService(
     status?.let { jobExecutionRepository.updateStatus(jobExecutionId, it) }
   }
 
-  fun findAll(jobId: JobId?) = jobExecutionRepository.findAll(jobId)
+  fun findAll(jobId: JobId?) = jobExecutionRepository.findHundredSortedDescending(jobId)
 
   fun findOne(jobExecutionId: JobExecutionId) = jobExecutionRepository.findOne(jobExecutionId)
 

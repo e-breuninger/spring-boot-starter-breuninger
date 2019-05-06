@@ -27,7 +27,7 @@ class KillDeadJobExecutionsCleanupStrategy(
   override fun cleanUp() {
     val killDeadJobExecutionAt = now().minusSeconds(jobsProperties.cleanup.killDeadJobExecutionsAfterSeconds.toLong())
     LOG.info("Looking for job executions older than $killDeadJobExecutionAt ")
-    jobExecutionService.findAllWithoutMessages()
+    jobExecutionService.findAllIgnoreMessages()
       .filter { it.hasNotStopped() && it.lastUpdated.isBefore(killDeadJobExecutionAt) }
       .forEach {
         jobExecutionService.markDead(it.id)

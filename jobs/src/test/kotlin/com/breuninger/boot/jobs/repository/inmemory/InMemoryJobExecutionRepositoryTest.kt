@@ -1,43 +1,13 @@
 package com.breuninger.boot.jobs.repository.inmemory
 
-import org.junit.jupiter.api.Test
+import com.breuninger.boot.jobs.repository.AbstractJobExecutionRepositoryTest
+import com.breuninger.boot.jobs.repository.JobExecutionRepository
 
-// TODO implement
-internal class InMemoryJobExecutionRepositoryTest {
+internal class InMemoryJobExecutionRepositoryTest: AbstractJobExecutionRepositoryTest() {
 
-    @Test
-    fun findOne() {
-    }
+  val inMemoryJobExecutionRepository = InMemoryJobExecutionRepository()
 
-    @Test
-    fun findAllWithoutMessages() {
-    }
-
-    @Test
-    fun findAll() {
-    }
-
-    @Test
-    fun save() {
-    }
-
-    @Test
-    fun remove() {
-    }
-
-    @Test
-    fun stop() {
-    }
-
-    @Test
-    fun updateStatus() {
-    }
-
-    @Test
-    fun appendMessage() {
-    }
-
-    @Test
-    fun updateLastUpdated() {
-    }
+  override fun getRepository(): JobExecutionRepository {
+    return inMemoryJobExecutionRepository
+  }
 }

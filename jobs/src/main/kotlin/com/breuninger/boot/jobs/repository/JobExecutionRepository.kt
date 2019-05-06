@@ -12,9 +12,9 @@ interface JobExecutionRepository {
 
   fun findOne(jobExecutionId: JobExecutionId): JobExecution?
 
-  fun findAllWithoutMessages(): List<JobExecution>
+  fun findAllIgnoreMessages(): List<JobExecution>
 
-  fun findAll(jobId: JobId?): List<JobExecution>
+  fun findHundredSortedDescending(jobId: JobId?): List<JobExecution>
 
   fun save(jobExecution: JobExecution): JobExecution
 

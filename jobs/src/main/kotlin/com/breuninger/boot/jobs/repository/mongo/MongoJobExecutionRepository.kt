@@ -26,7 +26,7 @@ class MongoJobExecutionRepository(private val mongoTemplate: MongoTemplate) : Jo
 
   override fun findOne(jobExecutionId: JobExecutionId) = mongoTemplate.findById<JobExecution>(jobExecutionId)
 
-  override fun findAllWithoutMessages(): List<JobExecution> {
+  override fun findAllIgnoreMessages(): List<JobExecution> {
     val query = Query()
     query.fields().slice(JobExecution::messages.name, 0)
     return mongoTemplate.find(query)
@@ -36,9 +36,8 @@ class MongoJobExecutionRepository(private val mongoTemplate: MongoTemplate) : Jo
   // TODO(BS): can do that better with mongo query and not sorting afterwards
   // TODO(BS): need to add jobId filter if not null
   // TODO(BS): take 100
-  override fun findAll(jobId: JobId?): List<JobExecution> = mongoTemplate.findAll(JobExecution::class.java)
-    .sortedBy { it.lastUpdated }
-    .reversed()
+  override fun findHundredSortedDescending(jobId: JobId?): List<JobExecution> = mongoTemplate.findAll(JobExecution::class.java)
+    .sortedByDescending { it.lastUpdated }.take(100)
 
   override fun save(jobExecution: JobExecution) = mongoTemplate.save(jobExecution)
 

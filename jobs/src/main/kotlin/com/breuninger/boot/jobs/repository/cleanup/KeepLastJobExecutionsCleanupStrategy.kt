@@ -21,7 +21,7 @@ class KeepLastJobExecutionsCleanupStrategy(
   @Timed("com.breuninger.boot.jobs.repository.cleanup.KeepLastJobExecutionsCleanupStrategy.cleanUp", longTask = true)
   @Scheduled(fixedRate = KEEP_LAST_JOB_EXECUTIONS_CLEANUP_INTERVAL)
   override fun cleanUp() {
-    jobExecutionService.findAllWithoutMessages()
+    jobExecutionService.findAllIgnoreMessages()
       .sortedByDescending { it.started }
       .groupBy { it.jobId }
       .flatMap { jobToJobExecutions ->

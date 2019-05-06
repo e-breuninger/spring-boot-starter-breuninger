@@ -21,7 +21,7 @@ class DeleteSkippedJobExecutionsCleanupStrategy(
   @Timed("com.breuninger.boot.jobs.repository.cleanup.DeleteSkippedJobExecutionsCleanupStrategy.cleanUp", longTask = true)
   @Scheduled(fixedRate = DELETE_SKIPPED_JOB_EXECUTIONS_CLEANUP_INTERVAL)
   override fun cleanUp() {
-    jobExecutionService.findAllWithoutMessages()
+    jobExecutionService.findAllIgnoreMessages()
       .sortedByDescending { it.started }
       .groupBy { it.jobId }
       .flatMap { jobToJobExecutions ->
