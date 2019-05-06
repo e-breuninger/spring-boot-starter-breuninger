@@ -12,20 +12,23 @@ import io.mockk.verify
 import org.junit.jupiter.api.Test
 
 // TODO implement
-internal class MeterJobExecutionStateChangedEventListenerTest{
-  val meterRegistry = mockk<MeterRegistry>()
-  val meterJobExecutionStateChangedEventListener = MeterJobExecutionStateChangedEventListener(meterRegistry)
-  val jobRunnable = mockk<JobRunnable>()
-  val jobDefinition = mockk<JobDefinition>()
+internal class MeterJobExecutionStateChangedEventListenerTest {
+
+  private val meterRegistry = mockk<MeterRegistry>()
+  private val meterJobExecutionStateChangedEventListener = MeterJobExecutionStateChangedEventListener(meterRegistry)
+  private val jobRunnable = mockk<JobRunnable>()
+  private val jobDefinition = mockk<JobDefinition>()
 
   @Test
-  fun `ensure meterRegistrys gauge function is called`(){
+  fun `ensure meterRegistry gauge function is called`() {
     every { jobRunnable.definition() } returns jobDefinition
     every { jobDefinition.jobId } returns JobId("foo")
-    every { meterRegistry.gauge(JobExecutionStateChangedEvent::class.java.name,any(), 1) } returns 1
-    val jobExecutionStateChangedEvent = JobExecutionStateChangedEvent(jobRunnable, JobExecutionId("bar"),JobExecutionStateChangedEvent.State.START)
-    meterJobExecutionStateChangedEventListener.consumeJobExecutionStateChanged(jobExecutionStateChangedEvent)
-    verify(exactly = 1) { meterRegistry.gauge(JobExecutionStateChangedEvent::class.java.name,any(), 1) }
-  }
+    every { meterRegistry.gauge(JobExecutionStateChangedEvent::class.java.name, any(), 1) } returns 1
 
+    val jobExecutionStateChangedEvent = JobExecutionStateChangedEvent(jobRunnable, JobExecutionId("bar"),
+      JobExecutionStateChangedEvent.State.START)
+    meterJobExecutionStateChangedEventListener.consumeJobExecutionStateChanged(jobExecutionStateChangedEvent)
+
+    verify(exactly = 1) { meterRegistry.gauge(JobExecutionStateChangedEvent::class.java.name, any(), 1) }
+  }
 }

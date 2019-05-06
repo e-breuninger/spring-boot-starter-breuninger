@@ -24,7 +24,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
 import java.time.Instant.now
 
-// TODO(BS): sort methods
 @Service
 @ConditionalOnProperty(prefix = "breuni.jobs", name = ["enabled"], havingValue = "true")
 class JobExecutionService(
@@ -40,7 +39,13 @@ class JobExecutionService(
     val LOG: Logger = LoggerFactory.getLogger(JobExecutionService::class.java)
   }
 
+  fun findOne(jobExecutionId: JobExecutionId) = jobExecutionRepository.findOne(jobExecutionId)
+
+  fun find100DescendingByLastUpdated(jobId: JobId?) = jobExecutionRepository.find100DescendingByLastUpdated(jobId)
+
   fun findAllIgnoreMessages() = jobExecutionRepository.findAllIgnoreMessages()
+
+  fun create(jobId: JobId) = jobExecutorRegistry.findOne(jobId)?.let { Thread(it).start() }
 
   fun save(jobExecution: JobExecution) = jobExecutionRepository.save(jobExecution)
 
@@ -48,12 +53,20 @@ class JobExecutionService(
 
   fun keepAlive(jobExecutionId: JobExecutionId) = jobExecutionRepository.updateLastUpdated(jobExecutionId, now())
 
-  fun stop(jobId: JobId, jobExecutionId: JobExecutionId) {
-    jobExecutionRepository.stop(jobExecutionId)
-    releaseRunLock(jobId, jobExecutionId)?.let {
-      jobHealthIndicator.setJobExecutionStatus(jobId, it.status)
-    }
+  fun appendMessage(jobExecutionId: JobExecutionId, message: JobExecutionMessage) {
+    val status = if (message.level == Level.ERROR) Status.ERROR else null
+    appendMessageAndUpdateStatus(jobExecutionId, message, status)
   }
+
+  fun markRestarted(jobExecutionId: JobExecutionId) =
+    appendMessageAndUpdateStatus(jobExecutionId, JobExecutionMessage(now(), WARNING, "Restarting job ..."), OK)
+
+  fun markSkipped(jobExecutionId: JobExecutionId) =
+    appendMessageAndUpdateStatus(jobExecutionId, JobExecutionMessage(now(), INFO, "Skipped job ..."), SKIPPED)
+
+  fun markDead(jobExecutionId: JobExecutionId) =
+    appendMessageAndUpdateStatus(jobExecutionId,
+      JobExecutionMessage(now(), WARNING, "Job didn't receive updates for a while, considering it dead"), DEAD)
 
   @Throws(JobBlockedException::class)
   fun acquireRunLock(jobId: JobId, jobExecutionId: JobExecutionId): Job {
@@ -72,6 +85,23 @@ class JobExecutionService(
     } ?: throw JobBlockedException("JobRunnable '$jobId' is already running")
   }
 
+  fun releaseRunLock(jobId: JobId, jobExecutionId: JobExecutionId): JobExecution? {
+    LOG.info("Releasing runLock of $jobId")
+    return jobRepository.releaseRunLock(jobId, jobExecutionId)?.let { jobExecutionRepository.findOne(jobExecutionId) }
+  }
+
+  fun stop(jobId: JobId, jobExecutionId: JobExecutionId) {
+    jobExecutionRepository.stop(jobExecutionId, now())
+    releaseRunLock(jobId, jobExecutionId)?.let {
+      jobHealthIndicator.setJobExecutionStatus(jobId, it.status)
+    }
+  }
+
+  private fun appendMessageAndUpdateStatus(jobExecutionId: JobExecutionId, message: JobExecutionMessage, status: Status?) {
+    jobExecutionRepository.appendMessage(jobExecutionId, message)
+    status?.let { jobExecutionRepository.updateStatus(jobExecutionId, it) }
+  }
+
   private fun findMutexJobs(jobId: JobId) = mutexGroups
     .asSequence()
     .map { it.jobIds }
@@ -79,35 +109,4 @@ class JobExecutionService(
     .flatten()
     .filter { it != jobId }
     .toSet()
-
-  fun releaseRunLock(jobId: JobId, jobExecutionId: JobExecutionId): JobExecution? {
-    LOG.info("Releasing runLock of $jobId")
-    return jobRepository.releaseRunLock(jobId, jobExecutionId)?.let { jobExecutionRepository.findOne(jobExecutionId) }
-  }
-
-  fun appendMessage(jobExecutionId: JobExecutionId, message: JobExecutionMessage) {
-    val status = if (message.level == Level.ERROR) Status.ERROR else null
-    appendMessageAndUpdateStatus(jobExecutionId, message, status)
-  }
-
-  fun markRestarted(jobExecutionId: JobExecutionId) =
-    appendMessageAndUpdateStatus(jobExecutionId, JobExecutionMessage(now(), WARNING, "Restarting job ..."), OK)
-
-  fun markSkipped(jobExecutionId: JobExecutionId) =
-    appendMessageAndUpdateStatus(jobExecutionId, JobExecutionMessage(now(), INFO, "Skipped job ..."), SKIPPED)
-
-  fun markDead(jobExecutionId: JobExecutionId) =
-    appendMessageAndUpdateStatus(jobExecutionId,
-      JobExecutionMessage(now(), WARNING, "Job didn't receive updates for a while, considering it dead"), DEAD)
-
-  private fun appendMessageAndUpdateStatus(jobExecutionId: JobExecutionId, message: JobExecutionMessage, status: Status?) {
-    jobExecutionRepository.appendMessage(jobExecutionId, message)
-    status?.let { jobExecutionRepository.updateStatus(jobExecutionId, it) }
-  }
-
-  fun findAll(jobId: JobId?) = jobExecutionRepository.findHundredSortedDescending(jobId)
-
-  fun findOne(jobExecutionId: JobExecutionId) = jobExecutionRepository.findOne(jobExecutionId)
-
-  fun create(jobId: JobId) = jobExecutorRegistry.findOne(jobId)?.let { Thread(it).start() }
 }

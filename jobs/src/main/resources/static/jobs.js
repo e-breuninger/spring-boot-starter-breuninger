@@ -105,13 +105,12 @@ function startJob(button) {
 }
 
 function disableJob(disable, button) {
-  const body = {
-    id: {value: button.value},
-    disabled: disable,
-    disableComment: $(`#${button.value}disabledcommentinput`)[0].value
-  };
   $.ajax({
-    data: JSON.stringify(body),
+    data: JSON.stringify({
+      id: {value: button.value},
+      disabled: disable,
+      disableComment: $(`#${button.value}disabledcommentinput`)[0].value
+    }),
     contentType: 'application/json',
     type: 'PUT',
     url: `jobs/${button.value}`,

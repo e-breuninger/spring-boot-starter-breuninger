@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.RequestParam
 @RequestMapping("/jobExecutions")
 class JobExecutionHtmlController(private val jobExecutionService: JobExecutionService) {
 
-  @GetMapping
-  fun findAll(@RequestParam(required = false) jobId: String?, model: Model): String {
-    model.addAttribute("jobExecutions", jobExecutionService.findAll(jobId?.let { JobId(it) }))
-    return "jobExecutions"
-  }
-
   @GetMapping("/{jobExecutionId}")
   fun find(@PathVariable jobExecutionId: String, model: Model): String {
     model.addAttribute("jobExecutions", listOfNotNull(jobExecutionService.findOne(JobExecutionId(jobExecutionId))))
+    return "jobExecutions"
+  }
+
+  @GetMapping
+  fun findAll(@RequestParam(required = false) jobId: String?, model: Model): String {
+    model.addAttribute("jobExecutions", jobExecutionService.find100DescendingByLastUpdated(jobId?.let { JobId(it) }))
     return "jobExecutions"
   }
 }

@@ -7,6 +7,8 @@ import com.breuninger.boot.jobs.domain.JobExecutionMessage
 import com.breuninger.boot.jobs.domain.JobId
 import com.breuninger.boot.jobs.repository.JobExecutionRepository
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.data.domain.Sort
+import org.springframework.data.domain.Sort.Direction.DESC
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.find
 import org.springframework.data.mongodb.core.findById
@@ -17,14 +19,16 @@ import org.springframework.data.mongodb.core.query.Update.update
 import org.springframework.data.mongodb.core.updateFirst
 import org.springframework.stereotype.Repository
 import java.time.Instant
-import java.time.Instant.now
 
-// TODO(BS): sort methods
 @Repository
 @ConditionalOnProperty(prefix = "breuni.jobs", name = ["mongo.enabled"], havingValue = "true")
 class MongoJobExecutionRepository(private val mongoTemplate: MongoTemplate) : JobExecutionRepository {
 
   override fun findOne(jobExecutionId: JobExecutionId) = mongoTemplate.findById<JobExecution>(jobExecutionId)
+
+  // TODO(BS): need to add jobId filter if not null
+  override fun find100DescendingByLastUpdated(jobId: JobId?): List<JobExecution> =
+    mongoTemplate.find(Query().with(Sort.by(DESC, JobExecution::lastUpdated.name)).limit(100))
 
   override fun findAllIgnoreMessages(): List<JobExecution> {
     val query = Query()
@@ -32,41 +36,31 @@ class MongoJobExecutionRepository(private val mongoTemplate: MongoTemplate) : Jo
     return mongoTemplate.find(query)
   }
 
-  // TODO(KA): better name and tests
-  // TODO(BS): can do that better with mongo query and not sorting afterwards
-  // TODO(BS): need to add jobId filter if not null
-  // TODO(BS): take 100
-  override fun findHundredSortedDescending(jobId: JobId?): List<JobExecution> = mongoTemplate.findAll(JobExecution::class.java)
-    .sortedByDescending { it.lastUpdated }.take(100)
-
   override fun save(jobExecution: JobExecution) = mongoTemplate.save(jobExecution)
 
-  override fun remove(jobExecution: JobExecution) {
-    mongoTemplate.remove(jobExecution)
-  }
-
-  override fun stop(jobExecutionId: JobExecutionId) {
-    val stopped = now()
-    mongoTemplate.updateFirst<JobExecution>(
-      query(where("_id").`is`(jobExecutionId)),
-      update(JobExecution::stopped.name, stopped).set(JobExecution::lastUpdated.name, stopped))
-  }
-
   override fun updateStatus(jobExecutionId: JobExecutionId, status: Status) {
-    mongoTemplate.updateFirst<JobExecution>(
-      query(where("_id").`is`(jobExecutionId)),
+    mongoTemplate.updateFirst<JobExecution>(query(where("_id").`is`(jobExecutionId)),
       update(JobExecution::status.name, status))
   }
 
-  override fun appendMessage(jobExecutionId: JobExecutionId, message: JobExecutionMessage) {
-    mongoTemplate.updateFirst<JobExecution>(
-      query(where("_id").`is`(jobExecutionId)),
-      update(JobExecution::lastUpdated.name, message.timestamp).addToSet(JobExecution::messages.name, message))
+  override fun updateLastUpdated(jobExecutionId: JobExecutionId, lastUpdated: Instant) {
+    mongoTemplate.updateFirst<JobExecution>(query(where("_id").`is`(jobExecutionId)),
+      update(JobExecution::lastUpdated.name, lastUpdated))
   }
 
-  override fun updateLastUpdated(jobExecutionId: JobExecutionId, lastUpdated: Instant) {
-    mongoTemplate.updateFirst<JobExecution>(
-      query(where("_id").`is`(jobExecutionId)),
-      update(JobExecution::lastUpdated.name, lastUpdated))
+  override fun appendMessage(jobExecutionId: JobExecutionId, message: JobExecutionMessage) {
+    mongoTemplate.updateFirst<JobExecution>(query(where("_id").`is`(jobExecutionId)),
+      update(JobExecution::lastUpdated.name, message.timestamp)
+        .addToSet(JobExecution::messages.name, message))
+  }
+
+  override fun stop(jobExecutionId: JobExecutionId, stopped: Instant) {
+    mongoTemplate.updateFirst<JobExecution>(query(where("_id").`is`(jobExecutionId)),
+      update(JobExecution::stopped.name, stopped)
+        .set(JobExecution::lastUpdated.name, stopped))
+  }
+
+  override fun remove(jobExecution: JobExecution) {
+    mongoTemplate.remove(jobExecution)
   }
 }
