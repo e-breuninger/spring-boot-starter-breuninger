@@ -37,7 +37,7 @@ abstract class AbstractJobExecutionRepositoryTest {
       getRepository().save(createJobExecution(id = i.toString(), lastUpdated = Instant.ofEpochSecond(Random.nextLong(Instant.MIN.epochSecond, Instant.MAX.epochSecond))))
     }
 
-    val jobExecutions = getRepository().findHundredSortedDescending(null)
+    val jobExecutions = getRepository().find100DescendingByLastUpdated(null)
 
     Assertions.assertEquals(100, jobExecutions.size)
     var lastInstant: Long = Long.MAX_VALUE
@@ -57,7 +57,7 @@ abstract class AbstractJobExecutionRepositoryTest {
       getRepository().save(createJobExecution(id = i.toString(), jobId = jobId, lastUpdated = Instant.ofEpochSecond(Random.nextLong(Instant.MIN.epochSecond, Instant.MAX.epochSecond))))
     }
 
-    val jobExecutions = getRepository().findHundredSortedDescending(JobId("foo"))
+    val jobExecutions = getRepository().find100DescendingByLastUpdated(JobId("foo"))
 
     Assertions.assertEquals(100, jobExecutions.size)
     var lastInstant: Long = Long.MAX_VALUE
@@ -109,7 +109,7 @@ abstract class AbstractJobExecutionRepositoryTest {
 
     Assertions.assertNull(jobExecutionFoo.stopped)
 
-    getRepository().stop(JobExecutionId("foo"))
+    getRepository().stop(JobExecutionId("foo"), Instant.now())
 
     Assertions.assertNotNull(getRepository().findOne(JobExecutionId("foo"))?.stopped)
   }
