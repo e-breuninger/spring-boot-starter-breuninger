@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
+// TODO(BS): implement more tests see TODOs in repository class
 abstract class AbstractJobRepositoryTest {
 
   @Test
