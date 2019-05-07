@@ -25,6 +25,7 @@ dependencies {
   testCompile(libraries["mockk"] as String)
   testCompile(libraries["spring-test"] as String)
   testCompile(libraries["spring-boot-test"] as String)
+  testCompile(libraries["hamcrest"] as String)
 
   annotationProcessor(libraries["spring-boot-configuration-processor"] as String)
 }

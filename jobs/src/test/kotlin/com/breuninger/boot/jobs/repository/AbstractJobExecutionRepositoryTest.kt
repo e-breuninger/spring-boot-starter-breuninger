@@ -34,7 +34,7 @@ abstract class AbstractJobExecutionRepositoryTest {
   @Test
   fun `ensure finding the last hundred jobs sorted in descending order works`() {
     for (i in 1..150) {
-      getRepository().save(createJobExecution(id = i.toString(), lastUpdated = Instant.ofEpochSecond(Random.nextLong(Instant.MIN.epochSecond, Instant.MAX.epochSecond))))
+      getRepository().save(createJobExecution(id = i.toString(), lastUpdated = Instant.ofEpochSecond(Random.nextLong(Instant.now().minusSeconds(5000).epochSecond, Instant.now().epochSecond))))
     }
 
     val jobExecutions = getRepository().find100DescendingByLastUpdated(null)
@@ -54,7 +54,7 @@ abstract class AbstractJobExecutionRepositoryTest {
       var jobId = JobId("foo")
       if (i % 2 == 0)
         jobId = JobId("bar")
-      getRepository().save(createJobExecution(id = i.toString(), jobId = jobId, lastUpdated = Instant.ofEpochSecond(Random.nextLong(Instant.MIN.epochSecond, Instant.MAX.epochSecond))))
+      getRepository().save(createJobExecution(id = i.toString(), jobId = jobId, lastUpdated = Instant.ofEpochSecond(Random.nextLong(Instant.now().minusSeconds(5000).epochSecond, Instant.now().epochSecond))))
     }
 
     val jobExecutions = getRepository().find100DescendingByLastUpdated(JobId("foo"))
@@ -156,11 +156,12 @@ abstract class AbstractJobExecutionRepositoryTest {
 
   @Test
   fun `ensure updateLastUpdated works`() {
-    val jobExecutionFoo = createJobExecution(lastUpdated = Instant.MIN)
+    val jobExecutionFoo = createJobExecution(lastUpdated = Instant.now())
     getRepository().save(jobExecutionFoo)
 
-    getRepository().updateLastUpdated(JobExecutionId("foo"), Instant.ofEpochSecond(Instant.MIN.epochSecond+1))
+    val newInstant = Instant.now().epochSecond + 1
+    getRepository().updateLastUpdated(JobExecutionId("foo"), Instant.ofEpochSecond(newInstant))
 
-    Assertions.assertEquals(Instant.ofEpochSecond(Instant.MIN.epochSecond + 1), getRepository().findOne(JobExecutionId("foo"))?.lastUpdated)
+    Assertions.assertEquals(Instant.ofEpochSecond(newInstant), getRepository().findOne(JobExecutionId("foo"))?.lastUpdated)
   }
 }

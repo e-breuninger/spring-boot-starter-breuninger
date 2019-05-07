@@ -5,7 +5,7 @@ import com.breuninger.boot.jobs.repository.JobExecutionRepository
 
 internal class InMemoryJobExecutionRepositoryTest: AbstractJobExecutionRepositoryTest() {
 
-  val inMemoryJobExecutionRepository = InMemoryJobExecutionRepository()
+  private val inMemoryJobExecutionRepository = InMemoryJobExecutionRepository()
 
   override fun getRepository(): JobExecutionRepository {
     return inMemoryJobExecutionRepository

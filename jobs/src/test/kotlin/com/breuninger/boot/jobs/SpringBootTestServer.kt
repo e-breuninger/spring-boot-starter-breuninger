@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication(scanBasePackages = ["com.breuninger.boot"])
-class Server
+class SpringBootTestServer
 
 fun main(args: Array<String>) {
-  runApplication<Server>(*args)
+  runApplication<SpringBootTestServer>(*args)
 }

@@ -14,7 +14,7 @@ class JobService(private val jobRepository: JobRepository) {
 
   fun findAll() = jobRepository.findAll()
 
-  fun create(job: Job) = jobRepository.insert(job)
+  fun create(job: Job) = jobRepository.create(job)
 
   fun update(jobId: JobId, job: Job) = jobRepository.updateDisableState(jobId, job)
 

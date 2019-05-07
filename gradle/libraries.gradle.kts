@@ -17,7 +17,8 @@ val libraryVersions = mapOf(
   "slugify" to "2.3",
 
   "junit" to "5.4.2",
-  "mockk" to "1.9.3"
+  "mockk" to "1.9.3",
+  "hamcrest" to "2.0.0.0"
 )
 
 val libraries = mapOf(
@@ -51,7 +52,8 @@ val libraries = mapOf(
 
   "junit-jupiter-api" to "org.junit.jupiter:junit-jupiter-api:${libraryVersions["junit"]}",
   "junit-jupiter-engine" to "org.junit.jupiter:junit-jupiter-engine:${libraryVersions["junit"]}",
-  "mockk" to "io.mockk:mockk:${libraryVersions["mockk"]}"
+  "mockk" to "io.mockk:mockk:${libraryVersions["mockk"]}",
+  "hamcrest" to "org.hamcrest:hamcrest-junit:${libraryVersions["hamcrest"]}"
 )
 
 extra["libraryVersions"] = libraryVersions

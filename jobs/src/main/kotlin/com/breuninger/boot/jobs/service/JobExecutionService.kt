@@ -76,7 +76,7 @@ class JobExecutionService(
           releaseRunLock(jobId, jobExecutionId)
           throw JobBlockedException("JobRunnable '$jobId' is currently disabled")
         }
-        else -> jobRepository.findRunning(findMutexJobs(jobId))?.let {
+        else -> jobRepository.findOneRunning(findMutexJobs(jobId))?.let {
           releaseRunLock(jobId, jobExecutionId)
           throw JobBlockedException("JobRunnable '$jobId' blocked by currently running job '$it'")
         }

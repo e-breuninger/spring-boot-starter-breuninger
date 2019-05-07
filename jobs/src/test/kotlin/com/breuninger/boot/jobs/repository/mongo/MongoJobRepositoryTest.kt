@@ -1,43 +1,24 @@
 package com.breuninger.boot.jobs.repository.mongo
 
-import org.junit.jupiter.api.Test
+import com.breuninger.boot.jobs.domain.Job
+import com.breuninger.boot.jobs.repository.AbstractJobRepositoryTest
+import com.breuninger.boot.jobs.repository.JobRepository
+import org.junit.jupiter.api.BeforeEach
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core.dropCollection
 
-// TODO implement
-internal class MongoJobRepositoryTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+internal class MongoJobRepositoryTest (@Autowired private val mongoJobRepository: MongoJobRepository, @Autowired private val mongoTemplate: MongoTemplate): AbstractJobRepositoryTest() {
 
-    @Test
-    fun update() {
-    }
+  override fun getRepository(): JobRepository {
+    return mongoJobRepository
+  }
 
-    @Test
-    fun findOne() {
-    }
-
-    @Test
-    fun findRunning() {
-    }
-
-    @Test
-    fun insert() {
-    }
-
-    @Test
-    fun acquireRunLock() {
-    }
-
-    @Test
-    fun releaseRunLock() {
-    }
-
-    @Test
-    fun findState() {
-    }
-
-    @Test
-    fun updateState() {
-    }
-
-    @Test
-    fun findAll() {
-    }
+  @BeforeEach
+  fun before(){
+    mongoTemplate.dropCollection<Job>()
+  }
 }
+

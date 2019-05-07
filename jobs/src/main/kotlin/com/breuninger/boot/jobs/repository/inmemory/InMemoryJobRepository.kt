@@ -20,11 +20,11 @@ class InMemoryJobRepository : JobRepository {
 
   override fun findOne(jobId: JobId): Job? = jobs[jobId]
 
-  override fun findRunning(jobIds: Set<JobId>) = jobs.values.find { jobIds.contains(it.id) && it.isRunning() }
+  override fun findOneRunning(jobIds: Set<JobId>) = jobs.values.find { jobIds.contains(it.id) && it.isRunning() }
 
   override fun findAll(): List<Job> = ArrayList<Job>(jobs.values)
 
-  override fun insert(job: Job) = findOne(job.id)?.let { LOG.info("Job already created") } ?: run { jobs[job.id] = job }
+  override fun create(job: Job) = findOne(job.id)?.let { LOG.info("Job already created") } ?: run { jobs[job.id] = job }
 
   override fun updateDisableState(jobId: JobId, job: Job) = jobs[jobId]?.let {
     jobs.replace(jobId, it.copy(disabled = job.disabled, disableComment = job.disableComment))
@@ -45,10 +45,12 @@ class InMemoryJobRepository : JobRepository {
     }
   }
 
+  //TODO(BS): warum wird das über das repository abgebildet und nicht einfach über den job?
   override fun findState(jobId: JobId, key: String) = findOne(jobId)?.let {
     it.state?.get(key)
   }
 
+  //TODO(BS): s.o.
   override fun updateState(jobId: JobId, key: String, value: String?) = findOne(jobId)?.let {
     val state = HashMap(it.state)
     if (value == null) state.remove(key) else state[key] = value

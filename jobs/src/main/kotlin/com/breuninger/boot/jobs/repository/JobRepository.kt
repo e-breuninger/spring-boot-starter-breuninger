@@ -9,11 +9,11 @@ interface JobRepository {
 
   fun findOne(jobId: JobId): Job?
 
-  fun findRunning(jobIds: Set<JobId>): Job?
+  fun findOneRunning(jobIds: Set<JobId>): Job?
 
   fun findAll(): List<Job>
 
-  fun insert(job: Job)
+  fun create(job: Job)
 
   fun updateDisableState(jobId: JobId, job: Job): Job?
 

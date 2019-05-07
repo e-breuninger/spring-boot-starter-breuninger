@@ -29,12 +29,12 @@ class MongoJobRepository(private val mongoTemplate: MongoTemplate) : JobReposito
 
   override fun findOne(jobId: JobId) = mongoTemplate.findById<Job>(jobId)
 
-  override fun findRunning(jobIds: Set<JobId>) =
+  override fun findOneRunning(jobIds: Set<JobId>) =
     mongoTemplate.findOne<Job>(query(where("_id").`in`(jobIds).and(Job::runningJobExecutionId.name).exists(true)))
 
   override fun findAll(): List<Job> = mongoTemplate.findAll(Job::class.java)
 
-  override fun insert(job: Job) = try {
+  override fun create(job: Job) = try {
     mongoTemplate.insert(job)
     Unit
   } catch (exception: Exception) {
@@ -63,10 +63,12 @@ class MongoJobRepository(private val mongoTemplate: MongoTemplate) : JobReposito
       throw JobBlockedException("Tried to release runLock of $jobId but different execution was running")
   }
 
+  // TODO(BS): ein datenbankaufruf um den state direkt zu holen (projection)
   override fun findState(jobId: JobId, key: String) = findOne(jobId)?.let {
     it.state?.get(key)
   }
 
+  // TODO(BS): directly update keys in map (use set and unset)
   override fun updateState(jobId: JobId, key: String, value: String?) = findOne(jobId)?.let {
     val state = HashMap(it.state)
     if (value == null) state.remove(key) else state[key] = value
