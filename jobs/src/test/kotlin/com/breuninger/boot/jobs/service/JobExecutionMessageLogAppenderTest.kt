@@ -4,7 +4,7 @@ import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.spi.LoggingEvent
 import com.breuninger.boot.jobs.domain.JobExecutionMessage
 import com.breuninger.boot.jobs.domain.JobId
-import com.breuninger.boot.jobs.domain.JobMarker
+import com.breuninger.boot.jobs.domain.JobMarker.jobMarkerFor
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -14,12 +14,6 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 internal class JobExecutionMessageLogAppenderTest {
-
-  private val jobExecutionService = mockk<JobExecutionService>()
-  private val jobExecutionMessageLogAppender = JobExecutionMessageLogAppender(jobExecutionService)
-  private val iLoggingEvent = mockk<LoggingEvent>()
-  private val logMessage = "foo bar bazz"
-  val slot = slot<JobExecutionMessage>()
 
   companion object {
     @JvmStatic
@@ -34,18 +28,16 @@ internal class JobExecutionMessageLogAppenderTest {
     )
   }
 
-  data class TestData(
-    val iLoggingEventLevel: Level,
-    val jobExecutionMessageLevel: JobExecutionMessage.Level
-  )
+  private val iLoggingEvent = mockk<LoggingEvent>()
+  private val logMessage = "foo bar bazz"
+  private val slot = slot<JobExecutionMessage>()
+  private val jobExecutionService = mockk<JobExecutionService>()
+  private val jobExecutionMessageLogAppender = JobExecutionMessageLogAppender(jobExecutionService)
 
   @BeforeEach
   fun before() {
-    every { iLoggingEvent.mdcPropertyMap } returns mapOf(
-      "job_execution_id_value" to "bar"
-    )
-    val marker = JobMarker.jobMarkerFor(JobId("foo"))
-    every { iLoggingEvent.marker } returns marker
+    every { iLoggingEvent.mdcPropertyMap } returns mapOf("job_execution_id_value" to "bar")
+    every { iLoggingEvent.marker } returns jobMarkerFor(JobId("foo"))
     every { iLoggingEvent.formattedMessage } returns logMessage
     every { jobExecutionService.appendMessage(any(), capture(slot)) } returns Unit
   }
@@ -58,4 +50,9 @@ internal class JobExecutionMessageLogAppenderTest {
     assertEquals(testData.jobExecutionMessageLevel, slot.captured.level)
     assertEquals(logMessage, slot.captured.message)
   }
+
+  data class TestData(
+    val iLoggingEventLevel: Level,
+    val jobExecutionMessageLevel: JobExecutionMessage.Level
+  )
 }

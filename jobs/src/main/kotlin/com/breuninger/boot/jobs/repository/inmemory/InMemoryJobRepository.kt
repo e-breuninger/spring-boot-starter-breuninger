@@ -53,7 +53,7 @@ class InMemoryJobRepository : JobRepository {
   //TODO(BS): s.o.
   override fun updateState(jobId: JobId, key: String, value: String?) = findOne(jobId)?.let {
     val state = HashMap(it.state)
-    if (value == null) state.remove(key) else state[key] = value
+    value?.run { state[key] = value } ?: state.remove(key)
     jobs.replace(jobId, it.copy(state = state))
     Unit
   }

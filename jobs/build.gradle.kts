@@ -24,7 +24,6 @@ dependencies {
   testCompile(libraries["junit-jupiter-engine"] as String)
   testCompile(libraries["junit-jupiter-params"] as String)
   testCompile(libraries["mockk"] as String)
-  testCompile(libraries["spring-test"] as String)
   testCompile(libraries["spring-boot-test"] as String)
   testCompile(libraries["hamcrest"] as String)
 

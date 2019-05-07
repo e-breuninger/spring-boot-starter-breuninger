@@ -18,6 +18,7 @@ val libraryVersions = mapOf(
 
   "junit" to "5.4.2",
   "mockk" to "1.9.3",
+  // TODO(KA): Use assertK instead
   "hamcrest" to "2.0.0.0"
 )
 
@@ -27,7 +28,6 @@ val libraries = mapOf(
   "jackson-module-kotlin" to "com.fasterxml.jackson.module:jackson-module-kotlin:${libraryVersions["jackson-module-kotlin"]}",
 
   "spring-core" to "org.springframework:spring-core:${coreVersions["spring"]}",
-  "spring-test" to "org.springframework:spring-test:${coreVersions["spring"]}",
   "spring-boot-starter-aop" to "org.springframework.boot:spring-boot-starter-aop:${coreVersions["spring-boot"]}",
   "spring-boot-starter-actuator" to "org.springframework.boot:spring-boot-starter-actuator:${coreVersions["spring-boot"]}",
   "spring-boot-starter-webflux" to "org.springframework.boot:spring-boot-starter-webflux:${coreVersions["spring-boot"]}",
@@ -54,6 +54,7 @@ val libraries = mapOf(
   "junit-jupiter-engine" to "org.junit.jupiter:junit-jupiter-engine:${libraryVersions["junit"]}",
   "junit-jupiter-params" to "org.junit.jupiter:junit-jupiter-params:${libraryVersions["junit"]}",
   "mockk" to "io.mockk:mockk:${libraryVersions["mockk"]}",
+  // TODO(KA): Use assertK instead
   "hamcrest" to "org.hamcrest:hamcrest-junit:${libraryVersions["hamcrest"]}"
 )
 

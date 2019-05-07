@@ -1,4 +1,4 @@
 package com.breuninger.boot.togglz.actuator
 
-// TODO implement
+// TODO(KA): implement test
 internal class TogglzEndpointTest

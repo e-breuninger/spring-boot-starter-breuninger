@@ -1,5 +1,6 @@
 package com.breuninger.boot.jobs.domain
 
+import com.breuninger.boot.jobs.domain.JobExecution.Status.OK
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import java.time.Instant
@@ -34,7 +35,14 @@ internal class JobExecutionTest {
     assert(jobExecution.hasNotStopped())
   }
 
-  private fun createJobExecution(stopped: Instant? = null) =
-    JobExecution(JobExecutionId("foo"), JobId("bar"), JobExecution.Status.OK, Instant.now(), stopped, emptyList(),
-      "foobar", Instant.now())
+  private fun createJobExecution(stopped: Instant? = null) = JobExecution(
+    JobExecutionId("foo"),
+    JobId("bar"),
+    OK,
+    Instant.now(),
+    stopped,
+    emptyList(),
+    "foobar",
+    Instant.now()
+  )
 }
