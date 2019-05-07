@@ -6,6 +6,9 @@ apply {
   plugin("com.github.ben-manes.versions")
 }
 
+group = "com.breuninger"
+version = "1.0"
+
 buildscript {
   repositories {
     maven { setUrl("https://plugins.gradle.org/m2/") }
@@ -24,7 +27,6 @@ subprojects {
     plugin("kotlin")
     plugin("kotlin-spring")
     plugin("io.spring.dependency-management")
-    plugin("org.jlleitschuh.gradle.ktlint")
   }
 
   configure<JavaPluginConvention> {
@@ -46,8 +48,4 @@ subprojects {
   }
 }
 
-// TODO(BS): add signing
-// TODO(BS): add nexus release
-
-// TODO(BS): add testing kotlin
-// TODO(BS): add coverage kotlin
+// TODO(BS): add coverage kotlin jacoco
