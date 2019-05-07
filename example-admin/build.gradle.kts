@@ -2,6 +2,7 @@ import org.springframework.boot.gradle.tasks.run.BootRun
 
 apply {
   plugin("org.springframework.boot")
+  plugin("com.gorylenko.gradle-git-properties")
 
   from("$rootDir/gradle/libraries.gradle.kts")
 }

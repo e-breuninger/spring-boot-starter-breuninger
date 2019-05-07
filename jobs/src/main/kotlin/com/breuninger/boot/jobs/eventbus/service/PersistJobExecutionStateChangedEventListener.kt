@@ -22,11 +22,11 @@ class PersistJobExecutionStateChangedEventListener(
       PersistJobExecutionStateChangedEventListener::class.java)
   }
 
-  override fun consumeJobExecutionStateChanged(jobExecutionStateChangedEvent: JobExecutionStateChangedEvent) {
-    val jobId = jobExecutionStateChangedEvent.jobId
-    val jobExecutionId = jobExecutionStateChangedEvent.jobExecutionId
+  override fun consumeJobExecutionStateChanged(event: JobExecutionStateChangedEvent) {
+    val jobId = event.jobId
+    val jobExecutionId = event.jobExecutionId
     try {
-      when (jobExecutionStateChangedEvent.state) {
+      when (event.state) {
         START -> jobExecutionService.save(JobExecution(jobExecutionId, jobId))
         KEEP_ALIVE -> jobExecutionService.keepAlive(jobExecutionId)
         RESTART -> jobExecutionService.markRestarted(jobExecutionId)
@@ -37,7 +37,7 @@ class PersistJobExecutionStateChangedEventListener(
         STOP -> jobExecutionService.stop(jobId, jobExecutionId)
       }
     } catch (exception: Exception) {
-      LOG.error("Failed to persist job state change of $jobExecutionId to ${jobExecutionStateChangedEvent.state}", exception)
+      LOG.error("Failed to persist job state change of $jobExecutionId to ${event.state}", exception)
     }
   }
 }

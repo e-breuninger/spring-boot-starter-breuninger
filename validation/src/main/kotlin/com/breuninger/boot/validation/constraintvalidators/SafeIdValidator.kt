@@ -15,5 +15,6 @@ class SafeIdValidator : ConstraintValidator<SafeId, String> {
   override fun initialize(safeId: SafeId?) {
   }
 
-  override fun isValid(id: String?, context: ConstraintValidatorContext) = id?.let { SAFE_ID_PATTERN.matcher(it).matches() } ?: true
+  override fun isValid(id: String?, context: ConstraintValidatorContext) =
+    id?.let { SAFE_ID_PATTERN.matcher(it).matches() } ?: true
 }

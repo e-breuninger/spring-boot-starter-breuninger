@@ -147,5 +147,6 @@ abstract class AbstractJobRepositoryTest {
     id: JobId = JobId("foo"),
     runningJobExecutionId: JobExecutionId? = JobExecutionId("bar"),
     disabled: Boolean = false,
-    disabledComment: String = "") = Job(id, runningJobExecutionId, disabled, disabledComment, emptyMap())
+    disabledComment: String = ""
+  ) = Job(id, runningJobExecutionId, disabled, disabledComment, emptyMap())
 }

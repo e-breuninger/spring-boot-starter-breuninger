@@ -19,13 +19,15 @@ class JobDefinition private constructor(
     fun manuallyTriggerableJobDefinition(
       jobId: JobId,
       name: String,
-      description: String) = JobDefinition(jobId, name, description, null, null, null, 0, null, null)
+      description: String
+    ) = JobDefinition(jobId, name, description, null, null, null, 0, null, null)
 
     fun timedManuallyTriggerableJobDefinition(
       jobId: JobId,
       name: String,
       description: String,
-      timer: Timer) = JobDefinition(jobId, name, description, null, null, null, 0, null, timer)
+      timer: Timer
+    ) = JobDefinition(jobId, name, description, null, null, null, 0, null, timer)
 
     fun cronJobDefinition(
       jobId: JobId,

@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 apply {
   plugin("idea")
+  plugin("org.jlleitschuh.gradle.ktlint")
   plugin("com.github.ben-manes.versions")
 }
 
@@ -23,6 +24,7 @@ subprojects {
     plugin("kotlin")
     plugin("kotlin-spring")
     plugin("io.spring.dependency-management")
+    plugin("org.jlleitschuh.gradle.ktlint")
   }
 
   configure<JavaPluginConvention> {
@@ -44,8 +46,8 @@ subprojects {
   }
 }
 
-// TODO(BS): add linting
-// TODO(BS): add testing
-// TODO(BS): add coverage
 // TODO(BS): add signing
 // TODO(BS): add nexus release
+
+// TODO(BS): add testing kotlin
+// TODO(BS): add coverage kotlin

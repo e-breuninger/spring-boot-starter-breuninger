@@ -9,12 +9,12 @@ class MeterJobExecutionStateChangedEventListener(
   private val meterRegistry: MeterRegistry
 ) : JobExecutionStateChangedEventListener {
 
-  override fun consumeJobExecutionStateChanged(jobExecutionStateChangedEvent: JobExecutionStateChangedEvent) {
+  override fun consumeJobExecutionStateChanged(event: JobExecutionStateChangedEvent) {
     meterRegistry.gauge(JobExecutionStateChangedEvent::class.java.name,
       listOf(
-        Tag.of("job_id", jobExecutionStateChangedEvent.jobId.value),
-        Tag.of("job_execution_id", jobExecutionStateChangedEvent.jobExecutionId.value),
-        Tag.of("state", jobExecutionStateChangedEvent.state.name)
+        Tag.of("job_id", event.jobId.value),
+        Tag.of("job_execution_id", event.jobExecutionId.value),
+        Tag.of("state", event.state.name)
       ),
       1)
   }

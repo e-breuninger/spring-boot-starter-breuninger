@@ -13,8 +13,8 @@ data class TogglzFeature(
   val parameters: Map<String, String>
 ) : Comparable<TogglzFeature> {
 
-  constructor(feature: Feature, featureState: FeatureState)
-    : this(feature.name(), featureState.isEnabled, featureState.strategyId, featureState.parameterMap)
+  constructor(feature: Feature, featureState: FeatureState) : this(feature.name(), featureState.isEnabled,
+    featureState.strategyId, featureState.parameterMap)
 
   fun toFeatureState(feature: Feature): FeatureState {
     val featureState = FeatureState(feature)
