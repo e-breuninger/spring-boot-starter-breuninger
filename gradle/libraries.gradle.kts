@@ -18,8 +18,7 @@ val libraryVersions = mapOf(
 
   "junit" to "5.4.2",
   "mockk" to "1.9.3",
-  // TODO(KA): Use assertK instead
-  "hamcrest" to "2.0.0.0"
+  "assertk" to "0.14"
 )
 
 val libraries = mapOf(
@@ -54,8 +53,7 @@ val libraries = mapOf(
   "junit-jupiter-engine" to "org.junit.jupiter:junit-jupiter-engine:${libraryVersions["junit"]}",
   "junit-jupiter-params" to "org.junit.jupiter:junit-jupiter-params:${libraryVersions["junit"]}",
   "mockk" to "io.mockk:mockk:${libraryVersions["mockk"]}",
-  // TODO(KA): Use assertK instead
-  "hamcrest" to "org.hamcrest:hamcrest-junit:${libraryVersions["hamcrest"]}"
+  "assertk" to "com.willowtreeapps.assertk:assertk-jvm:${libraryVersions["assertk"]}"
 )
 
 extra["libraryVersions"] = libraryVersions

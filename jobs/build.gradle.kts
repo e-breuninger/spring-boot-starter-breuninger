@@ -30,7 +30,7 @@ dependencies {
   testCompile(libraries["junit-jupiter-params"] as String)
   testCompile(libraries["mockk"] as String)
   testCompile(libraries["spring-boot-test"] as String)
-  testCompile(libraries["hamcrest"] as String)
+  testCompile(libraries["assertk"] as String)
 
   annotationProcessor(libraries["spring-boot-configuration-processor"] as String)
 }

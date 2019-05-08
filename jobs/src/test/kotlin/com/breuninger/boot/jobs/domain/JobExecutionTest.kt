@@ -1,7 +1,9 @@
 package com.breuninger.boot.jobs.domain
 
+import assertk.assertThat
+import assertk.assertions.isFalse
+import assertk.assertions.isTrue
 import com.breuninger.boot.jobs.domain.JobExecution.Status.OK
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
@@ -11,28 +13,28 @@ internal class JobExecutionTest {
   fun `ensure hasStopped returns true correctly`() {
     val jobExecution = createJobExecution(stopped = Instant.now())
 
-    assert(jobExecution.hasStopped())
+    assertThat(jobExecution.hasStopped()).isTrue()
   }
 
   @Test
   fun `ensure hasStopped returns false correctly`() {
     val jobExecution = createJobExecution()
 
-    assertFalse(jobExecution.hasStopped())
+    assertThat(jobExecution.hasStopped()).isFalse()
   }
 
   @Test
   fun `ensure hasNotStopped returns false correctly`() {
     val jobExecution = createJobExecution(stopped = Instant.now())
 
-    assertFalse(jobExecution.hasNotStopped())
+    assertThat(jobExecution.hasNotStopped()).isFalse()
   }
 
   @Test
   fun `ensure hasNotStopped returns true correctly`() {
     val jobExecution = createJobExecution()
 
-    assert(jobExecution.hasNotStopped())
+    assertThat(jobExecution.hasNotStopped()).isTrue()
   }
 
   private fun createJobExecution(stopped: Instant? = null) = JobExecution(

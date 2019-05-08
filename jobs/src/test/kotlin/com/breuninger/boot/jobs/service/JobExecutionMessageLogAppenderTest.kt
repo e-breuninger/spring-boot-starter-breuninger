@@ -1,5 +1,7 @@
 package com.breuninger.boot.jobs.service
 
+import assertk.assertThat
+import assertk.assertions.isEqualTo
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.spi.LoggingEvent
 import com.breuninger.boot.jobs.domain.JobExecutionMessage
@@ -8,7 +10,6 @@ import com.breuninger.boot.jobs.domain.JobMarker.jobMarkerFor
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
@@ -47,8 +48,9 @@ internal class JobExecutionMessageLogAppenderTest {
   fun `ensure ILoggingEvent with Level INFO is appended correctly`(testData: TestData) {
     every { iLoggingEvent.level } returns testData.iLoggingEventLevel
     jobExecutionMessageLogAppender.doAppend(iLoggingEvent)
-    assertEquals(testData.jobExecutionMessageLevel, slot.captured.level)
-    assertEquals(logMessage, slot.captured.message)
+
+    assertThat(slot.captured.level).isEqualTo(testData.jobExecutionMessageLevel)
+    assertThat(slot.captured.message).isEqualTo(logMessage)
   }
 
   data class TestData(

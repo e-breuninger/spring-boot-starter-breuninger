@@ -1,13 +1,13 @@
 package com.breuninger.boot.jobs.repository
 
+import assertk.assertThat
+import assertk.assertions.*
 import com.breuninger.boot.jobs.domain.JobExecution
-import com.breuninger.boot.jobs.domain.JobExecution.Status.OK
+import com.breuninger.boot.jobs.domain.JobExecution.Status.*
 import com.breuninger.boot.jobs.domain.JobExecutionId
 import com.breuninger.boot.jobs.domain.JobExecutionMessage
+import com.breuninger.boot.jobs.domain.JobExecutionMessage.Level
 import com.breuninger.boot.jobs.domain.JobId
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import java.time.Instant
 import kotlin.random.Random
@@ -23,9 +23,9 @@ abstract class AbstractJobExecutionRepositoryTest {
     getRepository().save(jobExecutionBar)
     getRepository().save(jobExecutionBat)
 
-    assertEquals(jobExecutionFoo, getRepository().findOne(JobExecutionId("foo")))
-    assertEquals(jobExecutionBar, getRepository().findOne(JobExecutionId("bar")))
-    assertEquals(jobExecutionBat, getRepository().findOne(JobExecutionId("bat")))
+    assertThat(getRepository().findOne(JobExecutionId("foo"))).isEqualTo(jobExecutionFoo)
+    assertThat(getRepository().findOne(JobExecutionId("bar"))).isEqualTo(jobExecutionBar)
+    assertThat(getRepository().findOne(JobExecutionId("bat"))).isEqualTo(jobExecutionBat)
   }
 
   @Test
@@ -40,10 +40,10 @@ abstract class AbstractJobExecutionRepositoryTest {
 
     val jobExecutions = getRepository().find100DescendingByLastUpdated(null)
 
-    assertEquals(100, jobExecutions.size)
+    assertThat(jobExecutions.size).isEqualTo(100)
     var lastInstant: Long = Long.MAX_VALUE
     for (jobExecution in jobExecutions) {
-      assert(jobExecution.lastUpdated.epochSecond <= lastInstant)
+      assertThat(jobExecution.lastUpdated.epochSecond).isLessThanOrEqualTo(lastInstant)
       lastInstant = jobExecution.lastUpdated.epochSecond
     }
   }
@@ -66,28 +66,28 @@ abstract class AbstractJobExecutionRepositoryTest {
 
     val jobExecutions = getRepository().find100DescendingByLastUpdated(JobId("foo"))
 
-    assertEquals(100, jobExecutions.size)
+    assertThat(jobExecutions.size).isEqualTo(100)
     var lastInstant: Long = Long.MAX_VALUE
     for (jobExecution in jobExecutions) {
-      assert(jobExecution.lastUpdated.epochSecond <= lastInstant)
-      assertEquals(JobId("foo"), jobExecution.jobId)
+      assertThat(jobExecution.lastUpdated.epochSecond).isLessThanOrEqualTo(lastInstant)
+      assertThat(jobExecution.jobId).isEqualTo(JobId("foo"))
       lastInstant = jobExecution.lastUpdated.epochSecond
     }
   }
 
   @Test
   fun `ensure finding all ignoring messages works`() {
-    for (i in 1..300) {
+    for (i in 1..100) {
       getRepository().save(createJobExecution(
         id = JobExecutionId(i.toString()),
-        messages = listOf(JobExecutionMessage(Instant.now(), JobExecutionMessage.Level.ERROR, "foo bar"))))
+        messages = listOf(JobExecutionMessage(Instant.now(), Level.ERROR, "foo bar"))))
     }
 
     val jobExecutions = getRepository().findAllIgnoreMessages()
 
-    assertEquals(300, jobExecutions.size)
+    assertThat(jobExecutions.size).isEqualTo(100)
     for (jobExecution in jobExecutions) {
-      assert(jobExecution.messages.isEmpty())
+      assertThat(jobExecution.messages).isEmpty()
     }
   }
 
@@ -104,9 +104,9 @@ abstract class AbstractJobExecutionRepositoryTest {
     getRepository().remove(jobExecutionBar)
     getRepository().remove(jobExecutionBat)
 
-    assertNull(getRepository().findOne(JobExecutionId("foo")))
-    assertNull(getRepository().findOne(JobExecutionId("bar")))
-    assertNull(getRepository().findOne(JobExecutionId("bat")))
+    assertThat(getRepository().findOne(JobExecutionId("foo"))).isNull()
+    assertThat(getRepository().findOne(JobExecutionId("bar"))).isNull()
+    assertThat(getRepository().findOne(JobExecutionId("bat"))).isNull()
   }
 
   @Test
@@ -114,11 +114,11 @@ abstract class AbstractJobExecutionRepositoryTest {
     val jobExecutionFoo = createJobExecution()
     getRepository().save(jobExecutionFoo)
 
-    assertNull(jobExecutionFoo.stopped)
+    assertThat(getRepository().findOne(JobExecutionId("foo"))!!.stopped).isNull()
 
     getRepository().stop(JobExecutionId("foo"), Instant.now())
 
-    assertNotNull(getRepository().findOne(JobExecutionId("foo"))?.stopped)
+    assertThat(getRepository().findOne(JobExecutionId("foo"))!!.stopped).isNotNull()
   }
 
   @Test
@@ -126,23 +126,19 @@ abstract class AbstractJobExecutionRepositoryTest {
     val jobExecutionFoo = createJobExecution()
     getRepository().save(jobExecutionFoo)
 
-    assertEquals(OK, jobExecutionFoo.status)
+    assertThat(getRepository().findOne(JobExecutionId("foo"))!!.status).isEqualTo(OK)
 
-    getRepository().updateStatus(JobExecutionId("foo"), JobExecution.Status.DEAD)
+    getRepository().updateStatus(JobExecutionId("foo"), DEAD)
+    assertThat(getRepository().findOne(JobExecutionId("foo"))!!.status).isEqualTo(DEAD)
 
-    assertEquals(JobExecution.Status.DEAD, getRepository().findOne(JobExecutionId("foo"))?.status)
+    getRepository().updateStatus(JobExecutionId("foo"), ERROR)
+    assertThat(getRepository().findOne(JobExecutionId("foo"))!!.status).isEqualTo(ERROR)
 
-    getRepository().updateStatus(JobExecutionId("foo"), JobExecution.Status.ERROR)
-
-    assertEquals(JobExecution.Status.ERROR, getRepository().findOne(JobExecutionId("foo"))?.status)
-
-    getRepository().updateStatus(JobExecutionId("foo"), JobExecution.Status.SKIPPED)
-
-    assertEquals(JobExecution.Status.SKIPPED, getRepository().findOne(JobExecutionId("foo"))?.status)
+    getRepository().updateStatus(JobExecutionId("foo"), SKIPPED)
+    assertThat(getRepository().findOne(JobExecutionId("foo"))!!.status).isEqualTo(SKIPPED)
 
     getRepository().updateStatus(JobExecutionId("foo"), OK)
-
-    assertEquals(OK, getRepository().findOne(JobExecutionId("foo"))?.status)
+    assertThat(getRepository().findOne(JobExecutionId("foo"))!!.status).isEqualTo(OK)
   }
 
   @Test
@@ -150,17 +146,17 @@ abstract class AbstractJobExecutionRepositoryTest {
     val jobExecutionFoo = createJobExecution()
     getRepository().save(jobExecutionFoo)
 
-    assert(jobExecutionFoo.messages.isEmpty())
+    assertThat(jobExecutionFoo.messages).isEmpty()
 
     getRepository().appendMessage(JobExecutionId("foo"),
-      JobExecutionMessage(Instant.now(), JobExecutionMessage.Level.ERROR, "foobar"))
+      JobExecutionMessage(Instant.now(), Level.ERROR, "foobar"))
 
-    assertEquals(1, getRepository().findOne(JobExecutionId("foo"))?.messages?.size)
+    assertThat(getRepository().findOne(JobExecutionId("foo"))!!.messages.size).isEqualTo(1)
 
     getRepository().appendMessage(JobExecutionId("foo"),
-      JobExecutionMessage(Instant.now(), JobExecutionMessage.Level.ERROR, "foobar"))
+      JobExecutionMessage(Instant.now(), Level.ERROR, "foobar"))
 
-    assertEquals(2, getRepository().findOne(JobExecutionId("foo"))?.messages?.size)
+    assertThat(getRepository().findOne(JobExecutionId("foo"))!!.messages.size).isEqualTo(2)
   }
 
   @Test
@@ -171,7 +167,7 @@ abstract class AbstractJobExecutionRepositoryTest {
     val newInstant = Instant.now().epochSecond + 1
     getRepository().updateLastUpdated(JobExecutionId("foo"), Instant.ofEpochSecond(newInstant))
 
-    assertEquals(Instant.ofEpochSecond(newInstant), getRepository().findOne(JobExecutionId("foo"))?.lastUpdated)
+    assertThat(getRepository().findOne(JobExecutionId("foo"))?.lastUpdated).isEqualTo(Instant.ofEpochSecond(newInstant))
   }
 
   abstract fun getRepository(): JobExecutionRepository

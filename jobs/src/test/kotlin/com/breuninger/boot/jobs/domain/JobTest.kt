@@ -1,6 +1,8 @@
 package com.breuninger.boot.jobs.domain
 
-import org.junit.jupiter.api.Assertions.assertFalse
+import assertk.assertThat
+import assertk.assertions.isFalse
+import assertk.assertions.isTrue
 import org.junit.jupiter.api.Test
 
 internal class JobTest {
@@ -9,28 +11,28 @@ internal class JobTest {
   fun `ensure isRunning returns true`() {
     val job = createJob()
 
-    assert(job.isRunning())
+    assertThat(job.isRunning()).isTrue()
   }
 
   @Test
   fun `ensure isRunning returns false`() {
     val job = createJob(null)
 
-    assertFalse(job.isRunning())
+    assertThat(job.isRunning()).isFalse()
   }
 
   @Test
   fun `ensure isNotRunning returns false`() {
     val job = createJob()
 
-    assertFalse(job.isNotRunning())
+    assertThat(job.isNotRunning()).isFalse()
   }
 
   @Test
   fun `ensure isNotRunning returns true`() {
     val job = createJob(null)
 
-    assert(job.isNotRunning())
+    assertThat(job.isNotRunning()).isTrue()
   }
 
   private fun createJob(runningJobExecutionId: JobExecutionId? = JobExecutionId("bar")) =
