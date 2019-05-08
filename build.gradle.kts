@@ -6,9 +6,6 @@ apply {
   plugin("com.github.ben-manes.versions")
 }
 
-group = "com.breuninger"
-version = "1.0"
-
 buildscript {
   repositories {
     maven { setUrl("https://plugins.gradle.org/m2/") }
@@ -28,6 +25,9 @@ subprojects {
     plugin("kotlin-spring")
     plugin("io.spring.dependency-management")
   }
+
+  group = "com.breuninger.boot"
+  version = "3.0.0.SNAPSHOT"
 
   configure<JavaPluginConvention> {
     sourceCompatibility = JavaVersion.VERSION_12
