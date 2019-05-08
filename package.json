@@ -1,7 +1,3 @@
-// TODO(BS): add linting js
-// TODO(BS): add linting css
-// TODO(BS): add testing js
-// TODO(BS): add coverage js
 {
   "name": "spring-boot-starter-breuninger",
   "version": "2.1.2",

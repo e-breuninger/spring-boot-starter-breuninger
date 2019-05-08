@@ -1,7 +1,13 @@
 package com.breuninger.boot.jobs.repository
 
 import assertk.assertThat
-import assertk.assertions.*
+import assertk.assertions.containsAll
+import assertk.assertions.hasClass
+import assertk.assertions.isEqualTo
+import assertk.assertions.isFalse
+import assertk.assertions.isNotEqualTo
+import assertk.assertions.isNull
+import assertk.assertions.isTrue
 import com.breuninger.boot.jobs.domain.Job
 import com.breuninger.boot.jobs.domain.JobBlockedException
 import com.breuninger.boot.jobs.domain.JobExecutionId

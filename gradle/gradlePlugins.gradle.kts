@@ -4,7 +4,7 @@ project.apply {
 val coreVersions = extra["coreVersions"] as Map<*, *>
 
 val gradlePluginVersions = mapOf(
-  "git-properties" to "1.5.1",
+  "git-properties" to "2.0.0",
 
   "ktlint-gradle" to "8.0.0",
 

@@ -124,17 +124,6 @@ internal class JobExecutionServiceTest {
     verify(exactly = 0) { jobExecutionRepository.updateStatus(jobExecutionId, any()) }
   }
 
-  private fun createJobExecution() = JobExecution(
-    JobExecutionId("foo"),
-    JobId("bar"),
-    Status.OK,
-    Instant.now(),
-    null,
-    emptyList(),
-    "foobar",
-    Instant.now()
-  )
-
   @Test
   fun `ensure markRestarted appends a message to the correct job`(){
     val jobExecutionId = JobExecutionId("foo")
@@ -210,10 +199,9 @@ internal class JobExecutionServiceTest {
   fun `ensure releaseRunLock calls JobRepository releaseRunLock`() {
     val jobExecutionId = JobExecutionId("foo")
     val jobId = JobId("bar")
-
     every { jobRepository.releaseRunLock(jobId, jobExecutionId) } returns null
 
-    jobExecutionService.releaseRunLock(jobId,jobExecutionId)
+    jobExecutionService.releaseRunLock(jobId, jobExecutionId)
 
     verify { jobRepository.releaseRunLock(jobId, jobExecutionId) }
   }
@@ -222,11 +210,21 @@ internal class JobExecutionServiceTest {
   fun `ensure releaseRunLock calls JobExecutionRepository findOne if the run lock was successfully released`() {
     val jobExecutionId = JobExecutionId("foo")
     val jobId = JobId("bar")
-
     every { jobRepository.releaseRunLock(jobId, jobExecutionId) } returns Unit
 
-    jobExecutionService.releaseRunLock(jobId,jobExecutionId)
+    jobExecutionService.releaseRunLock(jobId, jobExecutionId)
 
     verify { jobExecutionRepository.findOne(jobExecutionId) }
   }
+
+  private fun createJobExecution() = JobExecution(
+    JobExecutionId("foo"),
+    JobId("bar"),
+    Status.OK,
+    Instant.now(),
+    null,
+    emptyList(),
+    "foobar",
+    Instant.now()
+  )
 }

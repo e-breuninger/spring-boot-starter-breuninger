@@ -1,9 +1,16 @@
 package com.breuninger.boot.jobs.repository
 
 import assertk.assertThat
-import assertk.assertions.*
+import assertk.assertions.isEmpty
+import assertk.assertions.isEqualTo
+import assertk.assertions.isLessThanOrEqualTo
+import assertk.assertions.isNotNull
+import assertk.assertions.isNull
 import com.breuninger.boot.jobs.domain.JobExecution
-import com.breuninger.boot.jobs.domain.JobExecution.Status.*
+import com.breuninger.boot.jobs.domain.JobExecution.Status.DEAD
+import com.breuninger.boot.jobs.domain.JobExecution.Status.ERROR
+import com.breuninger.boot.jobs.domain.JobExecution.Status.OK
+import com.breuninger.boot.jobs.domain.JobExecution.Status.SKIPPED
 import com.breuninger.boot.jobs.domain.JobExecutionId
 import com.breuninger.boot.jobs.domain.JobExecutionMessage
 import com.breuninger.boot.jobs.domain.JobExecutionMessage.Level
@@ -196,6 +203,5 @@ abstract class AbstractJobExecutionRepositoryTest {
     messages: List<JobExecutionMessage> = emptyList(),
     hostname: String = "foobar",
     lastUpdated: Instant = Instant.now()
-  ) =
-    JobExecution(id, jobId, OK, Instant.now(), stopped, messages, hostname, lastUpdated)
+  ) = JobExecution(id, jobId, OK, Instant.now(), stopped, messages, hostname, lastUpdated)
 }
