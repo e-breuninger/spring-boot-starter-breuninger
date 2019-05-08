@@ -1,11 +1,9 @@
 package com.breuninger.boot.jobs.actuator.health
 
-import com.breuninger.boot.jobs.domain.JobExecution.Status.DEAD
-import com.breuninger.boot.jobs.domain.JobExecution.Status.ERROR
-import com.breuninger.boot.jobs.domain.JobExecution.Status.OK
-import com.breuninger.boot.jobs.domain.JobExecution.Status.SKIPPED
+import assertk.assertThat
+import assertk.assertions.isEqualTo
+import com.breuninger.boot.jobs.domain.JobExecution.Status.*
 import com.breuninger.boot.jobs.domain.JobId
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.boot.actuate.health.Health
 import org.springframework.boot.actuate.health.Status.DOWN
@@ -23,10 +21,10 @@ internal class JobHealthIndicatorTest {
 
     val actualHealth = healthIndicator.health()
 
-    assertEquals(UP, actualHealth.status)
-    assertEquals(UP, (actualHealth.details["test"] as Health).status)
-    assertEquals(UP, (actualHealth.details["foo"] as Health).status)
-    assertEquals(UP, (actualHealth.details["bar"] as Health).status)
+    assertThat(actualHealth.status).isEqualTo(UP)
+    assertThat((actualHealth.details["test"] as Health).status).isEqualTo(UP)
+    assertThat((actualHealth.details["foo"] as Health).status).isEqualTo(UP)
+    assertThat((actualHealth.details["bar"] as Health).status).isEqualTo(UP)
   }
 
   @Test
@@ -37,10 +35,10 @@ internal class JobHealthIndicatorTest {
 
     val actualHealth = healthIndicator.health()
 
-    assertEquals(DOWN, actualHealth.status)
-    assertEquals(UP, (actualHealth.details["test"] as Health).status)
-    assertEquals(UP, (actualHealth.details["foo"] as Health).status)
-    assertEquals(DOWN, (actualHealth.details["bar"] as Health).status)
+    assertThat(actualHealth.status).isEqualTo(DOWN)
+    assertThat((actualHealth.details["test"] as Health).status).isEqualTo(UP)
+    assertThat((actualHealth.details["foo"] as Health).status).isEqualTo(UP)
+    assertThat((actualHealth.details["bar"] as Health).status).isEqualTo(DOWN)
   }
 
   @Test
@@ -51,10 +49,10 @@ internal class JobHealthIndicatorTest {
 
     val actualHealth = healthIndicator.health()
 
-    assertEquals(DOWN, actualHealth.status)
-    assertEquals(UP, (actualHealth.details["test"] as Health).status)
-    assertEquals(UP, (actualHealth.details["foo"] as Health).status)
-    assertEquals(DOWN, (actualHealth.details["bar"] as Health).status)
+    assertThat(actualHealth.status).isEqualTo(DOWN)
+    assertThat((actualHealth.details["test"] as Health).status).isEqualTo(UP)
+    assertThat((actualHealth.details["foo"] as Health).status).isEqualTo(UP)
+    assertThat((actualHealth.details["bar"] as Health).status).isEqualTo(DOWN)
   }
 
   @Test
@@ -65,9 +63,9 @@ internal class JobHealthIndicatorTest {
 
     val actualHealth = healthIndicator.health()
 
-    assertEquals(DOWN, actualHealth.status)
-    assertEquals(DOWN, (actualHealth.details["test"] as Health).status)
-    assertEquals(DOWN, (actualHealth.details["foo"] as Health).status)
-    assertEquals(DOWN, (actualHealth.details["bar"] as Health).status)
+    assertThat(actualHealth.status).isEqualTo(DOWN)
+    assertThat((actualHealth.details["test"] as Health).status).isEqualTo(DOWN)
+    assertThat((actualHealth.details["foo"] as Health).status).isEqualTo(DOWN)
+    assertThat((actualHealth.details["bar"] as Health).status).isEqualTo(DOWN)
   }
 }
