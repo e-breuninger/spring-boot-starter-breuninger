@@ -9,14 +9,11 @@ import com.breuninger.boot.jobs.repository.JobExecutionRepository
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.data.domain.Sort
 import org.springframework.data.domain.Sort.Direction.DESC
-import org.springframework.data.mongodb.core.MongoTemplate
-import org.springframework.data.mongodb.core.find
-import org.springframework.data.mongodb.core.findById
+import org.springframework.data.mongodb.core.*
 import org.springframework.data.mongodb.core.query.Criteria.where
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Query.query
 import org.springframework.data.mongodb.core.query.Update.update
-import org.springframework.data.mongodb.core.updateFirst
 import org.springframework.stereotype.Repository
 import java.time.Instant
 
@@ -66,4 +63,6 @@ class MongoJobExecutionRepository(private val mongoTemplate: MongoTemplate) : Jo
   override fun remove(jobExecution: JobExecution) {
     mongoTemplate.remove(jobExecution)
   }
+
+  override fun clear() = mongoTemplate.dropCollection<JobExecution>()
 }

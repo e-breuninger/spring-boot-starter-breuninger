@@ -16,7 +16,7 @@ class JobService(private val jobRepository: JobRepository) {
 
   fun create(job: Job) = jobRepository.create(job)
 
-  fun update(jobId: JobId, job: Job) = jobRepository.updateDisableState(jobId, job)
+  fun updateDisableState(jobId: JobId, job: Job) = jobRepository.updateDisableState(jobId, job)
 
   fun findState(jobId: JobId, key: String) = jobRepository.findState(jobId, key)
 

@@ -47,10 +47,10 @@ function updateMessagesAndDates(input) {
           second: 'numeric'
         };
 
-        // update last updated date
+        // updateDisableState last updated date
         $(`#${id}update`)[0].textContent = new Date(fragment.lastUpdated).toLocaleDateString(localeDE, options).replace(',', '');
 
-        // if stopped update stopped date
+        // if stopped updateDisableState stopped date
         if (fragment.stopped) {
           $(`#${id}stopped`)[0].textContent = new Date(fragment.stopped).toLocaleDateString(localeDE, options).replace(',', '');
           input.checked = false;
@@ -98,7 +98,7 @@ function startJob(button) {
       jobExecutionLinkHeader.textContent = job.runningJobExecutionId.value;
       jobExecutionLinkHeader.href = `../jobexecutions/single/${job.runningJobExecutionId.value}`;
 
-      // update header status
+      // updateDisableState header status
       updateJob(job.id.value, job);
     }
   });

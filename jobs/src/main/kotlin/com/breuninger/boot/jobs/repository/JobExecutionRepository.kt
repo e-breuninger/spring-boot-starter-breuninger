@@ -26,4 +26,6 @@ interface JobExecutionRepository {
   fun stop(jobExecutionId: JobExecutionId, stopped: Instant): Unit?
 
   fun remove(jobExecution: JobExecution)
+
+  fun clear()
 }

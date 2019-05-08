@@ -25,4 +25,6 @@ interface JobRepository {
   fun findState(jobId: JobId, key: String): String?
 
   fun updateState(jobId: JobId, key: String, value: String?): Unit?
+
+  fun clear()
 }

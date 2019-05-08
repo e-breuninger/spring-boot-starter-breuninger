@@ -19,11 +19,13 @@ dependencies {
   compile(libraries["kotlin-reflect"] as String)
   compile(libraries["jackson-module-kotlin"] as String)
 
+  compile(libraries["spring-boot-admin-starter-client"] as String)
   compile(libraries["spring-boot-starter-webflux"] as String)
   compile(libraries["spring-boot-starter-actuator"] as String)
   compile(libraries["spring-boot-starter-data-mongodb-reactive"] as String)
 
   compile(libraries["spring-boot-starter-aop"] as String)
+  compile(libraries["spring-boot-starter-thymeleaf"] as String)
 
   testCompile(libraries["junit-jupiter-api"] as String)
   testCompile(libraries["junit-jupiter-engine"] as String)

@@ -8,14 +8,11 @@ import com.breuninger.boot.jobs.repository.JobRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
-import org.springframework.data.mongodb.core.MongoTemplate
-import org.springframework.data.mongodb.core.findById
-import org.springframework.data.mongodb.core.findOne
+import org.springframework.data.mongodb.core.*
 import org.springframework.data.mongodb.core.query.Criteria.where
 import org.springframework.data.mongodb.core.query.Query.query
 import org.springframework.data.mongodb.core.query.Update
 import org.springframework.data.mongodb.core.query.Update.update
-import org.springframework.data.mongodb.core.updateFirst
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -68,11 +65,13 @@ class MongoJobRepository(private val mongoTemplate: MongoTemplate) : JobReposito
     it.state?.get(key)
   }
 
-  // TODO(BS): directly update keys in map (use set and unset)
+  // TODO(BS): directly updateDisableState keys in map (use set and unset)
   override fun updateState(jobId: JobId, key: String, value: String?) = findOne(jobId)?.let {
     val state = HashMap(it.state)
     value?.run { state[key] = value } ?: state.remove(key)
     mongoTemplate.updateFirst<Job>(query(where("_id").`is`(jobId)), update(Job::state.name, state))
     Unit
   }
+
+  override fun clear() = mongoTemplate.dropCollection<Job>()
 }

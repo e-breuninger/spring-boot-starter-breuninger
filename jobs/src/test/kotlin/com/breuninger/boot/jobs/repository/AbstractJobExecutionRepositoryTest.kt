@@ -8,11 +8,15 @@ import com.breuninger.boot.jobs.domain.JobExecutionId
 import com.breuninger.boot.jobs.domain.JobExecutionMessage
 import com.breuninger.boot.jobs.domain.JobExecutionMessage.Level
 import com.breuninger.boot.jobs.domain.JobId
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Instant
 import kotlin.random.Random
 
 abstract class AbstractJobExecutionRepositoryTest {
+
+  @BeforeEach
+  fun before() = getRepository().clear()
 
   @Test
   fun `ensure saving and finding the saved item works`() {
@@ -168,6 +172,19 @@ abstract class AbstractJobExecutionRepositoryTest {
     getRepository().updateLastUpdated(JobExecutionId("foo"), Instant.ofEpochSecond(newInstant))
 
     assertThat(getRepository().findOne(JobExecutionId("foo"))?.lastUpdated).isEqualTo(Instant.ofEpochSecond(newInstant))
+  }
+
+  @Test
+  fun `ensure clear works`(){
+    getRepository().save(createJobExecution())
+    getRepository().save(createJobExecution(id = JobExecutionId("bar")))
+    getRepository().save(createJobExecution(id = JobExecutionId("bat")))
+
+    getRepository().clear()
+
+    assertThat(getRepository().findOne(JobExecutionId("foo"))).isNull()
+    assertThat(getRepository().findOne(JobExecutionId("bar"))).isNull()
+    assertThat(getRepository().findOne(JobExecutionId("bat"))).isNull()
   }
 
   abstract fun getRepository(): JobExecutionRepository

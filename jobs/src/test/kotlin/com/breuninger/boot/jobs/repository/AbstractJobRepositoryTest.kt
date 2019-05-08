@@ -6,10 +6,14 @@ import com.breuninger.boot.jobs.domain.Job
 import com.breuninger.boot.jobs.domain.JobBlockedException
 import com.breuninger.boot.jobs.domain.JobExecutionId
 import com.breuninger.boot.jobs.domain.JobId
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 // TODO(BS): implement more tests see TODOs in repository class
 abstract class AbstractJobRepositoryTest {
+
+  @BeforeEach
+  fun before() = getRepository().clear()
 
   @Test
   fun `ensure that inserting and finding a job works`() {
@@ -38,7 +42,7 @@ abstract class AbstractJobRepositoryTest {
     assertThat(getRepository().findOne(JobId("foo"))).isNotEqualTo(job2)
   }
 
-  // TODO(KA): implement test :)
+  @Test
   fun `ensure findOneRunning returns all running jobs`() {
     val jobFoo = createJob()
     val jobBar = createJob(id = JobId("bar"), runningJobExecutionId = null)
@@ -47,6 +51,9 @@ abstract class AbstractJobRepositoryTest {
     getRepository().create(jobFoo)
     getRepository().create(jobBar)
     getRepository().create(jobBat)
+
+    val runningJob = getRepository().findOneRunning(setOf(JobId("foo"), JobId("bar"), JobId("bat")))
+    assertThat(runningJob).isIn(jobFoo, jobBat)
   }
 
   @Test
@@ -132,6 +139,58 @@ abstract class AbstractJobRepositoryTest {
     assertThat { getRepository().releaseRunLock(JobId("foo"), JobExecutionId("bat")) }.thrownError { hasClass(JobBlockedException::class) }
   }
 
+  @Test
+  fun `ensure the requested state is returned if it is contained when calling findState`(){
+    val job = createJob()
+    getRepository().create(job)
+    assertThat(getRepository().findState(JobId("foo"), "foo")).isEqualTo("bar")
+    assertThat(getRepository().findState(JobId("foo"), "bat")).isEqualTo("buzz")
+  }
+
+  @Test
+  fun `ensure the null is returned if the requested state is not contained when calling findState`(){
+    val job = createJob()
+    getRepository().create(job)
+    assertThat(getRepository().findState(JobId("foo"), "bam")).isNull()
+  }
+
+  @Test
+  fun `ensure that updateState adds a new state to the map if it is called with an none existing key`(){
+    val job = createJob()
+    getRepository().create(job)
+    getRepository().updateState(JobId("foo"), "test-key", "test-value")
+    assertThat(getRepository().findState(JobId("foo"), "test-key")).isEqualTo("test-value")
+  }
+
+  @Test
+  fun `ensure that updateState updates an existing key correctly with the new value`(){
+    val job = createJob()
+    getRepository().create(job)
+    getRepository().updateState(JobId("foo"), "foo", "foo-bar-buzz")
+    assertThat(getRepository().findState(JobId("foo"), "foo")).isEqualTo("foo-bar-buzz")
+  }
+
+  @Test
+  fun `ensure that updateState removes an existing key correctly when it is called with a null value`(){
+    val job = createJob()
+    getRepository().create(job)
+    getRepository().updateState(JobId("foo"), "foo", null)
+    assertThat(getRepository().findState(JobId("foo"), "foo")).isNull()
+  }
+
+  @Test
+  fun `ensure clear works`() {
+    getRepository().create(createJob())
+    getRepository().create(createJob(id = JobId("bar")))
+    getRepository().create(createJob(id = JobId("bat")))
+
+    getRepository().clear()
+
+    assertThat(getRepository().findOne(JobId("foo"))).isNull()
+    assertThat(getRepository().findOne(JobId("bar"))).isNull()
+    assertThat(getRepository().findOne(JobId("bat"))).isNull()
+  }
+
   abstract fun getRepository(): JobRepository
 
   private fun createJob(
@@ -139,5 +198,5 @@ abstract class AbstractJobRepositoryTest {
     runningJobExecutionId: JobExecutionId? = JobExecutionId("bar"),
     disabled: Boolean = false,
     disabledComment: String = ""
-  ) = Job(id, runningJobExecutionId, disabled, disabledComment, emptyMap())
+  ) = Job(id, runningJobExecutionId, disabled, disabledComment, mapOf("foo" to "bar", "bat" to "buzz"))
 }

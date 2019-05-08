@@ -45,16 +45,16 @@ class InMemoryJobRepository : JobRepository {
     }
   }
 
-  // TODO(BS): warum wird das über das repository abgebildet und nicht einfach über den job?
   override fun findState(jobId: JobId, key: String) = findOne(jobId)?.let {
     it.state?.get(key)
   }
 
-  // TODO(BS): s.o.
   override fun updateState(jobId: JobId, key: String, value: String?) = findOne(jobId)?.let {
     val state = HashMap(it.state)
     value?.run { state[key] = value } ?: state.remove(key)
     jobs.replace(jobId, it.copy(state = state))
     Unit
   }
+
+  override fun clear() = jobs.clear()
 }
