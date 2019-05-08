@@ -49,3 +49,9 @@ subprojects {
 }
 
 // TODO(BS): add coverage kotlin jacoco
+
+// package.json
+// TODO(BS): add linting js
+// TODO(BS): add linting css
+// TODO(BS): add testing js
+// TODO(BS): add coverage js

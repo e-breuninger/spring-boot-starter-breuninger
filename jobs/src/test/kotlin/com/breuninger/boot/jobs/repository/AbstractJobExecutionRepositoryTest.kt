@@ -186,6 +186,5 @@ abstract class AbstractJobExecutionRepositoryTest {
     messages: List<JobExecutionMessage> = emptyList(),
     hostname: String = "foobar",
     lastUpdated: Instant = Instant.now()
-  ) =
-    JobExecution(id, jobId, OK, Instant.now(), stopped, messages, hostname, lastUpdated)
+  ) = JobExecution(id, jobId, OK, Instant.now(), stopped, messages, hostname, lastUpdated)
 }
