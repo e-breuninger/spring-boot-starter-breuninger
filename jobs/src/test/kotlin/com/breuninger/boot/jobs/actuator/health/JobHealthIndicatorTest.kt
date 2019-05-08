@@ -5,6 +5,7 @@ import com.breuninger.boot.jobs.domain.JobExecution.Status.ERROR
 import com.breuninger.boot.jobs.domain.JobExecution.Status.OK
 import com.breuninger.boot.jobs.domain.JobExecution.Status.SKIPPED
 import com.breuninger.boot.jobs.domain.JobId
+// TODO(KA): switch for assertk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.boot.actuate.health.Health

@@ -121,6 +121,60 @@ internal class JobExecutionServiceTest {
     verify(exactly = 0) { jobExecutionRepository.updateStatus(jobExecutionId, any()) }
   }
 
+  @Test
+  fun `ensure markRestarted appends a message to the correct job`() {
+  }
+
+  @Test
+  fun `ensure markSkipped appends a message to the correct job`() {
+  }
+
+  @Test
+  fun `ensure markDead appends a message to the correct job`() {
+  }
+
+  @Test
+  fun `ensure acquireRunLock calls acquireRunLock of the JobExecutionRepository and does not throw an exception if the job is not disabled not already running and not part of a mutexGroup with an already running job`() {
+  }
+
+  @Test
+  fun `ensure acquireRunLock throws an exception and releases the previous acquired run lock if the job is disabled`() {
+  }
+
+  @Test
+  fun `ensure acquireRunLock throws an exception and releases the previous acquired run lock if the job is part of a mutex group with an already running job`() {
+  }
+
+  @Test
+  fun `ensure acquireRunLock throws an exception if the job is already running`() {
+  }
+
+  @Test
+  fun `ensure releaseRunLock calls JobRepository releaseRunLock`() {
+    val jobExecutionId = JobExecutionId("foo")
+    val jobId = JobId("bar")
+    every { jobRepository.releaseRunLock(jobId, jobExecutionId) } returns null
+
+    jobExecutionService.releaseRunLock(jobId, jobExecutionId)
+
+    verify { jobRepository.releaseRunLock(jobId, jobExecutionId) }
+  }
+
+  @Test
+  fun `ensure releaseRunLock calls JobExecutionRepository findOne if the run lock was successfully released`() {
+    val jobExecutionId = JobExecutionId("foo")
+    val jobId = JobId("bar")
+    every { jobRepository.releaseRunLock(jobId, jobExecutionId) } returns Unit
+
+    jobExecutionService.releaseRunLock(jobId, jobExecutionId)
+
+    verify { jobExecutionRepository.findOne(jobExecutionId) }
+  }
+
+  @Test
+  fun `ensure findMutexJobs returns the correct JobIds`() {
+  }
+
   private fun createJobExecution() = JobExecution(
     JobExecutionId("foo"),
     JobId("bar"),
@@ -131,68 +185,4 @@ internal class JobExecutionServiceTest {
     "foobar",
     Instant.now()
   )
-
-  @Test
-  fun `ensure markRestarted appends a message to the correct job`(){
-
-  }
-
-  @Test
-  fun `ensure markSkipped appends a message to the correct job`(){
-
-  }
-
-  @Test
-  fun `ensure markDead appends a message to the correct job`(){
-
-  }
-
-  @Test
-  fun `ensure acquireRunLock calls acquireRunLock of the JobExecutionRepository and does not throw an exception if the job is not disabled not already running and not part of a mutexGroup with an already running job`(){
-
-  }
-
-  @Test
-  fun `ensure acquireRunLock throws an exception and releases the previous acquired run lock if the job is disabled`(){
-
-  }
-
-  @Test
-  fun `ensure acquireRunLock throws an exception and releases the previous acquired run lock if the job is part of a mutex group with an already running job`(){
-
-  }
-
-  @Test
-  fun `ensure acquireRunLock throws an exception if the job is already running`(){
-
-  }
-
-  @Test
-  fun `ensure releaseRunLock calls JobRepository releaseRunLock`() {
-    val jobExecutionId = JobExecutionId("foo")
-    val jobId = JobId("bar")
-
-    every { jobRepository.releaseRunLock(jobId, jobExecutionId) } returns null
-
-    jobExecutionService.releaseRunLock(jobId,jobExecutionId)
-
-    verify { jobRepository.releaseRunLock(jobId, jobExecutionId) }
-  }
-
-  @Test
-  fun `ensure releaseRunLock calls JobExecutionRepository findOne if the run lock was successfully released`() {
-    val jobExecutionId = JobExecutionId("foo")
-    val jobId = JobId("bar")
-
-    every { jobRepository.releaseRunLock(jobId, jobExecutionId) } returns Unit
-
-    jobExecutionService.releaseRunLock(jobId,jobExecutionId)
-
-    verify { jobExecutionRepository.findOne(jobExecutionId) }
-  }
-
-  @Test
-  fun `ensure findMutexJobs returns the correct JobIds`(){
-
-  }
 }

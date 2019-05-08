@@ -25,11 +25,11 @@ dependencies {
 
   compile(libraries["spring-boot-starter-aop"] as String)
 
+  testCompile(libraries["spring-boot-test"] as String)
   testCompile(libraries["junit-jupiter-api"] as String)
   testCompile(libraries["junit-jupiter-engine"] as String)
   testCompile(libraries["junit-jupiter-params"] as String)
   testCompile(libraries["mockk"] as String)
-  testCompile(libraries["spring-boot-test"] as String)
   testCompile(libraries["assertk"] as String)
 
   annotationProcessor(libraries["spring-boot-configuration-processor"] as String)
