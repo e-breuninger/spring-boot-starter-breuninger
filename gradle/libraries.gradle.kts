@@ -27,6 +27,7 @@ val libraries = mapOf(
   "jackson-module-kotlin" to "com.fasterxml.jackson.module:jackson-module-kotlin:${libraryVersions["jackson-module-kotlin"]}",
 
   "spring-core" to "org.springframework:spring-core:${coreVersions["spring"]}",
+  "spring-test" to "org.springframework:spring-test:${coreVersions["spring"]}",
   "spring-boot-starter-aop" to "org.springframework.boot:spring-boot-starter-aop:${coreVersions["spring-boot"]}",
   "spring-boot-starter-actuator" to "org.springframework.boot:spring-boot-starter-actuator:${coreVersions["spring-boot"]}",
   "spring-boot-starter-webflux" to "org.springframework.boot:spring-boot-starter-webflux:${coreVersions["spring-boot"]}",
