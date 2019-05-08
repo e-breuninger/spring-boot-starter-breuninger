@@ -12,8 +12,7 @@ class LogJobExecutionStateChangedEventListener : JobExecutionStateChangedEventLi
     val LOG: Logger = LoggerFactory.getLogger(LogJobExecutionStateChangedEventListener::class.java)
   }
 
-  override fun consumeJobExecutionStateChanged(jobExecutionStateChangedEvent: JobExecutionStateChangedEvent) {
-    LOG.info(
-      "${jobExecutionStateChangedEvent.jobId} (${jobExecutionStateChangedEvent.jobExecutionId}) state changed to ${jobExecutionStateChangedEvent.state}")
+  override fun consumeJobExecutionStateChanged(event: JobExecutionStateChangedEvent) {
+    LOG.info("${event.jobId} (${event.jobExecutionId}) state changed to ${event.state}")
   }
 }

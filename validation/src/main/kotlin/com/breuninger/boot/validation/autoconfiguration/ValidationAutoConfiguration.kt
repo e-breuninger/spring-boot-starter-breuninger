@@ -32,13 +32,15 @@ class ValidationAutoConfiguration {
 
   @Bean
   @Order(-2)
-  fun errorWebExceptionHandler(validationProperties: ValidationProperties,
-                               errorAttributes: ErrorAttributes,
-                               resourceProperties: ResourceProperties,
-                               serverProperties: ServerProperties,
-                               applicationContext: ApplicationContext,
-                               viewResolversProvider: ObjectProvider<ViewResolver>,
-                               serverCodecConfigurer: ServerCodecConfigurer): ErrorWebExceptionHandler {
+  fun errorWebExceptionHandler(
+    validationProperties: ValidationProperties,
+    errorAttributes: ErrorAttributes,
+    resourceProperties: ResourceProperties,
+    serverProperties: ServerProperties,
+    applicationContext: ApplicationContext,
+    viewResolversProvider: ObjectProvider<ViewResolver>,
+    serverCodecConfigurer: ServerCodecConfigurer
+  ): ErrorWebExceptionHandler {
     val exceptionHandler = GlobalErrorWebExceptionHandler(validationProperties, errorAttributes, resourceProperties,
       serverProperties.error, applicationContext)
     exceptionHandler.setViewResolvers(viewResolversProvider.orderedStream().collect(toList()))

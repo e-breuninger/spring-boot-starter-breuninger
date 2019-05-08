@@ -23,11 +23,15 @@ class TogglzAutoConfiguration {
   fun stateRepository(): StateRepository = InMemoryStateRepository()
 
   @Bean
-  fun featureManager(togglzProperties: TogglzProperties, featureProvider: FeatureProvider,
-                     stateRepository: StateRepository): FeatureManager {
+  fun featureManager(
+    togglzProperties: TogglzProperties,
+    featureProvider: FeatureProvider,
+    stateRepository: StateRepository
+  ): FeatureManager {
     val featureManager = FeatureManagerBuilder().featureProvider(featureProvider)
       .stateRepository(
-        CachingStateRepository(stateRepository, togglzProperties.cache.timeToLive, togglzProperties.cache.timeUnit)).build()
+        CachingStateRepository(stateRepository, togglzProperties.cache.timeToLive, togglzProperties.cache.timeUnit))
+      .build()
     StaticFeatureManagerProvider.setFeatureManager(featureManager)
     return featureManager
   }

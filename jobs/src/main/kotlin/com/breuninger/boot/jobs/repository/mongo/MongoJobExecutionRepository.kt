@@ -26,9 +26,12 @@ class MongoJobExecutionRepository(private val mongoTemplate: MongoTemplate) : Jo
 
   override fun findOne(jobExecutionId: JobExecutionId) = mongoTemplate.findById<JobExecution>(jobExecutionId)
 
-  // TODO(BS): need to add jobId filter if not null
-  override fun find100DescendingByLastUpdated(jobId: JobId?): List<JobExecution> =
-    mongoTemplate.find(Query().with(Sort.by(DESC, JobExecution::lastUpdated.name)).limit(100))
+  override fun find100DescendingByLastUpdated(jobId: JobId?): List<JobExecution> {
+    val query = Query()
+    jobId?.let { query.addCriteria(where(JobExecution::jobId.name).`is`(jobId)) }
+    query.with(Sort.by(DESC, JobExecution::lastUpdated.name)).limit(100)
+    return mongoTemplate.find(query)
+  }
 
   override fun findAllIgnoreMessages(): List<JobExecution> {
     val query = Query()

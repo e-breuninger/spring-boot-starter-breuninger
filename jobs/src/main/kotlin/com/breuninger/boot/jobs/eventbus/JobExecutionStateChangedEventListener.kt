@@ -6,5 +6,5 @@ import org.springframework.context.event.EventListener
 interface JobExecutionStateChangedEventListener {
 
   @EventListener
-  fun consumeJobExecutionStateChanged(jobExecutionStateChangedEvent: JobExecutionStateChangedEvent)
+  fun consumeJobExecutionStateChanged(event: JobExecutionStateChangedEvent)
 }

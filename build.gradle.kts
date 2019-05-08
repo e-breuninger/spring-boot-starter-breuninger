@@ -2,8 +2,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 apply {
   plugin("idea")
+  plugin("org.jlleitschuh.gradle.ktlint")
   plugin("com.github.ben-manes.versions")
 }
+
+group = "com.breuninger"
+version = "1.0"
 
 buildscript {
   repositories {
@@ -44,8 +48,4 @@ subprojects {
   }
 }
 
-// TODO(BS): add linting
-// TODO(BS): add testing
-// TODO(BS): add coverage
-// TODO(BS): add signing
-// TODO(BS): add nexus release
+// TODO(BS): add coverage kotlin jacoco

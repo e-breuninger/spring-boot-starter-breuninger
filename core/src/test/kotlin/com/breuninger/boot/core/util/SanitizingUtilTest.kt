@@ -1,4 +1,4 @@
 package com.breuninger.boot.core.util
 
-// TODO(BS): implement
+// TODO(BS): implement test
 internal class SanitizingUtilTest

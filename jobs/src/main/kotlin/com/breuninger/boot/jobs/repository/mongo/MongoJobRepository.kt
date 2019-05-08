@@ -71,7 +71,7 @@ class MongoJobRepository(private val mongoTemplate: MongoTemplate) : JobReposito
   // TODO(BS): directly update keys in map (use set and unset)
   override fun updateState(jobId: JobId, key: String, value: String?) = findOne(jobId)?.let {
     val state = HashMap(it.state)
-    if (value == null) state.remove(key) else state[key] = value
+    value?.run { state[key] = value } ?: state.remove(key)
     mongoTemplate.updateFirst<Job>(query(where("_id").`is`(jobId)), update(Job::state.name, state))
     Unit
   }

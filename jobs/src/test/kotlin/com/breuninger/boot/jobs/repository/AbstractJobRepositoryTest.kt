@@ -4,19 +4,18 @@ import com.breuninger.boot.jobs.domain.Job
 import com.breuninger.boot.jobs.domain.JobBlockedException
 import com.breuninger.boot.jobs.domain.JobExecutionId
 import com.breuninger.boot.jobs.domain.JobId
-import org.hamcrest.collection.IsIterableContainingInAnyOrder
-import org.junit.Assert
-import org.junit.jupiter.api.Assertions
+import org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder
+import org.hamcrest.junit.MatcherAssert.assertThat
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNotEquals
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
+// TODO(BS): implement more tests see TODOs in repository class
 abstract class AbstractJobRepositoryTest {
-  abstract fun getRepository(): JobRepository
-
-  fun createJob(
-    id: JobId = JobId("foo"),
-    runningJobExecutionId: JobExecutionId? = JobExecutionId("bar"),
-    disabled: Boolean = false,
-    disabledComment: String = "") = Job(id, runningJobExecutionId, disabled, disabledComment, emptyMap())
 
   @Test
   fun `ensure that inserting and finding a job works`() {
@@ -28,9 +27,9 @@ abstract class AbstractJobRepositoryTest {
     getRepository().create(jobBar)
     getRepository().create(jobBat)
 
-    Assertions.assertEquals(jobFoo, getRepository().findOne(JobId("foo")))
-    Assertions.assertEquals(jobBar, getRepository().findOne(JobId("bar")))
-    Assertions.assertEquals(jobBat, getRepository().findOne(JobId("bat")))
+    assertEquals(jobFoo, getRepository().findOne(JobId("foo")))
+    assertEquals(jobBar, getRepository().findOne(JobId("bar")))
+    assertEquals(jobBat, getRepository().findOne(JobId("bat")))
   }
 
   @Test
@@ -41,11 +40,11 @@ abstract class AbstractJobRepositoryTest {
     getRepository().create(job1)
     getRepository().create(job2)
 
-    Assertions.assertEquals(job1, getRepository().findOne(JobId("foo")))
-    Assertions.assertNotEquals(job2, getRepository().findOne(JobId("foo")))
+    assertEquals(job1, getRepository().findOne(JobId("foo")))
+    assertNotEquals(job2, getRepository().findOne(JobId("foo")))
   }
 
-  //TODO klären mit BS: warum ist find running so wie es ist
+  // TODO(KA): implement test :)
   fun `ensure findRunning returns all running jobs`() {
     val jobFoo = createJob()
     val jobBar = createJob(id = JobId("bar"), runningJobExecutionId = null)
@@ -54,8 +53,6 @@ abstract class AbstractJobRepositoryTest {
     getRepository().create(jobFoo)
     getRepository().create(jobBar)
     getRepository().create(jobBat)
-
-
   }
 
   @Test
@@ -68,7 +65,7 @@ abstract class AbstractJobRepositoryTest {
     getRepository().create(jobBar)
     getRepository().create(jobBat)
 
-    Assert.assertThat(getRepository().findAll(), IsIterableContainingInAnyOrder.containsInAnyOrder(jobFoo, jobBar, jobBat))
+    assertThat(getRepository().findAll(), containsInAnyOrder(jobFoo, jobBar, jobBat))
   }
 
   @Test
@@ -80,21 +77,20 @@ abstract class AbstractJobRepositoryTest {
     getRepository().create(jobFoo)
 
     var job = getRepository().findOne(jobId)!!
-    Assertions.assertFalse(job.disabled)
-    Assertions.assertEquals("", job.disableComment)
-
+    assertFalse(job.disabled)
+    assertEquals("", job.disableComment)
 
     getRepository().updateDisableState(jobId, createJob(disabled = true, disabledComment = disableComment))
 
     job = getRepository().findOne(jobId)!!
-    Assertions.assertTrue(job.disabled)
-    Assertions.assertEquals(disableComment, job.disableComment)
+    assertTrue(job.disabled)
+    assertEquals(disableComment, job.disableComment)
 
     getRepository().updateDisableState(jobId, createJob())
 
     job = getRepository().findOne(jobId)!!
-    Assertions.assertFalse(job.disabled)
-    Assertions.assertEquals("", job.disableComment)
+    assertFalse(job.disabled)
+    assertEquals("", job.disableComment)
   }
 
   @Test
@@ -107,7 +103,7 @@ abstract class AbstractJobRepositoryTest {
 
     getRepository().acquireRunLock(jobId, jobExecutionId)
 
-    Assertions.assertEquals(jobExecutionId, getRepository().findOne(jobId)!!.runningJobExecutionId)
+    assertEquals(jobExecutionId, getRepository().findOne(jobId)!!.runningJobExecutionId)
   }
 
   @Test
@@ -119,7 +115,7 @@ abstract class AbstractJobRepositoryTest {
     getRepository().create(jobFoo)
     getRepository().acquireRunLock(jobId, jobExecutionId)
 
-    Assertions.assertNotEquals(jobExecutionId, getRepository().findOne(jobId)!!.runningJobExecutionId)
+    assertNotEquals(jobExecutionId, getRepository().findOne(jobId)!!.runningJobExecutionId)
   }
 
   @Test
@@ -131,7 +127,7 @@ abstract class AbstractJobRepositoryTest {
     getRepository().create(jobFoo)
     getRepository().releaseRunLock(jobId, jobExecutionId)
 
-    Assertions.assertNull(getRepository().findOne(jobId)!!.runningJobExecutionId)
+    assertNull(getRepository().findOne(jobId)!!.runningJobExecutionId)
   }
 
   @Test
@@ -140,6 +136,17 @@ abstract class AbstractJobRepositoryTest {
 
     getRepository().create(jobFoo)
 
-    Assertions.assertThrows(JobBlockedException::class.java, { getRepository().releaseRunLock(JobId("foo"), JobExecutionId("bat")) })
+    assertThrows(JobBlockedException::class.java) {
+      getRepository().releaseRunLock(JobId("foo"), JobExecutionId("bat"))
+    }
   }
+
+  abstract fun getRepository(): JobRepository
+
+  private fun createJob(
+    id: JobId = JobId("foo"),
+    runningJobExecutionId: JobExecutionId? = JobExecutionId("bar"),
+    disabled: Boolean = false,
+    disabledComment: String = ""
+  ) = Job(id, runningJobExecutionId, disabled, disabledComment, emptyMap())
 }

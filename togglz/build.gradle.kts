@@ -4,6 +4,11 @@ apply {
   plugin("com.moowork.node")
 }
 
+plugins {
+  `maven-publish`
+  signing
+}
+
 apply {
   from("$rootDir/gradle/libraries.gradle.kts")
 }
@@ -46,4 +51,25 @@ tasks {
       into("META-INF")
     }
   }
+}
+
+publishing {
+  repositories {
+    maven {
+      setUrl("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+      credentials {
+        username = System.getenv("sonatypeUsername")
+        password = System.getenv("sonatypePassword")
+      }
+    }
+  }
+  publications {
+    create<MavenPublication>("mavenJava") {
+      from(components["java"])
+    }
+  }
+}
+
+signing {
+  sign(publishing.publications["mavenJava"])
 }
