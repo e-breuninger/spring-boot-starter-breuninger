@@ -49,6 +49,7 @@ subprojects {
 }
 
 // TODO(BS): add coverage kotlin jacoco
+// TODO(BS): add https://github.com/arturbosch/detekt
 
 // package.json
 // TODO(BS): add linting js
