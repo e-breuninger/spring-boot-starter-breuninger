@@ -21,4 +21,6 @@ class JobService(private val jobRepository: JobRepository) {
   fun findState(jobId: JobId, key: String) = jobRepository.findState(jobId, key)
 
   fun updateState(jobId: JobId, key: String, value: String?) = jobRepository.updateState(jobId, key, value)
+
+  fun remove(job: Job) = jobRepository.remove(job)
 }

@@ -191,6 +191,24 @@ abstract class AbstractJobRepositoryTest {
     assertThat(getRepository().findOne(JobId("bat"))).isNull()
   }
 
+  @Test
+  fun `ensure remove works`() {
+    val jobFoo = createJob()
+    val jobBar = createJob(id = JobId("bar"))
+    val jobBat = createJob(id = JobId("bat"))
+    getRepository().create(jobFoo)
+    getRepository().create(jobBar)
+    getRepository().create(jobBat)
+
+    getRepository().remove(jobFoo)
+    getRepository().remove(jobBar)
+    getRepository().remove(jobBat)
+
+    assertThat(getRepository().findOne(JobId("foo"))).isNull()
+    assertThat(getRepository().findOne(JobId("bar"))).isNull()
+    assertThat(getRepository().findOne(JobId("bat"))).isNull()
+  }
+
   abstract fun getRepository(): JobRepository
 
   private fun createJob(

@@ -74,4 +74,8 @@ class MongoJobRepository(private val mongoTemplate: MongoTemplate) : JobReposito
   }
 
   override fun clear() = mongoTemplate.dropCollection<Job>()
+
+  override fun remove(job: Job) {
+    mongoTemplate.remove(job)
+  }
 }

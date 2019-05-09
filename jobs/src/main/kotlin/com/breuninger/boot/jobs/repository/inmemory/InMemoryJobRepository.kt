@@ -57,4 +57,8 @@ class InMemoryJobRepository : JobRepository {
   }
 
   override fun clear() = jobs.clear()
+
+  override fun remove(job: Job) {
+    jobs.remove(job.id)
+  }
 }
