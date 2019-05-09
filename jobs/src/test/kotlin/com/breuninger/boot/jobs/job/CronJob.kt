@@ -1,28 +1,21 @@
-package com.breuninger.boot.example.app.job
+package com.breuninger.boot.jobs.job
 
 import com.breuninger.boot.jobs.JobRunnable
-import com.breuninger.boot.jobs.domain.JobDefinition.Companion.fixedDelayJobDefinition
+import com.breuninger.boot.jobs.domain.JobDefinition.Companion.cronJobDefinition
 import com.breuninger.boot.jobs.domain.JobId
 import com.breuninger.boot.jobs.domain.JobMarker.JOB_MARKER
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.stereotype.Component
-import java.time.Duration.ofMillis
 
-@Component
-class NotTimedJob : JobRunnable {
+class CronJob : JobRunnable {
 
   companion object {
 
-    val LOG: Logger = LoggerFactory.getLogger(NotTimedJob::class.java)
+    val LOG: Logger = LoggerFactory.getLogger(CronJob::class.java)
   }
 
   override fun definition() =
-    fixedDelayJobDefinition(
-      JobId(NotTimedJob::class.java.simpleName),
-      NotTimedJob::class.java.simpleName,
-      "",
-      ofMillis(2000))
+    cronJobDefinition(JobId(CronJob::class.java.simpleName), CronJob::class.java.simpleName, "cron", "0 0 * * * *")
 
   override fun execute() = logShitToConsole()
 

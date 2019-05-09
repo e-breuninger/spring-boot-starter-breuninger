@@ -2,6 +2,7 @@ package com.breuninger.boot.jobs.web
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import assertk.assertions.isTrue
 import com.breuninger.boot.jobs.domain.JobExecution
 import com.breuninger.boot.jobs.domain.JobExecutionId
 import com.breuninger.boot.jobs.domain.JobId
@@ -25,9 +26,10 @@ internal class JobExecutionHtmlControllerTest(
 
   @Test
   fun `ensure that a thymeleaf template is returned without an parsing error for jobExecutions`() {
-    val result = restTemplate.getForEntity("http://localhost:" + port + "/jobExecutions",
+    val result = restTemplate.getForEntity("http://localhost:$port/jobExecutions",
       String::class.java)
     assertThat(result.statusCode).isEqualTo(HttpStatus.OK)
+    assertThat(result.body!!.contains("<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\">")).isTrue()
   }
 
   @Test
@@ -37,17 +39,19 @@ internal class JobExecutionHtmlControllerTest(
     val headers = HttpHeaders()
     headers.add("Accept", "text/html")
 
-    val result = restTemplate.exchange<String>("http://localhost:" + port + "/jobExecutions/foo",HttpMethod.GET, HttpEntity<MutableMap<String,String>>(headers))
+    val result = restTemplate.exchange<String>("http://localhost:$port/jobExecutions/foo",HttpMethod.GET, HttpEntity<MutableMap<String,String>>(headers))
     assertThat(result.statusCode).isEqualTo(HttpStatus.OK)
+    assertThat(result.body!!.contains("<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\">")).isTrue()
   }
 
   @Test
   fun `ensure that a thymeleaf template is returned without an parsing error for jobExecutions jobId`() {
     jobExecutionRepository.clear()
     jobExecutionRepository.save(JobExecution(JobExecutionId("foo"), JobId("bar")))
-    val result = restTemplate.getForEntity("http://localhost:" + port + "/jobExecutions?jobId=bar",
+    val result = restTemplate.getForEntity("http://localhost:$port/jobExecutions?jobId=bar",
       String::class.java)
     assertThat(result.statusCode).isEqualTo(HttpStatus.OK)
+    assertThat(result.body!!.contains("<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\">")).isTrue()
   }
 
 }

@@ -36,7 +36,7 @@
     <table>
       <tr>
         <td class="td-25">Description</td>
-        <td class="td-75" colspan="2" th:text="${jobDefinitions.get(job.id).description}"></td>
+        <td th:if="${jobDefinitions.get(job.id)}" class="td-75" colspan="2" th:text="${jobDefinitions.get(job.id).description}"></td>
       </tr>
       <tr>
         <td class="td-25">Running Job Execution ID</td>
@@ -86,7 +86,7 @@
         </td>
       </tr>
     </table>
-    <div class="card-content-item">
+    <div th:if="${jobDefinitions.get(job.id)}" class="card-content-item">
       <div class="card">
         <div class="card-header">
           <div class="card-header-title">Job Definition</div>

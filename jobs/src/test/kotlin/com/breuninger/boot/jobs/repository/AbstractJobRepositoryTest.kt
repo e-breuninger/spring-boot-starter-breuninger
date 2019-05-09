@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 abstract class AbstractJobRepositoryTest {
 
   @BeforeEach
-  fun before() = getRepository().clear()
+  fun beforeEach() = getRepository().clear()
 
   @Test
   fun `ensure that inserting and finding a job works`() {

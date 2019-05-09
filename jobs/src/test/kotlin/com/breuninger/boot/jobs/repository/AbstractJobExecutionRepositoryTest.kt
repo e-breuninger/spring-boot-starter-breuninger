@@ -1,16 +1,9 @@
 package com.breuninger.boot.jobs.repository
 
 import assertk.assertThat
-import assertk.assertions.isEmpty
-import assertk.assertions.isEqualTo
-import assertk.assertions.isLessThanOrEqualTo
-import assertk.assertions.isNotNull
-import assertk.assertions.isNull
+import assertk.assertions.*
 import com.breuninger.boot.jobs.domain.JobExecution
-import com.breuninger.boot.jobs.domain.JobExecution.Status.DEAD
-import com.breuninger.boot.jobs.domain.JobExecution.Status.ERROR
-import com.breuninger.boot.jobs.domain.JobExecution.Status.OK
-import com.breuninger.boot.jobs.domain.JobExecution.Status.SKIPPED
+import com.breuninger.boot.jobs.domain.JobExecution.Status.*
 import com.breuninger.boot.jobs.domain.JobExecutionId
 import com.breuninger.boot.jobs.domain.JobExecutionMessage
 import com.breuninger.boot.jobs.domain.JobExecutionMessage.Level
@@ -23,7 +16,7 @@ import kotlin.random.Random
 abstract class AbstractJobExecutionRepositoryTest {
 
   @BeforeEach
-  fun before() = getRepository().clear()
+  fun beforeEach() = getRepository().clear()
 
   @Test
   fun `ensure saving and finding the saved item works`() {

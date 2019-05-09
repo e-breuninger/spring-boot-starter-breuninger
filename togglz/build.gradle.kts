@@ -26,9 +26,12 @@ dependencies {
   compile(libraries["spring-boot-starter-actuator"] as String)
   compile(libraries["spring-boot-starter-data-mongodb-reactive"] as String)
 
+  testCompile(libraries["spring-test"] as String)
+  testCompile(libraries["spring-boot-test"] as String)
   testCompile(libraries["junit-jupiter-api"] as String)
   testCompile(libraries["junit-jupiter-engine"] as String)
   testCompile(libraries["mockk"] as String)
+  testCompile(libraries["assertk"] as String)
 
   annotationProcessor(libraries["spring-boot-configuration-processor"] as String)
 }

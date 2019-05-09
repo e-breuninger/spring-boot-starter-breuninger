@@ -1,0 +1,33 @@
+#logging.level.root: DEBUG
+
+server.port: 0
+
+spring:
+  boot.admin.client.url: "http://localhost:8080"
+  data.mongodb.database: "kotlin-spring-poc-test"
+
+management:
+  endpoints.web.exposure.include: "*"
+  # https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-metrics.html#production-ready-metrics-custom
+  # https://docs.spring.io/spring-metrics/docs/current/public/datadog
+  endpoint.health.show-details: always
+  metrics:
+    export.datadog:
+      enabled: false
+      api-key: "YOUR_KEY"
+    tags:
+      region: "us-east-1"
+      stack: "prod"
+
+breuni:
+  jobs:
+    enabled: "true"
+    mongo.enabled: "true"
+    cleanup.number-of-job-executions-to-keep: "2"
+  togglz:
+    enabled: "true"
+    mongo.enabled: "true"
+    cache:
+      time-to-live: "30"
+      time-unit: "seconds"
+  validation.enabled: "true"

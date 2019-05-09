@@ -1,4 +1,4 @@
-package com.breuninger.boot.example.app.job
+package com.breuninger.boot.jobs.job
 
 import com.breuninger.boot.jobs.JobRunnable
 import com.breuninger.boot.jobs.domain.JobDefinition.Companion.timedFixedDelayJobDefinition
@@ -7,25 +7,23 @@ import com.breuninger.boot.jobs.domain.JobMarker.JOB_MARKER
 import com.breuninger.boot.jobs.domain.Timer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.stereotype.Component
 import java.time.Duration.ofMillis
 import kotlin.random.Random
 
-@Component
-class TimedShortJob : JobRunnable {
+class FixedDelayJob : JobRunnable {
 
   companion object {
 
-    val LOG: Logger = LoggerFactory.getLogger(TimedShortJob::class.java)
+    val LOG: Logger = LoggerFactory.getLogger(FixedDelayJob::class.java)
   }
 
   override fun definition() =
     timedFixedDelayJobDefinition(
-      JobId(TimedShortJob::class.java.simpleName),
-      TimedShortJob::class.java.simpleName,
+      JobId(FixedDelayJob::class.java.simpleName),
+      FixedDelayJob::class.java.simpleName,
       "",
       ofMillis(2000),
-      Timer(name = "${TimedShortJob::class.java.name}.${actuatorEndpointPublicMethodName()}"))
+      Timer(name = "${FixedDelayJob::class.java.name}.${actuatorEndpointPublicMethodName()}"))
 
   override fun execute() = logShitToConsole()
 
