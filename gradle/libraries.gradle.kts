@@ -18,7 +18,8 @@ val libraryVersions = mapOf(
 
   "junit" to "5.4.2",
   "mockk" to "1.9.3",
-  "assertk" to "0.14"
+  "assertk" to "0.14",
+  "flapdoodle" to "2.2.0"
 )
 
 val libraries = mapOf(
@@ -32,8 +33,10 @@ val libraries = mapOf(
   "spring-boot-starter-actuator" to "org.springframework.boot:spring-boot-starter-actuator:${coreVersions["spring-boot"]}",
   "spring-boot-starter-webflux" to "org.springframework.boot:spring-boot-starter-webflux:${coreVersions["spring-boot"]}",
   "spring-boot-starter-thymeleaf" to "org.springframework.boot:spring-boot-starter-thymeleaf:${coreVersions["spring-boot"]}",
+  "spring-boot-starter-data-mongodb" to "org.springframework.boot:spring-boot-starter-data-mongodb:${coreVersions["spring-boot"]}",
   "spring-boot-starter-data-mongodb-reactive" to "org.springframework.boot:spring-boot-starter-data-mongodb-reactive:${coreVersions["spring-boot"]}",
   "spring-boot-test" to "org.springframework.boot:spring-boot-test:${coreVersions["spring-boot"]}",
+  "spring-boot-test-autoconfigure" to "org.springframework.boot:spring-boot-test-autoconfigure:${coreVersions["spring-boot"]}",
 
   "spring-boot-admin-starter-server" to "de.codecentric:spring-boot-admin-starter-server:${libraryVersions["spring-boot-admin-starter"]}",
   "spring-boot-admin-starter-client" to "de.codecentric:spring-boot-admin-starter-client:${libraryVersions["spring-boot-admin-starter"]}",
@@ -54,7 +57,8 @@ val libraries = mapOf(
   "junit-jupiter-engine" to "org.junit.jupiter:junit-jupiter-engine:${libraryVersions["junit"]}",
   "junit-jupiter-params" to "org.junit.jupiter:junit-jupiter-params:${libraryVersions["junit"]}",
   "mockk" to "io.mockk:mockk:${libraryVersions["mockk"]}",
-  "assertk" to "com.willowtreeapps.assertk:assertk-jvm:${libraryVersions["assertk"]}"
+  "assertk" to "com.willowtreeapps.assertk:assertk-jvm:${libraryVersions["assertk"]}",
+  "flapdoodle" to "de.flapdoodle.embed:de.flapdoodle.embed.mongo:${libraryVersions["flapdoodle"]}"
 )
 
 extra["libraryVersions"] = libraryVersions
