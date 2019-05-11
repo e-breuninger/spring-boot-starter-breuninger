@@ -15,13 +15,17 @@ class CronJob : JobRunnable {
   }
 
   override fun definition() =
-    cronJobDefinition(JobId(CronJob::class.java.simpleName), CronJob::class.java.simpleName, "cron", "0 0 * * * *")
+    cronJobDefinition(
+      JobId(CronJob::class.java.simpleName),
+      CronJob::class.java.simpleName,
+      "cron",
+      "0 0 * * * *")
 
   override fun execute() = logShitToConsole()
 
   override fun actuatorEndpointPublicMethodName() = this::logShitToConsole.name
 
-  fun logShitToConsole(): Boolean {
+  private fun logShitToConsole(): Boolean {
     LOG.info(JOB_MARKER, "IT WORKS")
     return true
   }

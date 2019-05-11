@@ -14,7 +14,7 @@ import org.togglz.core.Feature
 import org.togglz.core.manager.FeatureManager
 import org.togglz.core.repository.FeatureState
 
-internal class TogglzEndpointTest {
+class TogglzEndpointTest {
 
   private val featureManager = mockk<FeatureManager>()
   private val togglzEndpoint = TogglzEndpoint(featureManager)
@@ -36,23 +36,25 @@ internal class TogglzEndpointTest {
   @Test
   fun `ensure that getAllFeatures returns all features`() {
     val features = togglzEndpoint.getAllFeatures()
+
     assertThat(features.size).isEqualTo(3)
     assertThat(features).containsAll(
       TogglzFeature(featureA, featureStateA), TogglzFeature(featureB, featureStateB), TogglzFeature(featureC, featureStateC))
   }
 
   @Test
-  fun `ensure enabling and disabeling of features works`(){
+  fun `ensure enabling and disabeling of features works`() {
     every { featureManager.setFeatureState(any()) } returns Unit
 
     assertThat(featureStateA.isEnabled).isFalse()
     togglzEndpoint.setFeatureState("a", true)
+
     assertThat(featureStateA.isEnabled).isTrue()
     togglzEndpoint.setFeatureState("a", false)
+
     assertThat(featureStateA.isEnabled).isFalse()
     togglzEndpoint.setFeatureState("a", false)
+
     assertThat(featureStateA.isEnabled).isFalse()
   }
-
 }
-

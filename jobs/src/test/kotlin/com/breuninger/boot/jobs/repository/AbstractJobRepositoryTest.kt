@@ -1,7 +1,14 @@
 package com.breuninger.boot.jobs.repository
 
 import assertk.assertThat
-import assertk.assertions.*
+import assertk.assertions.containsAll
+import assertk.assertions.hasClass
+import assertk.assertions.isEqualTo
+import assertk.assertions.isFalse
+import assertk.assertions.isIn
+import assertk.assertions.isNotEqualTo
+import assertk.assertions.isNull
+import assertk.assertions.isTrue
 import com.breuninger.boot.jobs.domain.Job
 import com.breuninger.boot.jobs.domain.JobBlockedException
 import com.breuninger.boot.jobs.domain.JobExecutionId
@@ -13,7 +20,7 @@ import org.junit.jupiter.api.Test
 abstract class AbstractJobRepositoryTest {
 
   @BeforeEach
-  fun beforeEach() = getRepository().clear()
+  fun beforeEach() = getRepository().drop()
 
   @Test
   fun `ensure that inserting and finding a job works`() {
@@ -47,12 +54,12 @@ abstract class AbstractJobRepositoryTest {
     val jobFoo = createJob()
     val jobBar = createJob(id = JobId("bar"), runningJobExecutionId = null)
     val jobBat = createJob(id = JobId("bat"), runningJobExecutionId = JobExecutionId("bim"))
-
     getRepository().create(jobFoo)
     getRepository().create(jobBar)
     getRepository().create(jobBat)
 
     val runningJob = getRepository().findOneRunning(setOf(JobId("foo"), JobId("bar"), JobId("bat")))
+
     assertThat(runningJob).isIn(jobFoo, jobBat)
   }
 
@@ -136,59 +143,58 @@ abstract class AbstractJobRepositoryTest {
     val jobFoo = createJob()
 
     getRepository().create(jobFoo)
-    assertThat { getRepository().releaseRunLock(JobId("foo"), JobExecutionId("bat")) }.thrownError { hasClass(JobBlockedException::class) }
+    assertThat { getRepository().releaseRunLock(JobId("foo"), JobExecutionId("bat")) }.thrownError {
+      hasClass(JobBlockedException::class)
+    }
   }
 
   @Test
-  fun `ensure the requested state is returned if it is contained when calling findState`(){
+  fun `ensure the requested state is returned if it is contained when calling findState`() {
     val job = createJob()
+
     getRepository().create(job)
+
     assertThat(getRepository().findState(JobId("foo"), "foo")).isEqualTo("bar")
     assertThat(getRepository().findState(JobId("foo"), "bat")).isEqualTo("buzz")
   }
 
   @Test
-  fun `ensure the null is returned if the requested state is not contained when calling findState`(){
+  fun `ensure the null is returned if the requested state is not contained when calling findState`() {
     val job = createJob()
+
     getRepository().create(job)
+
     assertThat(getRepository().findState(JobId("foo"), "bam")).isNull()
   }
 
   @Test
-  fun `ensure that updateState adds a new state to the map if it is called with an none existing key`(){
+  fun `ensure that updateState adds a new state to the map if it is called with an none existing key`() {
     val job = createJob()
     getRepository().create(job)
+
     getRepository().updateState(JobId("foo"), "test-key", "test-value")
+
     assertThat(getRepository().findState(JobId("foo"), "test-key")).isEqualTo("test-value")
   }
 
   @Test
-  fun `ensure that updateState updates an existing key correctly with the new value`(){
+  fun `ensure that updateState updates an existing key correctly with the new value`() {
     val job = createJob()
     getRepository().create(job)
+
     getRepository().updateState(JobId("foo"), "foo", "foo-bar-buzz")
+
     assertThat(getRepository().findState(JobId("foo"), "foo")).isEqualTo("foo-bar-buzz")
   }
 
   @Test
-  fun `ensure that updateState removes an existing key correctly when it is called with a null value`(){
+  fun `ensure that updateState removes an existing key correctly when it is called with a null value`() {
     val job = createJob()
     getRepository().create(job)
+
     getRepository().updateState(JobId("foo"), "foo", null)
+
     assertThat(getRepository().findState(JobId("foo"), "foo")).isNull()
-  }
-
-  @Test
-  fun `ensure clear works`() {
-    getRepository().create(createJob())
-    getRepository().create(createJob(id = JobId("bar")))
-    getRepository().create(createJob(id = JobId("bat")))
-
-    getRepository().clear()
-
-    assertThat(getRepository().findOne(JobId("foo"))).isNull()
-    assertThat(getRepository().findOne(JobId("bar"))).isNull()
-    assertThat(getRepository().findOne(JobId("bat"))).isNull()
   }
 
   @Test
@@ -203,6 +209,19 @@ abstract class AbstractJobRepositoryTest {
     getRepository().remove(jobFoo)
     getRepository().remove(jobBar)
     getRepository().remove(jobBat)
+
+    assertThat(getRepository().findOne(JobId("foo"))).isNull()
+    assertThat(getRepository().findOne(JobId("bar"))).isNull()
+    assertThat(getRepository().findOne(JobId("bat"))).isNull()
+  }
+
+  @Test
+  fun `ensure drop works`() {
+    getRepository().create(createJob())
+    getRepository().create(createJob(id = JobId("bar")))
+    getRepository().create(createJob(id = JobId("bat")))
+
+    getRepository().drop()
 
     assertThat(getRepository().findOne(JobId("foo"))).isNull()
     assertThat(getRepository().findOne(JobId("bar"))).isNull()

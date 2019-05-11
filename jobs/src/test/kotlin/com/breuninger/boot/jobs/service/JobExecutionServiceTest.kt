@@ -4,9 +4,14 @@ import assertk.assertThat
 import assertk.assertions.hasClass
 import assertk.assertions.hasMessage
 import com.breuninger.boot.jobs.actuator.health.JobHealthIndicator
-import com.breuninger.boot.jobs.domain.*
+import com.breuninger.boot.jobs.domain.Job
+import com.breuninger.boot.jobs.domain.JobBlockedException
+import com.breuninger.boot.jobs.domain.JobExecution
 import com.breuninger.boot.jobs.domain.JobExecution.Status
+import com.breuninger.boot.jobs.domain.JobExecutionId
+import com.breuninger.boot.jobs.domain.JobExecutionMessage
 import com.breuninger.boot.jobs.domain.JobExecutionMessage.Level
+import com.breuninger.boot.jobs.domain.JobId
 import com.breuninger.boot.jobs.repository.JobExecutionRepository
 import com.breuninger.boot.jobs.repository.JobExecutorRegistry
 import com.breuninger.boot.jobs.repository.JobRepository
@@ -17,7 +22,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
-internal class JobExecutionServiceTest {
+class JobExecutionServiceTest {
 
   private val jobExecutionRepository = mockk<JobExecutionRepository>()
   private val jobRepository = mockk<JobRepository>()
@@ -127,21 +132,27 @@ internal class JobExecutionServiceTest {
   @Test
   fun `ensure markRestarted appends a message to the correct job`(){
     val jobExecutionId = JobExecutionId("foo")
+
     jobExecutionService.markRestarted(jobExecutionId)
+
     verify { jobExecutionRepository.appendMessage(jobExecutionId, any()) }
   }
 
   @Test
   fun `ensure markSkipped appends a message to the correct job`(){
     val jobExecutionId = JobExecutionId("foo")
+
     jobExecutionService.markSkipped(jobExecutionId)
+
     verify { jobExecutionRepository.appendMessage(jobExecutionId, any()) }
   }
 
   @Test
   fun `ensure markDead appends a message to the correct job`(){
     val jobExecutionId = JobExecutionId("foo")
+
     jobExecutionService.markRestarted(jobExecutionId)
+
     verify { jobExecutionRepository.appendMessage(jobExecutionId, any()) }
   }
 
@@ -149,7 +160,6 @@ internal class JobExecutionServiceTest {
   fun `ensure acquireRunLock calls acquireRunLock of the JobRepository and does not throw an exception if the job is not disabled not already running and not part of a mutexGroup with an already running job`(){
     val jobExecutionId = JobExecutionId("foo")
     val jobId = JobId("bar")
-
     every { jobRepository.acquireRunLock(jobId, jobExecutionId) } returns Job(jobId, null, false, "", emptyMap())
     every { jobRepository.findOneRunning(any()) } returns null
 
@@ -161,7 +171,6 @@ internal class JobExecutionServiceTest {
   fun `ensure acquireRunLock throws an exception and releases the previous acquired run lock if the job is disabled`(){
     val jobExecutionId = JobExecutionId("foo")
     val jobId = JobId("bar")
-
     every { jobRepository.acquireRunLock(jobId, jobExecutionId) } returns Job(jobId, null, true, "", emptyMap())
     every { jobRepository.findOneRunning(any()) } returns null
     every { jobRepository.releaseRunLock(jobId, jobExecutionId) } returns Unit
@@ -171,11 +180,10 @@ internal class JobExecutionServiceTest {
     verify { jobRepository.releaseRunLock(jobId,jobExecutionId) }
   }
 
-  // TODO define mutexgroup
+  // TODO(BS): define mutexgroup
   fun `ensure acquireRunLock throws an exception and releases the previous acquired run lock if the job is part of a mutex group with an already running job`(){
     val jobExecutionId = JobExecutionId("foo")
     val jobId = JobId("bar")
-
     every { jobRepository.acquireRunLock(jobId, jobExecutionId) } returns Job(jobId, null, false, "", emptyMap())
     every { jobRepository.releaseRunLock(jobId, jobExecutionId) } returns Unit
 
@@ -188,7 +196,6 @@ internal class JobExecutionServiceTest {
   fun `ensure acquireRunLock throws an exception if the job is already running`(){
     val jobExecutionId = JobExecutionId("foo")
     val jobId = JobId("bar")
-
     every { jobRepository.acquireRunLock(jobId, jobExecutionId) } returns null
 
     assertThat { jobExecutionService.acquireRunLock(jobId,jobExecutionId) }.thrownError { hasClass(JobBlockedException::class).also { hasMessage("JobRunnable '$jobId' is already running") } }

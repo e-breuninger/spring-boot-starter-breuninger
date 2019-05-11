@@ -12,7 +12,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 
-internal class MeterJobExecutionStateChangedEventListenerTest {
+class MeterJobExecutionStateChangedEventListenerTest {
 
   private val jobRunnable = mockk<JobRunnable>()
   private val jobDefinition = mockk<JobDefinition>()

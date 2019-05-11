@@ -48,6 +48,7 @@ subprojects {
   }
 }
 
+// TODO(BS): fix compileTime, compileOnly, ... dependencies
 // TODO(BS): add coverage kotlin jacoco
 // TODO(BS): add https://github.com/arturbosch/detekt
 

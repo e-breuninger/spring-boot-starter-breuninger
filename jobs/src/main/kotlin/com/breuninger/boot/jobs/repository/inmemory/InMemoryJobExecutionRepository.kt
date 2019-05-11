@@ -54,5 +54,5 @@ class InMemoryJobExecutionRepository : JobExecutionRepository {
     jobExecutions.remove(jobExecution.id)
   }
 
-  override fun clear() = jobExecutions.clear()
+  override fun drop() = jobExecutions.clear()
 }

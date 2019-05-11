@@ -4,9 +4,9 @@ import com.breuninger.boot.jobs.JobRunnable
 import com.breuninger.boot.jobs.service.JobExecutionService
 import org.springframework.stereotype.Component
 
-//TODO(BS): check and ensure it is called probably once on startup
+// TODO(BS): check and ensure it is called probably once on startup
 @Component
-class DeleteJobExecutionsWithotDefinitions(
+class DeleteJobExecutionsWithoutDefinitions(
   private val jobExecutionService: JobExecutionService,
   private val jobRunnables: List<JobRunnable>
 ) : JobExecutionCleanupStrategy {
@@ -18,5 +18,4 @@ class DeleteJobExecutionsWithotDefinitions(
         jobExecutionService.remove(it)
     }
   }
-
 }

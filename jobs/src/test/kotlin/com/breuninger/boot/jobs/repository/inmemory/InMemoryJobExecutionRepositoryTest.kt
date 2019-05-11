@@ -2,7 +2,7 @@ package com.breuninger.boot.jobs.repository.inmemory
 
 import com.breuninger.boot.jobs.repository.AbstractJobExecutionRepositoryTest
 
-internal class InMemoryJobExecutionRepositoryTest : AbstractJobExecutionRepositoryTest() {
+class InMemoryJobExecutionRepositoryTest : AbstractJobExecutionRepositoryTest() {
 
   private val inMemoryJobExecutionRepository = InMemoryJobExecutionRepository()
 
