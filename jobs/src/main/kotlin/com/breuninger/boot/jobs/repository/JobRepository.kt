@@ -26,7 +26,7 @@ interface JobRepository {
 
   fun updateState(jobId: JobId, key: String, value: String?): Unit?
 
-  fun clear()
-
   fun remove(job: Job)
+
+  fun drop()
 }

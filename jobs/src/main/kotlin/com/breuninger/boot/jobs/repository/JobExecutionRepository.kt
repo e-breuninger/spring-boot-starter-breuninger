@@ -27,5 +27,5 @@ interface JobExecutionRepository {
 
   fun remove(jobExecution: JobExecution)
 
-  fun clear()
+  fun drop()
 }

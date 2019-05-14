@@ -18,17 +18,18 @@ import org.springframework.context.ApplicationEventPublisher
 import org.springframework.scheduling.config.ScheduledTaskRegistrar
 import java.util.concurrent.ScheduledExecutorService
 
-internal class JobRegistrarTest {
+class JobRegistrarTest {
 
-  val jobRunnables = listOf(CronJob(), ManualTriggeredJob(), FixedRateJob(), FixedDelayJob())
-  val jobService = mockk<JobService>()
-  val jobExecutionService = mockk<JobExecutionService>()
-  val applicationEventPublisher = mockk<ApplicationEventPublisher>()
-  val scheduledExecutorService = mockk<ScheduledExecutorService>()
-  val meterRegistry = mockk<MeterRegistry>()
-  val jobExecutorRegistry = mockk<JobExecutorRegistry>()
-  val taskRegistrar = mockk<ScheduledTaskRegistrar>()
-  val jobRegistrar = JobRegistrar(jobRunnables, jobService, jobExecutionService, applicationEventPublisher, scheduledExecutorService, meterRegistry, jobExecutorRegistry)
+  private val jobRunnables = listOf(CronJob(), ManualTriggeredJob(), FixedRateJob(), FixedDelayJob())
+  private val jobService = mockk<JobService>()
+  private val jobExecutionService = mockk<JobExecutionService>()
+  private val applicationEventPublisher = mockk<ApplicationEventPublisher>()
+  private val scheduledExecutorService = mockk<ScheduledExecutorService>()
+  private val meterRegistry = mockk<MeterRegistry>()
+  private val jobExecutorRegistry = mockk<JobExecutorRegistry>()
+  private val taskRegistrar = mockk<ScheduledTaskRegistrar>()
+  private val jobRegistrar = JobRegistrar(jobRunnables, jobService, jobExecutionService, applicationEventPublisher,
+    scheduledExecutorService, meterRegistry, jobExecutorRegistry)
 
   @BeforeEach
   fun beforeEach() {
@@ -53,6 +54,7 @@ internal class JobRegistrarTest {
   @Test
   fun `ensure that JobService create is called for al four jobs`() {
     jobRegistrar.configureTasks(taskRegistrar)
+
     verifyAll {
       jobService.create(Job(CronJob().definition().jobId))
       jobService.create(Job(ManualTriggeredJob().definition().jobId))
@@ -64,6 +66,7 @@ internal class JobRegistrarTest {
   @Test
   fun `ensure that JobExecutorRegistry register is called for all four jobs`() {
     jobRegistrar.configureTasks(taskRegistrar)
+
     verifyAll {
       jobExecutorRegistry.register(CronJob().definition().jobId, any())
       jobExecutorRegistry.register(ManualTriggeredJob().definition().jobId, any())

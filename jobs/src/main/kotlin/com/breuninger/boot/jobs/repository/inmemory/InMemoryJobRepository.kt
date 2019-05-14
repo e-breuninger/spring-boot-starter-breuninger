@@ -49,6 +49,7 @@ class InMemoryJobRepository : JobRepository {
     it.state?.get(key)
   }
 
+  // TODO(BS): directly updateDisableState keys in map
   override fun updateState(jobId: JobId, key: String, value: String?) = findOne(jobId)?.let {
     val state = HashMap(it.state)
     value?.run { state[key] = value } ?: state.remove(key)
@@ -56,9 +57,9 @@ class InMemoryJobRepository : JobRepository {
     Unit
   }
 
-  override fun clear() = jobs.clear()
-
   override fun remove(job: Job) {
     jobs.remove(job.id)
   }
+
+  override fun drop() = jobs.clear()
 }

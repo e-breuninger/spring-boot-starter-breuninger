@@ -31,7 +31,7 @@ class TimedShortJob : JobRunnable {
 
   override fun actuatorEndpointPublicMethodName() = this::logShitToConsole.name
 
-  fun logShitToConsole(): Boolean {
+  private fun logShitToConsole(): Boolean {
     repeat(Random.nextInt(10, 60)) {
       LOG.info(JOB_MARKER, "SHORT IT WORKS")
       Thread.sleep(1000)

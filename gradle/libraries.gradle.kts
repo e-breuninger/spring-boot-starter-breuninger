@@ -28,19 +28,12 @@ val libraries = mapOf(
   "jackson-module-kotlin" to "com.fasterxml.jackson.module:jackson-module-kotlin:${libraryVersions["jackson-module-kotlin"]}",
 
   "spring-core" to "org.springframework:spring-core:${coreVersions["spring"]}",
-  "spring-test" to "org.springframework:spring-test:${coreVersions["spring"]}",
-  "spring-boot-starter-aop" to "org.springframework.boot:spring-boot-starter-aop:${coreVersions["spring-boot"]}",
   "spring-boot-starter-actuator" to "org.springframework.boot:spring-boot-starter-actuator:${coreVersions["spring-boot"]}",
   "spring-boot-starter-webflux" to "org.springframework.boot:spring-boot-starter-webflux:${coreVersions["spring-boot"]}",
   "spring-boot-starter-thymeleaf" to "org.springframework.boot:spring-boot-starter-thymeleaf:${coreVersions["spring-boot"]}",
-  "spring-boot-starter-data-mongodb" to "org.springframework.boot:spring-boot-starter-data-mongodb:${coreVersions["spring-boot"]}",
   "spring-boot-starter-data-mongodb-reactive" to "org.springframework.boot:spring-boot-starter-data-mongodb-reactive:${coreVersions["spring-boot"]}",
-  "spring-boot-test" to "org.springframework.boot:spring-boot-test:${coreVersions["spring-boot"]}",
-  "spring-boot-test-autoconfigure" to "org.springframework.boot:spring-boot-test-autoconfigure:${coreVersions["spring-boot"]}",
-
   "spring-boot-admin-starter-server" to "de.codecentric:spring-boot-admin-starter-server:${libraryVersions["spring-boot-admin-starter"]}",
   "spring-boot-admin-starter-client" to "de.codecentric:spring-boot-admin-starter-client:${libraryVersions["spring-boot-admin-starter"]}",
-
   "togglz-spring-core" to "org.togglz:togglz-spring-core:${libraryVersions["togglz"]}",
 
   "reactor-kafka" to "io.projectreactor.kafka:reactor-kafka:${libraryVersions["reactor-kafka"]}",
@@ -58,6 +51,7 @@ val libraries = mapOf(
   "junit-jupiter-params" to "org.junit.jupiter:junit-jupiter-params:${libraryVersions["junit"]}",
   "mockk" to "io.mockk:mockk:${libraryVersions["mockk"]}",
   "assertk" to "com.willowtreeapps.assertk:assertk-jvm:${libraryVersions["assertk"]}",
+  "spring-boot-test" to "org.springframework.boot:spring-boot-test:${coreVersions["spring-boot"]}",
   "flapdoodle" to "de.flapdoodle.embed:de.flapdoodle.embed.mongo:${libraryVersions["flapdoodle"]}"
 )
 

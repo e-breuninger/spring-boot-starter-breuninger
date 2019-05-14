@@ -7,7 +7,7 @@ import com.breuninger.boot.jobs.domain.JobExecution.Status.OK
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
-internal class JobExecutionTest {
+class JobExecutionTest {
 
   @Test
   fun `ensure hasStopped returns true correctly`() {

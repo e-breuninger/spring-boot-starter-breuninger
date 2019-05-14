@@ -8,11 +8,15 @@ import com.breuninger.boot.jobs.repository.JobRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
-import org.springframework.data.mongodb.core.*
+import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core.dropCollection
+import org.springframework.data.mongodb.core.findById
+import org.springframework.data.mongodb.core.findOne
 import org.springframework.data.mongodb.core.query.Criteria.where
 import org.springframework.data.mongodb.core.query.Query.query
 import org.springframework.data.mongodb.core.query.Update
 import org.springframework.data.mongodb.core.query.Update.update
+import org.springframework.data.mongodb.core.updateFirst
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -73,9 +77,9 @@ class MongoJobRepository(private val mongoTemplate: MongoTemplate) : JobReposito
     Unit
   }
 
-  override fun clear() = mongoTemplate.dropCollection<Job>()
-
   override fun remove(job: Job) {
     mongoTemplate.remove(job)
   }
+
+  override fun drop() = mongoTemplate.dropCollection<Job>()
 }

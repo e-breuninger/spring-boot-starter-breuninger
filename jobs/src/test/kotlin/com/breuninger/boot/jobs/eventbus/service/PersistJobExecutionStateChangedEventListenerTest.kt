@@ -19,7 +19,7 @@ import io.mockk.verifySequence
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-internal class PersistJobExecutionStateChangedEventListenerTest {
+class PersistJobExecutionStateChangedEventListenerTest {
 
   private val jobRunnable = mockk<JobRunnable>()
   private val jobDefinition = mockk<JobDefinition>()

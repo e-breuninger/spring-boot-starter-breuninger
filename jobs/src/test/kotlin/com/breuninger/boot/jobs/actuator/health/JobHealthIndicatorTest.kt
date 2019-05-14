@@ -9,7 +9,7 @@ import org.springframework.boot.actuate.health.Health
 import org.springframework.boot.actuate.health.Status.DOWN
 import org.springframework.boot.actuate.health.Status.UP
 
-internal class JobHealthIndicatorTest {
+class JobHealthIndicatorTest {
 
   private val healthIndicator = JobHealthIndicator()
 

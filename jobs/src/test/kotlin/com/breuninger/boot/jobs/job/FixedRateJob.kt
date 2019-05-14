@@ -18,13 +18,18 @@ class FixedRateJob : JobRunnable {
   }
 
   override fun definition() =
-    timedFixedRateJobDefinition(JobId(FixedRateJob::class.java.simpleName), FixedRateJob::class.java.simpleName, "", Duration.ofMillis(2000), Timer())
+    timedFixedRateJobDefinition(
+      JobId(FixedRateJob::class.java.simpleName),
+      FixedRateJob::class.java.simpleName,
+      "",
+      Duration.ofMillis(2000),
+      Timer())
 
   override fun execute() = logShitToConsole()
 
   override fun actuatorEndpointPublicMethodName() = this::logShitToConsole.name
 
-  fun logShitToConsole(): Boolean {
+  private fun logShitToConsole(): Boolean {
     repeat(Random.nextInt(10, 60)) {
       LOG.info(JOB_MARKER, "LONG IT WORKS")
       Thread.sleep(1000)

@@ -5,7 +5,7 @@ import assertk.assertions.isFalse
 import assertk.assertions.isTrue
 import org.junit.jupiter.api.Test
 
-internal class JobTest {
+class JobTest {
 
   @Test
   fun `ensure isRunning returns true`() {

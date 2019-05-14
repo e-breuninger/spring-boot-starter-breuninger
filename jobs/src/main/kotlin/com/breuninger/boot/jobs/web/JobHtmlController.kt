@@ -17,14 +17,16 @@ class JobHtmlController(private val jobService: JobService, private val jobRunna
   @GetMapping("/{jobId}")
   fun find(@PathVariable jobId: String, model: Model): String {
     model.addAttribute("jobs", listOfNotNull(jobService.findOne(JobId(jobId))))
-    model.addAttribute("jobDefinitions", jobRunnables?.map { it.definition().jobId to it.definition() }?.toMap())
+    model.addAttribute("jobDefinitions",
+      jobRunnables?.map { it.definition().jobId to it.definition() }?.toMap() ?: emptyMap<JobId, JobDefinition>())
     return "jobs"
   }
 
   @GetMapping
   fun findAll(model: Model): String {
     model.addAttribute("jobs", jobService.findAll())
-    model.addAttribute("jobDefinitions", jobRunnables?.map { it.definition().jobId to it.definition() }?.toMap() ?: emptyMap<JobId, JobDefinition>())
+    model.addAttribute("jobDefinitions",
+      jobRunnables?.map { it.definition().jobId to it.definition() }?.toMap() ?: emptyMap<JobId, JobDefinition>())
     return "jobs"
   }
 }

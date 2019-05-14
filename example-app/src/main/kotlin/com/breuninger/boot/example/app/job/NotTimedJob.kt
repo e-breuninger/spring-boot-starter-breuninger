@@ -28,7 +28,7 @@ class NotTimedJob : JobRunnable {
 
   override fun actuatorEndpointPublicMethodName() = this::logShitToConsole.name
 
-  fun logShitToConsole(): Boolean {
+  private fun logShitToConsole(): Boolean {
     LOG.info(JOB_MARKER, "IT WORKS")
     return true
   }

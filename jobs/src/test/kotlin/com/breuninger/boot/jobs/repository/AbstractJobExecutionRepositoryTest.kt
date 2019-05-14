@@ -1,9 +1,16 @@
 package com.breuninger.boot.jobs.repository
 
 import assertk.assertThat
-import assertk.assertions.*
+import assertk.assertions.isEmpty
+import assertk.assertions.isEqualTo
+import assertk.assertions.isLessThanOrEqualTo
+import assertk.assertions.isNotNull
+import assertk.assertions.isNull
 import com.breuninger.boot.jobs.domain.JobExecution
-import com.breuninger.boot.jobs.domain.JobExecution.Status.*
+import com.breuninger.boot.jobs.domain.JobExecution.Status.DEAD
+import com.breuninger.boot.jobs.domain.JobExecution.Status.ERROR
+import com.breuninger.boot.jobs.domain.JobExecution.Status.OK
+import com.breuninger.boot.jobs.domain.JobExecution.Status.SKIPPED
 import com.breuninger.boot.jobs.domain.JobExecutionId
 import com.breuninger.boot.jobs.domain.JobExecutionMessage
 import com.breuninger.boot.jobs.domain.JobExecutionMessage.Level
@@ -16,7 +23,7 @@ import kotlin.random.Random
 abstract class AbstractJobExecutionRepositoryTest {
 
   @BeforeEach
-  fun beforeEach() = getRepository().clear()
+  fun beforeEach() = getRepository().drop()
 
   @Test
   fun `ensure saving and finding the saved item works`() {
@@ -175,12 +182,12 @@ abstract class AbstractJobExecutionRepositoryTest {
   }
 
   @Test
-  fun `ensure clear works`(){
+  fun `ensure drop works`(){
     getRepository().save(createJobExecution())
     getRepository().save(createJobExecution(id = JobExecutionId("bar")))
     getRepository().save(createJobExecution(id = JobExecutionId("bat")))
 
-    getRepository().clear()
+    getRepository().drop()
 
     assertThat(getRepository().findOne(JobExecutionId("foo"))).isNull()
     assertThat(getRepository().findOne(JobExecutionId("bar"))).isNull()

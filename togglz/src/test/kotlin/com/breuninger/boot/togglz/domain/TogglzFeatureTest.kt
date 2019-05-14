@@ -8,14 +8,15 @@ import org.junit.jupiter.api.Test
 import org.togglz.core.Feature
 import org.togglz.core.repository.FeatureState
 
-
-internal class TogglzFeatureTest {
+class TogglzFeatureTest {
 
   @Test
   fun `ensure toFeatureState copies the current FeatureState correctly`() {
     val featureState = createFeatureState(Feature { "a" })
     val togglzFeature = TogglzFeature(Feature { "a" }, featureState)
+
     val newFeatureState = togglzFeature.toFeatureState(Feature { "b" })
+
     assertThat(newFeatureState.isEnabled).isTrue()
     assertThat(newFeatureState.strategyId).isEqualTo("foo bar bazz")
     assertThat(newFeatureState.getParameter("a")).isEqualTo("b")
