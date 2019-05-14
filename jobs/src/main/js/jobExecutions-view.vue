@@ -10,13 +10,13 @@
             <tbody>
             <tr v-for="instance in app.instances" :key="instance.registration.serviceUrl">
               <td>
-                <i :class="instance.statusInfo.status === 'UP' ? faCheckClass: faMinusCircle" />
+                <i :class="instance.statusInfo.status === 'UP' ? faCheckClass : instance.statusInfo.status === 'OFFLINE' ? faMinusCircle : faTimesCircle" />
               </td>
               <td>
                 <div class="link" @click.stop="showDetails(instance)">{{ instance.registration.serviceUrl }}</div>
               </td>
               <td>
-                <iframe v-if="instance.statusInfo.status === 'UP'" :src="instance.registration.serviceUrl + 'jobExecutions'" />
+                <iframe v-if="instance.statusInfo.status !== 'OFFLINE'" :src="instance.registration.serviceUrl + 'jobExecutions'" />
               </td>
             </tr>
             </tbody>
@@ -38,7 +38,8 @@
     data: () => ({
       apps: '',
       faCheckClass: 'fas fa-check',
-      faMinusCircle: 'fas fa-minus-circle'
+      faMinusCircle: 'fas fa-minus-circle',
+      faTimesCircle: 'fas fa-times-circle'
     }),
     async created() {
       this.apps = await this.applications;
@@ -55,12 +56,12 @@
   };
 </script>
 
-<style>
+<style scoped>
   @import "https://use.fontawesome.com/releases/v5.8.1/css/all.css";
 
   iframe {
     width: 800px;
-    height: 350px !important;
+    height: 350px;
   }
 
   .title {
@@ -68,7 +69,7 @@
   }
 
   td {
-    padding: 0 10px !important;
+    padding: 0 10px;
   }
 
   .fa-check {
@@ -77,6 +78,10 @@
 
   .fa-minus-circle {
     color: #7a7a7a;
+  }
+
+  .fa-times-circle {
+    color: #ff3860;
   }
 
   .link {

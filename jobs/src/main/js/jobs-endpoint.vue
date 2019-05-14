@@ -21,7 +21,7 @@
   };
 </script>
 
-<style>
+<style scoped>
   .jobs {
     width: 100%;
     height: 100%;
