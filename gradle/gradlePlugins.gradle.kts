@@ -8,6 +8,8 @@ val gradlePluginVersions = mapOf(
 
   "ktlint-gradle" to "8.0.0",
 
+  "nexus-staging-plugin" to "0.21.0",
+
   "versions" to "0.21.0",
 
   "node" to "1.3.1"
@@ -21,6 +23,8 @@ val gradlePlugins = mapOf(
   "git-properties" to "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:${gradlePluginVersions["git-properties"]}",
 
   "ktlint-gradle" to "org.jlleitschuh.gradle:ktlint-gradle:${gradlePluginVersions["ktlint-gradle"]}",
+
+  "nexus-staging-plugin" to "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:${gradlePluginVersions["nexus-staging-plugin"]}",
 
   "versions" to "com.github.ben-manes:gradle-versions-plugin:${gradlePluginVersions["versions"]}",
 

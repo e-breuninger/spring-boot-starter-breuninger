@@ -4,6 +4,7 @@ apply {
   plugin("idea")
   plugin("org.jlleitschuh.gradle.ktlint")
   plugin("com.github.ben-manes.versions")
+  plugin("io.codearte.nexus-staging")
 }
 
 buildscript {
@@ -19,6 +20,20 @@ buildscript {
   }
 }
 
+configure<io.codearte.gradle.nexus.NexusStagingExtension> {
+  val sonatypeUsername: String by project
+  val sonatypePassword: String by project
+  username = sonatypeUsername
+  password = sonatypePassword
+  packageGroup = "com.breuninger"
+}
+
+tasks.register("publish") {
+  subprojects.filter { it.tasks.any { task -> task.name == "publish" } }
+    .forEach { dependsOn("${it.name}:publish") }
+  finalizedBy("closeAndReleaseRepository")
+}
+
 subprojects {
   apply {
     plugin("kotlin")
@@ -27,7 +42,7 @@ subprojects {
   }
 
   group = "com.breuninger.boot"
-  version = "3.0.0.RELEASE"
+  version = "3.0.2.RELEASE"
 
   configure<JavaPluginConvention> {
     sourceCompatibility = JavaVersion.VERSION_12
