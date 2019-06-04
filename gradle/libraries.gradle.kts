@@ -4,21 +4,21 @@ project.apply {
 val coreVersions = extra["coreVersions"] as Map<*, *>
 
 val libraryVersions = mapOf(
-  "jackson-module-kotlin" to "2.9.8",
+  "jackson-module-kotlin" to "2.9.9",
 
-  "spring-boot-admin-starter" to "2.1.4",
+  "spring-boot-admin-starter" to "2.1.5",
 
   "togglz" to "2.6.1.Final",
 
   "reactor-kafka" to "1.1.1.RELEASE",
 
   "unbescape" to "1.1.6.RELEASE",
-  "owasp-java-html-sanitizer" to "20190325.1",
+  "owasp-java-html-sanitizer" to "20190503.1",
   "slugify" to "2.3",
 
-  "junit" to "5.4.2",
+  "junit" to "5.5.0-M1",
   "mockk" to "1.9.3",
-  "assertk" to "0.14",
+  "assertk" to "0.17",
   "flapdoodle" to "2.2.0"
 )
 

@@ -47,12 +47,20 @@ task<YarnTask>("buildJs") {
 tasks.getByName("build")
   .dependsOn("buildJs")
 
-tasks {
-  jar {
-    from("src/main/resources/META-INF") {
-      into("META-INF")
-    }
+tasks.jar {
+  from("src/main/resources/META-INF") {
+    into("META-INF")
   }
+}
+
+tasks.register<Jar>("sourcesJar") {
+  from(sourceSets.main.get().allSource)
+  archiveClassifier.set("sources")
+}
+
+tasks.register<Jar>("javadocJar") {
+  from(tasks.javadoc)
+  archiveClassifier.set("javadoc")
 }
 
 publishing {
@@ -60,14 +68,41 @@ publishing {
     maven {
       setUrl("https://oss.sonatype.org/service/local/staging/deploy/maven2")
       credentials {
-        username = System.getenv("sonatypeUsername")
-        password = System.getenv("sonatypePassword")
+        val sonatypeUsername: String by project
+        val sonatypePassword: String by project
+        username = sonatypeUsername
+        password = sonatypePassword
       }
     }
   }
   publications {
     create<MavenPublication>("mavenJava") {
       from(components["java"])
+      artifact(tasks["sourcesJar"])
+      artifact(tasks["javadocJar"])
+      pom {
+        name.set("spring-boot-starter-breuninger-jobs")
+        description.set("spring-boot-starter-breuninger")
+        url.set("https://gitlab.breuni.de:bewerten/vertreiben/kotlin-spring-poc")
+        licenses {
+          license {
+            name.set("The Apache License, Version 2.0")
+            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+          }
+        }
+        developers {
+          developer {
+            id.set("bstemmildt")
+            name.set("Benedikt Stemmildt")
+            email.set("bene@breuninger.de")
+          }
+        }
+        scm {
+          connection.set("scm:git@gitlab.breuni.de:bewerten/vertreiben/kotlin-spring-poc.git")
+          developerConnection.set("scm:git@gitlab.breuni.de:bewerten/vertreiben/kotlin-spring-poc.git")
+          url.set("scm:git@gitlab.breuni.de:bewerten/vertreiben/kotlin-spring-poc.git")
+        }
+      }
     }
   }
 }

@@ -27,7 +27,7 @@ subprojects {
   }
 
   group = "com.breuninger.boot"
-  version = "3.0.0.SNAPSHOT"
+  version = "3.0.0.RELEASE"
 
   configure<JavaPluginConvention> {
     sourceCompatibility = JavaVersion.VERSION_12
@@ -38,12 +38,10 @@ subprojects {
     jcenter()
   }
 
-  tasks {
-    withType<KotlinCompile> {
-      kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = org.gradle.api.JavaVersion.VERSION_1_8.toString()
-      }
+  tasks.withType<KotlinCompile> {
+    kotlinOptions {
+      freeCompilerArgs = listOf("-Xjsr305=strict")
+      jvmTarget = org.gradle.api.JavaVersion.VERSION_1_8.toString()
     }
   }
 }
