@@ -21,8 +21,6 @@ dependencies {
   compileOnly(libraries["spring-context-indexer"] as String)
 }
 
-tasks {
-  withType<BootRun> {
-    systemProperties = System.getProperties().mapKeys { it.key.toString() }.toMap()
-  }
+tasks.withType<BootRun> {
+  systemProperties = System.getProperties().mapKeys { it.key.toString() }.toMap()
 }
