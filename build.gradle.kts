@@ -131,3 +131,12 @@ subprojects {
 // TODO(BS): add linting css
 // TODO(BS): add testing js
 // TODO(BS): add coverage js
+
+// commitizen			3.0.7	❯	3.1.1
+// tslint      			5.14.0	❯	5.17.0
+// @commitlint/cli    		7.5.2	❯	8.0.0
+// @commitlint/prompt		7.5.0	❯	8.0.0
+// husky         		1.3.1	❯	2.3.0
+// stylelint           		9.10.1	❯	10.0.1
+// typescript-tslint-plugin  	0.3.1	❯	0.4.0
+
