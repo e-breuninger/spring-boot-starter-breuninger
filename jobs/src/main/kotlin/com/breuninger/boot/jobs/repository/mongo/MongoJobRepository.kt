@@ -8,6 +8,7 @@ import com.breuninger.boot.jobs.repository.JobRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.data.mongodb.core.FindAndModifyOptions
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.dropCollection
 import org.springframework.data.mongodb.core.findById
@@ -42,13 +43,12 @@ class MongoJobRepository(private val mongoTemplate: MongoTemplate) : JobReposito
     LOG.info("Job already created")
   }
 
-  // TODO(BS): only one mongo call
-  override fun updateDisableState(jobId: JobId, job: Job): Job? {
-    mongoTemplate.updateFirst<Job>(query(where("_id").`is`(jobId)),
+  override fun updateDisableState(jobId: JobId, job: Job) =
+    mongoTemplate.findAndModify(query(where("_id").`is`(jobId)).limit(1),
       update(Job::disabled.name, job.disabled)
-        .set(Job::disableComment.name, job.disableComment))
-    return findOne(jobId)
-  }
+        .set(Job::disableComment.name, job.disableComment),
+      FindAndModifyOptions().returnNew(true),
+      Job::class.java)
 
   override fun acquireRunLock(jobId: JobId, jobExecutionId: JobExecutionId) =
     mongoTemplate.findAndModify(query(where("_id").`is`(jobId).and(Job::runningJobExecutionId.name).exists(false)),
@@ -56,25 +56,24 @@ class MongoJobRepository(private val mongoTemplate: MongoTemplate) : JobReposito
 
   @Throws(JobBlockedException::class)
   override fun releaseRunLock(jobId: JobId, jobExecutionId: JobExecutionId) {
-    val update = Update()
-    update.unset(Job::runningJobExecutionId.name)
     if (mongoTemplate.updateFirst<Job>(
-        query(where("_id").`is`(jobId).and(Job::runningJobExecutionId.name).`is`(jobExecutionId)), update)
+        query(where("_id").`is`(jobId).and(Job::runningJobExecutionId.name).`is`(jobExecutionId)),
+        Update().unset(Job::runningJobExecutionId.name))
         .modifiedCount != 1L)
       throw JobBlockedException("Tried to release runLock of $jobId but different execution was running")
   }
 
-  // TODO(BS): ein datenbankaufruf um den state direkt zu holen (projection)
-  override fun findState(jobId: JobId, key: String) = findOne(jobId)?.let {
-    it.state?.get(key)
+  override fun findState(jobId: JobId, key: String): String? {
+    val query = query(where("_id").`is`(jobId))
+    query.fields().include("${Job::state.name}.$key")
+    return mongoTemplate.findOne<Job>(query)?.let { it.state?.get(key) }
   }
 
-  // TODO(BS): directly updateDisableState keys in map (use set and unset)
-  override fun updateState(jobId: JobId, key: String, value: String?) = findOne(jobId)?.let {
-    val state = HashMap(it.state)
-    value?.run { state[key] = value } ?: state.remove(key)
-    mongoTemplate.updateFirst<Job>(query(where("_id").`is`(jobId)), update(Job::state.name, state))
-    Unit
+  override fun updateState(jobId: JobId, key: String, value: String?) {
+    val stateKey = "${Job::state.name}.$key"
+    mongoTemplate.updateFirst<Job>(query(where("_id").`is`(jobId)), value?.let { update(stateKey, it) } ?: let {
+      Update().unset(stateKey)
+    })
   }
 
   override fun remove(job: Job) {

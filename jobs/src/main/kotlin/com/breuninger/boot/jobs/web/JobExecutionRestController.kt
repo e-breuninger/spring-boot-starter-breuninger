@@ -18,7 +18,6 @@ class JobExecutionRestController(private val jobExecutionService: JobExecutionSe
   @GetMapping("/{jobExecutionId}", produces = [APPLICATION_JSON_VALUE])
   fun find(@PathVariable jobExecutionId: String) = jobExecutionService.findOne(JobExecutionId(jobExecutionId))
 
-  // TODO(BS): der client erwartet hier einen job zurück zu bekommen. nach dem umbau ist dies nicht mehr der fall
   @PostMapping
   fun create(@RequestParam(value = "jobId") jobIdValue: String) = jobExecutionService.create(JobId(jobIdValue))
 }

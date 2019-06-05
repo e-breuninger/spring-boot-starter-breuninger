@@ -45,7 +45,12 @@ class JobExecutionService(
 
   fun findAllIgnoreMessages() = jobExecutionRepository.findAllIgnoreMessages()
 
-  fun create(jobId: JobId) = jobExecutorRegistry.findOne(jobId)?.let { Thread(it).start() }
+  fun create(jobId: JobId): JobExecution? {
+    jobExecutorRegistry.findOne(jobId)?.let {
+      Thread(it).start()
+    }
+    return jobRepository.findOne(jobId)?.let { job -> job.runningJobExecutionId?.let { jobExecutionRepository.findOne(it) } }
+  }
 
   fun save(jobExecution: JobExecution) = jobExecutionRepository.save(jobExecution)
 
