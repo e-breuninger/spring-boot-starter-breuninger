@@ -44,7 +44,7 @@ subprojects {
   }
 
   group = "com.breuninger.boot"
-  version = "3.0.3.RELEASE"
+  version = "3.0.4.RELEASE"
 
   configure<JavaPluginConvention> {
     sourceCompatibility = JavaVersion.VERSION_12
@@ -92,7 +92,7 @@ subprojects {
         pom {
           name.set("spring-boot-starter-breuninger-${project.name}")
           description.set("spring-boot-starter-breuninger")
-          url.set("https://gitlab.breuni.de:bewerten/vertreiben/kotlin-spring-poc")
+          url.set("https://github.com/e-breuninger/spring-boot-starter-breuninger")
           licenses {
             license {
               name.set("The Apache License, Version 2.0")
@@ -107,9 +107,9 @@ subprojects {
             }
           }
           scm {
-            connection.set("scm:git@gitlab.breuni.de:bewerten/vertreiben/kotlin-spring-poc.git")
-            developerConnection.set("scm:git@gitlab.breuni.de:bewerten/vertreiben/kotlin-spring-poc.git")
-            url.set("scm:git@gitlab.breuni.de:bewerten/vertreiben/kotlin-spring-poc.git")
+            connection.set("scm:git@github.com:e-breuninger/spring-boot-starter-breuninger.git")
+            developerConnection.set("scm:git@github.com:e-breuninger/spring-boot-starter-breuninger.git")
+            url.set("scm:git@github.com:e-breuninger/spring-boot-starter-breuninger.git")
           }
         }
       }
