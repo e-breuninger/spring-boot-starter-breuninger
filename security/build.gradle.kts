@@ -4,6 +4,4 @@ apply {
 val libraries = extra["libraries"] as Map<*, *>
 
 dependencies {
-  compile(libraries["kotlin-stdlib-jre8"] as String)
-  compile(libraries["kotlin-reflect"] as String)
 }

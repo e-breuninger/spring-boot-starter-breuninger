@@ -6,9 +6,9 @@ val coreVersions = extra["coreVersions"] as Map<*, *>
 val gradlePluginVersions = mapOf(
   "git-properties" to "2.0.0",
 
-  "ktlint-gradle" to "8.0.0",
+  "detekt" to "1.0.0-RC14",
 
-  "nexus-staging-plugin" to "0.21.0",
+  "nexus-staging" to "0.21.0",
 
   "versions" to "0.21.0",
 
@@ -22,9 +22,9 @@ val gradlePlugins = mapOf(
 
   "git-properties" to "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:${gradlePluginVersions["git-properties"]}",
 
-  "ktlint-gradle" to "org.jlleitschuh.gradle:ktlint-gradle:${gradlePluginVersions["ktlint-gradle"]}",
+  "detekt" to "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:${gradlePluginVersions["detekt"]}",
 
-  "nexus-staging-plugin" to "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:${gradlePluginVersions["nexus-staging-plugin"]}",
+  "nexus-staging" to "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:${gradlePluginVersions["nexus-staging"]}",
 
   "versions" to "com.github.ben-manes:gradle-versions-plugin:${gradlePluginVersions["versions"]}",
 

@@ -9,8 +9,6 @@ apply {
 val libraries = extra["libraries"] as Map<*, *>
 
 dependencies {
-  compile(libraries["kotlin-stdlib-jre8"] as String)
-  compile(libraries["kotlin-reflect"] as String)
   compile(libraries["jackson-module-kotlin"] as String)
 
   compile(libraries["spring-boot-admin-starter-server"] as String)

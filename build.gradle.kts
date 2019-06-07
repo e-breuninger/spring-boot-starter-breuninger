@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 apply {
   plugin("idea")
-  plugin("org.jlleitschuh.gradle.ktlint")
+  plugin("io.gitlab.arturbosch.detekt")
   plugin("com.github.ben-manes.versions")
   plugin("io.codearte.nexus-staging")
 }
@@ -18,6 +18,19 @@ buildscript {
   dependencies {
     gradlePlugins.mapValues { classpath(it.value as String) }
   }
+}
+
+repositories {
+  jcenter()
+}
+
+apply {
+  from("$rootDir/gradle/libraries.gradle.kts")
+}
+val libraries = extra["libraries"] as Map<*, *>
+
+dependencies {
+  "detektPlugins"(libraries["detekt-formatting"] as String)
 }
 
 configure<io.codearte.gradle.nexus.NexusStagingExtension> {
@@ -38,6 +51,7 @@ subprojects {
   apply {
     plugin("kotlin")
     plugin("kotlin-spring")
+    plugin("io.gitlab.arturbosch.detekt")
     plugin("io.spring.dependency-management")
     plugin("maven-publish")
     plugin("signing")
@@ -53,6 +67,18 @@ subprojects {
 
   repositories {
     jcenter()
+  }
+
+  apply {
+    from("$rootDir/gradle/libraries.gradle.kts")
+  }
+  val libraries = extra["libraries"] as Map<*, *>
+
+  dependencies {
+    "compile"(libraries["kotlin-stdlib-jre8"] as String)
+    "compile"(libraries["kotlin-reflect"] as String)
+
+    "detektPlugins"(libraries["detekt-formatting"] as String)
   }
 
   tasks.withType<KotlinCompile> {
@@ -123,8 +149,8 @@ subprojects {
 }
 
 // TODO(BS): fix compileTime, compileOnly, ... dependencies
-// TODO(BS): add coverage kotlin jacoco
-// TODO(BS): add https://github.com/arturbosch/detekt
+// TODO(BS): add coverage kotlin jacoco (https://github.com/arturbosch/detekt/blob/master/build.gradle.kts)
+// TODO(BS): add com.gradle.build-scan (https://github.com/arturbosch/detekt/blob/master/build.gradle.kts)
 
 // package.json
 // TODO(BS): add linting js
@@ -139,4 +165,3 @@ subprojects {
 // husky         		1.3.1	❯	2.3.0
 // stylelint           		9.10.1	❯	10.0.1
 // typescript-tslint-plugin  	0.3.1	❯	0.4.0
-

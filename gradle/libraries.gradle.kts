@@ -1,7 +1,9 @@
 project.apply {
   from("$rootDir/gradle/core.gradle.kts")
+  from("$rootDir/gradle/gradlePlugins.gradle.kts")
 }
 val coreVersions = extra["coreVersions"] as Map<*, *>
+val gradlePluginVersions = extra["gradlePluginVersions"] as Map<*, *>
 
 val libraryVersions = mapOf(
   "jackson-module-kotlin" to "2.9.9",
@@ -52,7 +54,9 @@ val libraries = mapOf(
   "mockk" to "io.mockk:mockk:${libraryVersions["mockk"]}",
   "assertk" to "com.willowtreeapps.assertk:assertk-jvm:${libraryVersions["assertk"]}",
   "spring-boot-test" to "org.springframework.boot:spring-boot-test:${coreVersions["spring-boot"]}",
-  "flapdoodle" to "de.flapdoodle.embed:de.flapdoodle.embed.mongo:${libraryVersions["flapdoodle"]}"
+  "flapdoodle" to "de.flapdoodle.embed:de.flapdoodle.embed.mongo:${libraryVersions["flapdoodle"]}",
+
+  "detekt-formatting" to "io.gitlab.arturbosch.detekt:detekt-formatting:${gradlePluginVersions["detekt"]}"
 )
 
 extra["libraryVersions"] = libraryVersions
