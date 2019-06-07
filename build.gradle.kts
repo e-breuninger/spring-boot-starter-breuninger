@@ -151,6 +151,7 @@ subprojects {
 // TODO(BS): fix compileTime, compileOnly, ... dependencies
 // TODO(BS): add coverage kotlin jacoco (https://github.com/arturbosch/detekt/blob/master/build.gradle.kts)
 // TODO(BS): add com.gradle.build-scan (https://github.com/arturbosch/detekt/blob/master/build.gradle.kts)
+// TODO(BS): add org.jetbrains.dokka (https://github.com/arturbosch/detekt/blob/master/build.gradle.kts)
 
 // package.json
 // TODO(BS): add linting js
