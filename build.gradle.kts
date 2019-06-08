@@ -203,8 +203,8 @@ subprojects {
   }
 
   configure<SigningExtension> {
-    val publishing = project.extensions.findByType<PublishingExtension>()
-    sign(publishing!!.publications["mavenJava"])
+    val publishing: PublishingExtension = project.extensions["publishing"] as PublishingExtension
+    sign(publishing.publications["mavenJava"])
   }
 }
 
