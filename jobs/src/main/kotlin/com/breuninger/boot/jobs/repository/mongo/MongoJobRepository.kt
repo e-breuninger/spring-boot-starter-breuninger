@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.dropCollection
 import org.springframework.data.mongodb.core.findById
 import org.springframework.data.mongodb.core.findOne
+import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.query.Criteria.where
 import org.springframework.data.mongodb.core.query.Query.query
 import org.springframework.data.mongodb.core.query.Update
@@ -66,7 +67,10 @@ class MongoJobRepository(private val mongoTemplate: MongoTemplate) : JobReposito
   override fun findState(jobId: JobId, key: String): String? {
     val query = query(where("_id").`is`(jobId))
     query.fields().include("${Job::state.name}.$key")
-    return mongoTemplate.findOne<Job>(query)?.let { it.state?.get(key) }
+    val jobCollection = (Job::class.annotations.first { it is Document } as Document).collection
+    return mongoTemplate.findOne<Map<String, Map<String, String>>>(query, jobCollection)?.let {
+      it[Job::state.name]?.get(key)
+    }
   }
 
   override fun updateState(jobId: JobId, key: String, value: String?) {

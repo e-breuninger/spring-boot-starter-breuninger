@@ -6,12 +6,13 @@ import assertk.assertions.isTrue
 import com.breuninger.boot.jobs.domain.JobExecution.Status.OK
 import org.junit.jupiter.api.Test
 import java.time.Instant
+import java.time.Instant.now
 
 class JobExecutionTest {
 
   @Test
   fun `ensure hasStopped returns true correctly`() {
-    val jobExecution = createJobExecution(stopped = Instant.now())
+    val jobExecution = createJobExecution(stopped = now())
 
     assertThat(jobExecution.hasStopped()).isTrue()
   }
@@ -25,7 +26,7 @@ class JobExecutionTest {
 
   @Test
   fun `ensure hasNotStopped returns false correctly`() {
-    val jobExecution = createJobExecution(stopped = Instant.now())
+    val jobExecution = createJobExecution(stopped = now())
 
     assertThat(jobExecution.hasNotStopped()).isFalse()
   }
@@ -41,10 +42,10 @@ class JobExecutionTest {
     JobExecutionId("foo"),
     JobId("bar"),
     OK,
-    Instant.now(),
+    now(),
     stopped,
     emptyList(),
     "foobar",
-    Instant.now()
+    now()
   )
 }

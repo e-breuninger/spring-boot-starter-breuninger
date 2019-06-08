@@ -1,8 +1,15 @@
+import com.gradle.scan.plugin.BuildScanExtension
+import io.codearte.gradle.nexus.NexusStagingExtension
+import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 apply {
+  plugin("com.gradle.build-scan")
   plugin("idea")
   plugin("io.gitlab.arturbosch.detekt")
+  plugin("jacoco")
   plugin("com.github.ben-manes.versions")
   plugin("io.codearte.nexus-staging")
 }
@@ -25,15 +32,61 @@ repositories {
 }
 
 apply {
+  from("$rootDir/gradle/gradlePlugins.gradle.kts")
   from("$rootDir/gradle/libraries.gradle.kts")
 }
+val gradlePluginVersions = extra["gradlePluginVersions"] as Map<*, *>
 val libraries = extra["libraries"] as Map<*, *>
 
 dependencies {
   "detektPlugins"(libraries["detekt-formatting"] as String)
 }
 
-configure<io.codearte.gradle.nexus.NexusStagingExtension> {
+configure<BuildScanExtension> {
+  termsOfServiceUrl = "https://gradle.com/terms-of-service"
+  termsOfServiceAgree = "yes"
+}
+
+configure<DetektExtension> {
+  toolVersion = gradlePluginVersions["detekt"] as String
+  config = files("$rootDir/detekt.yml")
+}
+
+configure<JacocoPluginExtension> {
+  toolVersion = gradlePluginVersions["jacoco"] as String
+}
+
+tasks.register<JacocoMerge>("jacocoMerge") {
+  subprojects.forEach {
+    dependsOn("${it.name}:jacocoTestReport")
+    executionData(it.tasks.withType<Test>())
+  }
+}
+
+tasks.register<JacocoReport>("jacocoRootReport") {
+  dependsOn("jacocoMerge")
+  additionalSourceDirs(files(subprojects.forEach { it.the<SourceSetContainer>()["main"].allSource.srcDirs }))
+  additionalClassDirs(files(subprojects.forEach { it.the<SourceSetContainer>()["main"].output }))
+  executionData((tasks["jacocoMerge"] as JacocoMerge).destinationFile)
+  reports {
+    html.isEnabled = true
+    xml.isEnabled = false
+  }
+  doFirst {
+    executionData(files(executionData.filter { it.exists() }))
+  }
+}
+
+tasks.withType<Test> {
+  finalizedBy("jacocoRootReport")
+}
+
+task("publish") {
+  subprojects.forEach { dependsOn("${it.name}:publish") }
+  finalizedBy("closeAndReleaseRepository")
+}
+
+configure<NexusStagingExtension> {
   val sonatypeUsername: String by project
   val sonatypePassword: String by project
   username = sonatypeUsername
@@ -41,37 +94,30 @@ configure<io.codearte.gradle.nexus.NexusStagingExtension> {
   packageGroup = "com.breuninger"
 }
 
-tasks.register("publish") {
-  subprojects.filter { it.tasks.any { task -> task.name == "publish" } }
-    .forEach { dependsOn("${it.name}:publish") }
-  finalizedBy("closeAndReleaseRepository")
-}
-
 subprojects {
   apply {
+    plugin("io.spring.dependency-management")
     plugin("kotlin")
     plugin("kotlin-spring")
     plugin("io.gitlab.arturbosch.detekt")
-    plugin("io.spring.dependency-management")
+    plugin("jacoco")
+    plugin("org.jetbrains.dokka")
     plugin("maven-publish")
     plugin("signing")
   }
 
   group = "com.breuninger.boot"
-  version = "3.0.4.RELEASE"
-
-  configure<JavaPluginConvention> {
-    sourceCompatibility = JavaVersion.VERSION_12
-    targetCompatibility = JavaVersion.VERSION_12
-  }
+  version = "3.0.5.RELEASE"
 
   repositories {
     jcenter()
   }
 
   apply {
+    from("$rootDir/gradle/gradlePlugins.gradle.kts")
     from("$rootDir/gradle/libraries.gradle.kts")
   }
+  val gradlePluginVersions = extra["gradlePluginVersions"] as Map<*, *>
   val libraries = extra["libraries"] as Map<*, *>
 
   dependencies {
@@ -81,15 +127,59 @@ subprojects {
     "detektPlugins"(libraries["detekt-formatting"] as String)
   }
 
+  configure<JavaPluginConvention> {
+    sourceCompatibility = JavaVersion.VERSION_12
+    targetCompatibility = JavaVersion.VERSION_12
+  }
+
   tasks.withType<KotlinCompile> {
     kotlinOptions {
-      freeCompilerArgs = listOf("-Xjsr305=strict")
       jvmTarget = org.gradle.api.JavaVersion.VERSION_1_8.toString()
+      freeCompilerArgs = listOf("-Xjsr305=strict",
+        "-progressive",
+        "-Xskip-runtime-version-check",
+        "-Xdisable-default-scripting-plugin",
+        "-Xuse-experimental=kotlin.Experimental")
+    }
+  }
+
+  configure<DetektExtension> {
+    toolVersion = gradlePluginVersions["detekt"] as String
+    config = files("$rootDir/detekt.yml")
+  }
+
+  tasks.withType<Test> {
+    useJUnitPlatform()
+    testLogging {
+      events = setOf(
+        TestLogEvent.FAILED,
+        TestLogEvent.PASSED,
+        TestLogEvent.SKIPPED,
+        TestLogEvent.STANDARD_OUT
+      )
+      exceptionFormat = TestExceptionFormat.FULL
+      showExceptions = true
+      showCauses = true
+      showStackTraces = true
+    }
+    finalizedBy("jacocoTestReport")
+  }
+
+  configure<JacocoPluginExtension> {
+    toolVersion = gradlePluginVersions["jacoco"] as String
+  }
+
+  tasks.named<JacocoReport>("jacocoTestReport") {
+    dependsOn("test")
+    reports {
+      html.isEnabled = true
+      xml.isEnabled = false
+      csv.isEnabled = false
     }
   }
 
   tasks.register<Jar>("sourcesJar") {
-    from(project.extensions.getByType(SourceSetContainer::class)["main"].allSource)
+    from(project.the<SourceSetContainer>()["main"].allSource)
     archiveClassifier.set("sources")
   }
 
@@ -147,11 +237,6 @@ subprojects {
     sign(publishing.publications["mavenJava"])
   }
 }
-
-// TODO(BS): fix compileTime, compileOnly, ... dependencies
-// TODO(BS): add coverage kotlin jacoco (https://github.com/arturbosch/detekt/blob/master/build.gradle.kts)
-// TODO(BS): add com.gradle.build-scan (https://github.com/arturbosch/detekt/blob/master/build.gradle.kts)
-// TODO(BS): add org.jetbrains.dokka (https://github.com/arturbosch/detekt/blob/master/build.gradle.kts)
 
 // package.json
 // TODO(BS): add linting js

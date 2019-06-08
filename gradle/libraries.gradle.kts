@@ -30,6 +30,7 @@ val libraries = mapOf(
   "jackson-module-kotlin" to "com.fasterxml.jackson.module:jackson-module-kotlin:${libraryVersions["jackson-module-kotlin"]}",
 
   "spring-core" to "org.springframework:spring-core:${coreVersions["spring"]}",
+  "spring-boot-starter-aop" to "org.springframework.boot:spring-boot-starter-aop:${coreVersions["spring-boot"]}",
   "spring-boot-starter-actuator" to "org.springframework.boot:spring-boot-starter-actuator:${coreVersions["spring-boot"]}",
   "spring-boot-starter-webflux" to "org.springframework.boot:spring-boot-starter-webflux:${coreVersions["spring-boot"]}",
   "spring-boot-starter-thymeleaf" to "org.springframework.boot:spring-boot-starter-thymeleaf:${coreVersions["spring-boot"]}",
@@ -53,7 +54,7 @@ val libraries = mapOf(
   "junit-jupiter-params" to "org.junit.jupiter:junit-jupiter-params:${libraryVersions["junit"]}",
   "mockk" to "io.mockk:mockk:${libraryVersions["mockk"]}",
   "assertk" to "com.willowtreeapps.assertk:assertk-jvm:${libraryVersions["assertk"]}",
-  "spring-boot-test" to "org.springframework.boot:spring-boot-test:${coreVersions["spring-boot"]}",
+  "spring-boot-starter-test" to "org.springframework.boot:spring-boot-starter-test:${coreVersions["spring-boot"]}",
   "flapdoodle" to "de.flapdoodle.embed:de.flapdoodle.embed.mongo:${libraryVersions["flapdoodle"]}",
 
   "detekt-formatting" to "io.gitlab.arturbosch.detekt:detekt-formatting:${gradlePluginVersions["detekt"]}"

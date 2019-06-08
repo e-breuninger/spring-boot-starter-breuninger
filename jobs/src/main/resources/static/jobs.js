@@ -92,10 +92,12 @@ function startJob(button) {
     if (job && job.runningJobExecutionId) {
       const jobExecutionLink = $(`#${button.value}executionid`)[0];
       jobExecutionLink.textContent = job.runningJobExecutionId.value;
+      // TODO(BS): this url is wrong
       jobExecutionLink.href = `../jobexecutions/single/${job.runningJobExecutionId.value}`;
 
       const jobExecutionLinkHeader = $(`#${button.value}executionidheader`)[0];
       jobExecutionLinkHeader.textContent = job.runningJobExecutionId.value;
+      // TODO(BS): this url is wrong
       jobExecutionLinkHeader.href = `../jobexecutions/single/${job.runningJobExecutionId.value}`;
 
       // updateDisableState header status

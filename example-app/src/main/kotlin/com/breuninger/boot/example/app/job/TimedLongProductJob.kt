@@ -34,7 +34,7 @@ class TimedLongProductJob : JobRunnable {
 
   override fun actuatorEndpointPublicMethodName() = this::logShitToConsole.name
 
-  private fun logShitToConsole(): Boolean {
+  fun logShitToConsole(): Boolean {
     repeat(Random.nextInt(10, 60)) {
       LOG.info(JOB_MARKER, "LONG IT WORKS")
       Thread.sleep(1000)

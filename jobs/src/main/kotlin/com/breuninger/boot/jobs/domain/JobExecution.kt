@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.core.mapping.Document
 import java.net.InetAddress
 import java.time.Instant
 import java.time.Instant.now
-import java.time.temporal.ChronoUnit.MILLIS
 
 @Document(collection = "jobExecutions")
 data class JobExecution(
@@ -30,7 +29,7 @@ data class JobExecution(
       InetAddress.getLocalHost().hostAddress,
       started)
 
-  constructor(jobExecutionId: JobExecutionId, jobId: JobId) : this(jobExecutionId, jobId, now().truncatedTo(MILLIS))
+  constructor(jobExecutionId: JobExecutionId, jobId: JobId) : this(jobExecutionId, jobId, now())
 
   fun hasStopped() = stopped != null
 

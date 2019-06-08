@@ -18,6 +18,8 @@ import com.breuninger.boot.jobs.domain.JobId
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Instant
+import java.time.Instant.now
+import java.time.temporal.ChronoUnit.MILLIS
 import kotlin.random.Random
 
 abstract class AbstractJobExecutionRepositoryTest {
@@ -45,8 +47,8 @@ abstract class AbstractJobExecutionRepositoryTest {
       getRepository().save(createJobExecution(
         id = JobExecutionId(i.toString()),
         lastUpdated = Instant.ofEpochSecond(Random.nextLong(
-          Instant.now().minusSeconds(5000).epochSecond,
-          Instant.now().epochSecond))))
+          now().minusSeconds(5000).epochSecond,
+          now().epochSecond))))
     }
 
     val jobExecutions = getRepository().find100DescendingByLastUpdated(null)
@@ -71,8 +73,8 @@ abstract class AbstractJobExecutionRepositoryTest {
           id = JobExecutionId(i.toString()),
           jobId = jobId,
           lastUpdated = Instant.ofEpochSecond(Random.nextLong(
-            Instant.now().minusSeconds(5000).epochSecond,
-            Instant.now().epochSecond))))
+            now().minusSeconds(5000).epochSecond,
+            now().epochSecond))))
     }
 
     val jobExecutions = getRepository().find100DescendingByLastUpdated(JobId("foo"))
@@ -91,7 +93,7 @@ abstract class AbstractJobExecutionRepositoryTest {
     for (i in 1..100) {
       getRepository().save(createJobExecution(
         id = JobExecutionId(i.toString()),
-        messages = listOf(JobExecutionMessage(Instant.now(), Level.ERROR, "foo bar"))))
+        messages = listOf(JobExecutionMessage(now(), Level.ERROR, "foo bar"))))
     }
 
     val jobExecutions = getRepository().findAllIgnoreMessages()
@@ -127,7 +129,7 @@ abstract class AbstractJobExecutionRepositoryTest {
 
     assertThat(getRepository().findOne(JobExecutionId("foo"))!!.stopped).isNull()
 
-    getRepository().stop(JobExecutionId("foo"), Instant.now())
+    getRepository().stop(JobExecutionId("foo"), now())
 
     assertThat(getRepository().findOne(JobExecutionId("foo"))!!.stopped).isNotNull()
   }
@@ -160,22 +162,22 @@ abstract class AbstractJobExecutionRepositoryTest {
     assertThat(jobExecutionFoo.messages).isEmpty()
 
     getRepository().appendMessage(JobExecutionId("foo"),
-      JobExecutionMessage(Instant.now(), Level.ERROR, "foobar"))
+      JobExecutionMessage(now(), Level.ERROR, "foobar"))
 
     assertThat(getRepository().findOne(JobExecutionId("foo"))!!.messages.size).isEqualTo(1)
 
     getRepository().appendMessage(JobExecutionId("foo"),
-      JobExecutionMessage(Instant.now(), Level.ERROR, "foobar"))
+      JobExecutionMessage(now(), Level.ERROR, "foobar"))
 
     assertThat(getRepository().findOne(JobExecutionId("foo"))!!.messages.size).isEqualTo(2)
   }
 
   @Test
   fun `ensure updateLastUpdated works`() {
-    val jobExecutionFoo = createJobExecution(lastUpdated = Instant.now())
+    val jobExecutionFoo = createJobExecution(lastUpdated = now())
     getRepository().save(jobExecutionFoo)
 
-    val newInstant = Instant.now().epochSecond + 1
+    val newInstant = now().epochSecond + 1
     getRepository().updateLastUpdated(JobExecutionId("foo"), Instant.ofEpochSecond(newInstant))
 
     assertThat(getRepository().findOne(JobExecutionId("foo"))?.lastUpdated).isEqualTo(Instant.ofEpochSecond(newInstant))
@@ -202,6 +204,6 @@ abstract class AbstractJobExecutionRepositoryTest {
     stopped: Instant? = null,
     messages: List<JobExecutionMessage> = emptyList(),
     hostname: String = "foobar",
-    lastUpdated: Instant = Instant.now()
-  ) = JobExecution(id, jobId, OK, Instant.now(), stopped, messages, hostname, lastUpdated)
+    lastUpdated: Instant = now().truncatedTo(MILLIS)
+  ) = JobExecution(id, jobId, OK, now().truncatedTo(MILLIS), stopped, messages, hostname, lastUpdated)
 }

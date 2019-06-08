@@ -4,6 +4,7 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isTrue
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.client.exchange
@@ -17,7 +18,7 @@ import org.springframework.http.MediaType
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class TogglzHtmlControllerIntegrationTest(
   // TODO(KA): use WebClient instead of restTemplate
-  private val restTemplate: TestRestTemplate,
+  @Autowired private val restTemplate: TestRestTemplate,
   @LocalServerPort private val port: Int
 ) {
 

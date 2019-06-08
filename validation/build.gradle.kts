@@ -4,9 +4,24 @@ apply {
 val libraries = extra["libraries"] as Map<*, *>
 
 dependencies {
-  compile(libraries["jackson-module-kotlin"] as String)
+  compileOnly(libraries["jackson-module-kotlin"] as String)
 
-  compile(libraries["spring-boot-starter-webflux"] as String)
+  compileOnly(libraries["spring-boot-starter-webflux"] as String)
 
   annotationProcessor(libraries["spring-boot-configuration-processor"] as String)
+
+  testCompile(libraries["jackson-module-kotlin"] as String)
+
+  testCompile(libraries["spring-boot-starter-webflux"] as String)
+
+  testCompile(libraries["junit-jupiter-api"] as String)
+  testCompile(libraries["junit-jupiter-engine"] as String)
+  testCompile(libraries["mockk"] as String)
+  testCompile(libraries["assertk"] as String)
+  testCompile(libraries["spring-boot-starter-test"] as String) {
+    exclude(group = "junit")
+    exclude(group = "org.mockito")
+    exclude(group = "org.hamcrest")
+    exclude(group = "org.assertj")
+  }
 }

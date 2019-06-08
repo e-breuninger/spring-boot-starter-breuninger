@@ -20,7 +20,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.time.Instant
+import java.time.Instant.now
 
 class JobExecutionServiceTest {
 
@@ -99,7 +99,7 @@ class JobExecutionServiceTest {
   @Test
   fun `ensure appendMessage handles ERROR message correctly`() {
     val jobExecutionId = JobExecutionId("foo")
-    val message = JobExecutionMessage(Instant.now(), Level.ERROR, "foo bar bazz")
+    val message = JobExecutionMessage(now(), Level.ERROR, "foo bar bazz")
 
     jobExecutionService.appendMessage(jobExecutionId, message)
 
@@ -110,7 +110,7 @@ class JobExecutionServiceTest {
   @Test
   fun `ensure appendMessage handles WARNING message correctly`() {
     val jobExecutionId = JobExecutionId("foo")
-    val message = JobExecutionMessage(Instant.now(), Level.WARNING, "foo bar bazz")
+    val message = JobExecutionMessage(now(), Level.WARNING, "foo bar bazz")
 
     jobExecutionService.appendMessage(jobExecutionId, message)
 
@@ -121,7 +121,7 @@ class JobExecutionServiceTest {
   @Test
   fun `ensure appendMessage handles INFO message correctly`() {
     val jobExecutionId = JobExecutionId("foo")
-    val message = JobExecutionMessage(Instant.now(), Level.INFO, "foo bar bazz")
+    val message = JobExecutionMessage(now(), Level.INFO, "foo bar bazz")
 
     jobExecutionService.appendMessage(jobExecutionId, message)
 
@@ -228,10 +228,10 @@ class JobExecutionServiceTest {
     JobExecutionId("foo"),
     JobId("bar"),
     Status.OK,
-    Instant.now(),
+    now(),
     null,
     emptyList(),
     "foobar",
-    Instant.now()
+    now()
   )
 }

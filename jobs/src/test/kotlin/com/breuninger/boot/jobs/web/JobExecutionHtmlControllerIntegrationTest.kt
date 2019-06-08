@@ -8,6 +8,7 @@ import com.breuninger.boot.jobs.domain.JobExecutionId
 import com.breuninger.boot.jobs.domain.JobId
 import com.breuninger.boot.jobs.repository.JobExecutionRepository
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.client.exchange
@@ -21,8 +22,8 @@ import org.springframework.http.MediaType
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class JobExecutionHtmlControllerIntegrationTest(
   // TODO(KA): use WebClient instead of restTemplate
-  private val restTemplate: TestRestTemplate,
-  private val jobExecutionRepository: JobExecutionRepository,
+  @Autowired private val restTemplate: TestRestTemplate,
+  @Autowired private val jobExecutionRepository: JobExecutionRepository,
   @LocalServerPort private val port: Int
 ) {
 
