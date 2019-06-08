@@ -51,7 +51,7 @@ configure<DetektExtension> {
   config = files("$rootDir/detekt.yml")
 }
 
-task("publish") {
+tasks.register("publish") {
   subprojects.forEach { dependsOn("${it.name}:publish") }
   finalizedBy("closeAndReleaseRepository")
 }
