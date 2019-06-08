@@ -9,7 +9,6 @@ apply {
   plugin("com.gradle.build-scan")
   plugin("idea")
   plugin("io.gitlab.arturbosch.detekt")
-  plugin("jacoco")
   plugin("com.github.ben-manes.versions")
   plugin("io.codearte.nexus-staging")
 }
@@ -50,35 +49,6 @@ configure<BuildScanExtension> {
 configure<DetektExtension> {
   toolVersion = gradlePluginVersions["detekt"] as String
   config = files("$rootDir/detekt.yml")
-}
-
-configure<JacocoPluginExtension> {
-  toolVersion = gradlePluginVersions["jacoco"] as String
-}
-
-tasks.register<JacocoMerge>("jacocoMerge") {
-  subprojects.forEach {
-    dependsOn("${it.name}:jacocoTestReport")
-    executionData(it.tasks.withType<Test>())
-  }
-}
-
-tasks.register<JacocoReport>("jacocoRootReport") {
-  dependsOn("jacocoMerge")
-  additionalSourceDirs(files(subprojects.forEach { it.the<SourceSetContainer>()["main"].allSource.srcDirs }))
-  additionalClassDirs(files(subprojects.forEach { it.the<SourceSetContainer>()["main"].output }))
-  executionData((tasks["jacocoMerge"] as JacocoMerge).destinationFile)
-  reports {
-    html.isEnabled = true
-    xml.isEnabled = false
-  }
-  doFirst {
-    executionData(files(executionData.filter { it.exists() }))
-  }
-}
-
-tasks.withType<Test> {
-  finalizedBy("jacocoRootReport")
 }
 
 task("publish") {
@@ -233,8 +203,8 @@ subprojects {
   }
 
   configure<SigningExtension> {
-    val publishing: PublishingExtension = project.extensions["publishing"] as PublishingExtension
-    sign(publishing.publications["mavenJava"])
+    val publishing = project.extensions.findByType<PublishingExtension>()
+    sign(publishing!!.publications["mavenJava"])
   }
 }
 
