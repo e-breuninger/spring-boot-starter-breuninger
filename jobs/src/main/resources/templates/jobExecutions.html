@@ -24,7 +24,7 @@
       <div>
         <span th:text="'Running Job Execution ID: ' + ${jobExecution.id.value}"></span>
         <br>
-        <a class="" onclick="stopPropagation(event)" th:href="'../../jobs/' + ${jobExecution.jobId.value}"
+        <a class="" onclick="stopPropagation(event)" th:href="'/jobs/' + ${jobExecution.jobId.value}"
            th:text="'Job ID: ' + ${jobExecution.jobId.value}"></a>
       </div>
     </button>

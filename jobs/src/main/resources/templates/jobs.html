@@ -24,12 +24,12 @@
       <div><span th:text="${job.id.value}"></span>
         <br>
         <a onclick="stopPropagation(event);"
-           th:href="${job.runningJobExecutionId} ? '../jobExecutions/' + ${job.runningJobExecutionId.value} : '../jobExecutions'"
+           th:href="${job.runningJobExecutionId} ? '/jobExecutions/' + ${job.runningJobExecutionId.value} : '/jobExecutions'"
            th:id="${job.id.value} + 'executionidheader'"
            th:text="${job.runningJobExecutionId} ? ${job.runningJobExecutionId.value} : '-'"></a>
       </div>
       <a class="margin-left-auto display-block fas fa-arrow-right" onclick="stopPropagation(event);"
-         th:href="'../jobExecutions?jobId=' + ${job.id.value}"></a>
+         th:href="'/jobExecutions?jobId=' + ${job.id.value}"></a>
     </button>
   </div>
   <div class="card-content content" style="flex-direction: column" th:id="${job.id.value}+'content'">
@@ -41,7 +41,7 @@
       <tr>
         <td class="td-25">Running Job Execution ID</td>
         <td class="td-60"><a
-          th:href="${job.runningJobExecutionId} ? '../jobExecutions/' + ${job.runningJobExecutionId.value} : '../jobExecutions'"
+          th:href="${job.runningJobExecutionId} ? '/jobExecutions/' + ${job.runningJobExecutionId.value} : '/jobExecutions'"
           th:id="${job.id.value} + 'executionid'"
           th:text="${job.runningJobExecutionId} ? ${job.runningJobExecutionId.value} : '-'"></a></td>
         <td class="td-15">

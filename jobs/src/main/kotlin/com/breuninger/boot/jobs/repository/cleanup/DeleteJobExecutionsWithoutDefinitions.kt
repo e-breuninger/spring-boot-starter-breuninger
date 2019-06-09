@@ -14,16 +14,16 @@ class DeleteJobExecutionsWithoutDefinitions(
 
   companion object {
 
-    private const val DELETE_JOB_EXECUTIONS_WITHOUT_DEFINITIONS_CLEANUP_INTERVAL = 10L * 60L * 1000L
+    private const val DELETE_JOB_EXECUTIONS_WITHOUT_DEFINITIONS_CLEANUP_INTERVAL = 10L * 1000L
   }
 
   @Timed("com.breuninger.boot.jobs.repository.cleanup.DeleteJobExecutionsWithoutDefinitions.cleanUp", longTask = true)
   @Scheduled(fixedRate = DELETE_JOB_EXECUTIONS_WITHOUT_DEFINITIONS_CLEANUP_INTERVAL)
   override fun cleanUp() {
-    val jobIdsWithDefinitions = jobRunnables.map { it.definition().jobId }.toList()
     jobExecutionService.findAllIgnoreMessages().forEach {
-      if (!jobIdsWithDefinitions.contains(it.jobId))
+      if (!jobRunnables.map { it.definition().jobId }.toList().contains(it.jobId)) {
         jobExecutionService.remove(it)
+      }
     }
   }
 }

@@ -2,6 +2,7 @@ package com.breuninger.boot.jobs.web
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import com.breuninger.boot.jobs.domain.Job
 import com.breuninger.boot.jobs.domain.JobExecution
 import com.breuninger.boot.jobs.domain.JobExecutionId
 import com.breuninger.boot.jobs.domain.JobId
@@ -32,10 +33,10 @@ class JobExecutionRestControllerTest {
   fun `ensure create calls JobExecutionService create and returns its result`() {
     val jobIdValue = "foo"
     val jobId = JobId(jobIdValue)
-    val jobExecution = JobExecution(JobExecutionId(), jobId)
-    every { jobExecutionService.create(jobId) } returns jobExecution
+    val job = Job(jobId)
+    every { jobExecutionService.create(jobId) } returns job
 
-    assertThat(jobExecutionRestController.create(jobIdValue)).isEqualTo(jobExecution)
+    assertThat(jobExecutionRestController.create(jobIdValue)).isEqualTo(job)
     verify { jobExecutionService.create(jobId) }
   }
 }

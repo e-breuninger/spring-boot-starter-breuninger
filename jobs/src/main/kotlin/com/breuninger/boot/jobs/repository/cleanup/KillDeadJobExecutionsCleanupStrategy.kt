@@ -17,7 +17,7 @@ class KillDeadJobExecutionsCleanupStrategy(
 
   companion object {
 
-    private const val KILL_DEAD_JOB_EXECUTIONS_CLEANUP_INTERVAL = 1L * 60L * 1000L
+    private const val KILL_DEAD_JOB_EXECUTIONS_CLEANUP_INTERVAL = 10L * 1000L
 
     val LOG: Logger = LoggerFactory.getLogger(KillDeadJobExecutionsCleanupStrategy::class.java)
   }

@@ -24,19 +24,19 @@ function updateMessagesAndDates(input) {
   const id = input.value;
 
   const callJobExecutionUpdateFromServer = () => {
-    $.getJSON(`../../jobExecutions/${id}`, fragment => {
-      if (fragment) {
+    $.getJSON(`/jobExecutions/${id}`, jobExecution => {
+      if (jobExecution) {
         const messageElement = $(`#${id}`)[0];
-        messageElement.innerHTML = formatMessages(fragment.messages);
+        messageElement.innerHTML = formatMessages(jobExecution.messages);
         messageElement.scrollTop = messageElement.scrollHeight;
 
         const statusElement = $(`#${id}status`)[0];
-        statusElement.innerHTML = fragment.status === statusOk && !fragment.stopped ? 'Running' : fragment.status;
-        statusElement.className = fragment.status === statusOk ? 'green' : fragment.status === statusSkipped ? 'yellow' : 'red';
+        statusElement.innerHTML = jobExecution.status === statusOk && !jobExecution.stopped ? 'Running' : jobExecution.status;
+        statusElement.className = jobExecution.status === statusOk ? 'green' : jobExecution.status === statusSkipped ? 'yellow' : 'red';
 
-        $(`#${id}headerstate`)[0].className = fragment.status === statusOk ?
-          !fragment.stopped ? faSpinner : faCheck :
-          fragment.status === statusSkipped ? faExclamation : faTimes;
+        $(`#${id}headerstate`)[0].className = jobExecution.status === statusOk ?
+          !jobExecution.stopped ? faSpinner : faCheck :
+          jobExecution.status === statusSkipped ? faExclamation : faTimes;
 
         const options = {
           year: 'numeric',
@@ -48,11 +48,11 @@ function updateMessagesAndDates(input) {
         };
 
         // updateDisableState last updated date
-        $(`#${id}update`)[0].textContent = new Date(fragment.lastUpdated).toLocaleDateString(localeDE, options).replace(',', '');
+        $(`#${id}update`)[0].textContent = new Date(jobExecution.lastUpdated).toLocaleDateString(localeDE, options).replace(',', '');
 
         // if stopped updateDisableState stopped date
-        if (fragment.stopped) {
-          $(`#${id}stopped`)[0].textContent = new Date(fragment.stopped).toLocaleDateString(localeDE, options).replace(',', '');
+        if (jobExecution.stopped) {
+          $(`#${id}stopped`)[0].textContent = new Date(jobExecution.stopped).toLocaleDateString(localeDE, options).replace(',', '');
           input.checked = false;
           clearInterval(timermap.get(id));
           timermap.delete(id);
@@ -92,13 +92,11 @@ function startJob(button) {
     if (job && job.runningJobExecutionId) {
       const jobExecutionLink = $(`#${button.value}executionid`)[0];
       jobExecutionLink.textContent = job.runningJobExecutionId.value;
-      // TODO(BS): this url is wrong
-      jobExecutionLink.href = `../jobexecutions/single/${job.runningJobExecutionId.value}`;
+      jobExecutionLink.href = `/jobExecutions/${job.runningJobExecutionId.value}`;
 
       const jobExecutionLinkHeader = $(`#${button.value}executionidheader`)[0];
       jobExecutionLinkHeader.textContent = job.runningJobExecutionId.value;
-      // TODO(BS): this url is wrong
-      jobExecutionLinkHeader.href = `../jobexecutions/single/${job.runningJobExecutionId.value}`;
+      jobExecutionLinkHeader.href = `../jobExecutions/${job.runningJobExecutionId.value}`;
 
       // updateDisableState header status
       updateJob(job.id.value, job);
