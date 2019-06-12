@@ -11,7 +11,7 @@ class CronJob : JobRunnable {
 
   companion object {
 
-    val LOG: Logger = LoggerFactory.getLogger(CronJob::class.java)
+    private val LOG: Logger = LoggerFactory.getLogger(CronJob::class.java)
   }
 
   override fun definition() =

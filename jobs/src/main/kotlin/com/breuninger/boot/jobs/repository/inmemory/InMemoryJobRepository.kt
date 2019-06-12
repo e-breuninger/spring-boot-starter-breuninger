@@ -13,7 +13,7 @@ class InMemoryJobRepository : JobRepository {
 
   companion object {
 
-    val LOG: Logger = LoggerFactory.getLogger(InMemoryJobRepository::class.java)
+    private val LOG: Logger = LoggerFactory.getLogger(InMemoryJobRepository::class.java)
   }
 
   private val jobs = ConcurrentHashMap<JobId, Job>()

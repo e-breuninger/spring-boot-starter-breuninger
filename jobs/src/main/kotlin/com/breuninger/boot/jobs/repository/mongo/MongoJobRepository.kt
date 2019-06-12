@@ -27,7 +27,7 @@ class MongoJobRepository(private val mongoTemplate: MongoTemplate) : JobReposito
 
   companion object {
 
-    val LOG: Logger = LoggerFactory.getLogger(MongoJobRepository::class.java)
+    private val LOG: Logger = LoggerFactory.getLogger(MongoJobRepository::class.java)
   }
 
   override fun findOne(jobId: JobId) = mongoTemplate.findById<Job>(jobId)

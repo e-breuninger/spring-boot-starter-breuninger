@@ -36,7 +36,7 @@ class JobExecutionService(
 
   companion object {
 
-    val LOG: Logger = LoggerFactory.getLogger(JobExecutionService::class.java)
+    private val LOG: Logger = LoggerFactory.getLogger(JobExecutionService::class.java)
   }
 
   fun findOne(jobExecutionId: JobExecutionId) = jobExecutionRepository.findOne(jobExecutionId)

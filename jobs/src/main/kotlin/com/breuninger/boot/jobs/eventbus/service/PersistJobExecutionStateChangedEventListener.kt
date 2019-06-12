@@ -18,8 +18,7 @@ class PersistJobExecutionStateChangedEventListener(
 
   companion object {
 
-    val LOG: Logger = LoggerFactory.getLogger(
-      PersistJobExecutionStateChangedEventListener::class.java)
+    private val LOG: Logger = LoggerFactory.getLogger(PersistJobExecutionStateChangedEventListener::class.java)
   }
 
   override fun consumeJobExecutionStateChanged(event: JobExecutionStateChangedEvent) {

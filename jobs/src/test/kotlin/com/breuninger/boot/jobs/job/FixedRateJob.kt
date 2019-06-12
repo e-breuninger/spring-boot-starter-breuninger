@@ -14,7 +14,7 @@ class FixedRateJob : JobRunnable {
 
   companion object {
 
-    val LOG: Logger = LoggerFactory.getLogger(FixedRateJob::class.java)
+    private val LOG: Logger = LoggerFactory.getLogger(FixedRateJob::class.java)
   }
 
   override fun definition() =

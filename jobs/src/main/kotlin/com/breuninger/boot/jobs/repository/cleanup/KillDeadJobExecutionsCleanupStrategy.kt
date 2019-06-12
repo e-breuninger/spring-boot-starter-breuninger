@@ -19,7 +19,7 @@ class KillDeadJobExecutionsCleanupStrategy(
 
     private const val KILL_DEAD_JOB_EXECUTIONS_CLEANUP_INTERVAL = 10L * 1000L
 
-    val LOG: Logger = LoggerFactory.getLogger(KillDeadJobExecutionsCleanupStrategy::class.java)
+    private val LOG: Logger = LoggerFactory.getLogger(KillDeadJobExecutionsCleanupStrategy::class.java)
   }
 
   @Timed("com.breuninger.boot.jobs.repository.cleanup.KillDeadJobExecutionsCleanupStrategy.cleanUp", longTask = true)

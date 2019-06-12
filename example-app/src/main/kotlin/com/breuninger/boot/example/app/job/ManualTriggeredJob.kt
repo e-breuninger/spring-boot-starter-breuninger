@@ -14,7 +14,7 @@ class ManualTriggeredJob : JobRunnable {
 
   companion object {
 
-    val LOG: Logger = LoggerFactory.getLogger(ManualTriggeredJob::class.java)
+    private val LOG: Logger = LoggerFactory.getLogger(ManualTriggeredJob::class.java)
   }
 
   override fun definition() =

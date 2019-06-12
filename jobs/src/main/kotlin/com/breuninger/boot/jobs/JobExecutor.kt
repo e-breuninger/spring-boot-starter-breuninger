@@ -36,7 +36,7 @@ class JobExecutor(
 
     private const val PING_PERIOD = 20L
 
-    val LOG: Logger = getLogger(JobExecutor::class.java)
+    private val LOG: Logger = getLogger(JobExecutor::class.java)
   }
 
   private val jobRunnable = wrapWithLongTaskTimer(wrapWithTimer(delegate))

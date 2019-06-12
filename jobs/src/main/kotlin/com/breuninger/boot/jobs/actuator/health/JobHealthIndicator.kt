@@ -11,28 +11,33 @@ import java.util.concurrent.ConcurrentMap
 @Component
 class JobHealthIndicator : HealthIndicator {
 
+  companion object {
+
+    private const val WARN = "WARN"
+  }
+
   private val jobExecutionStatus: ConcurrentMap<JobId, JobExecution.Status> = ConcurrentHashMap()
 
   override fun health(): Health {
     val health = Health.unknown().withDetails(jobExecutionStatus.map { toHealth(it.key, it.value) }.toMap<String, Health>())
     return if (anyJobExecutionIsDown()) {
-      health.down().build()
+      health.status(WARN).build()
     } else {
       health.up().build()
     }
   }
 
-  private fun toHealth(jobId: JobId, status: JobExecution.Status) = if (isDown(status)) {
-    jobId.value to Health.down().build()
+  private fun toHealth(jobId: JobId, status: JobExecution.Status) = if (isWarn(status)) {
+    jobId.value to Health.status(WARN).build()
   } else {
     jobId.value to Health.up().build()
   }
 
   private fun anyJobExecutionIsDown() = jobExecutionStatus.any {
-    isDown(it.value)
+    isWarn(it.value)
   }
 
-  private fun isDown(status: JobExecution.Status) = status == JobExecution.Status.DEAD || status == JobExecution.Status.ERROR
+  private fun isWarn(status: JobExecution.Status) = status == JobExecution.Status.DEAD || status == JobExecution.Status.ERROR
 
   fun setJobExecutionStatus(jobId: JobId, status: JobExecution.Status) {
     jobExecutionStatus[jobId] = status

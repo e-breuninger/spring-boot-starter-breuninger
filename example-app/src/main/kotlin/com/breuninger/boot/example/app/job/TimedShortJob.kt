@@ -16,7 +16,7 @@ class TimedShortJob : JobRunnable {
 
   companion object {
 
-    val LOG: Logger = LoggerFactory.getLogger(TimedShortJob::class.java)
+    private val LOG: Logger = LoggerFactory.getLogger(TimedShortJob::class.java)
   }
 
   override fun definition() =

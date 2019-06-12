@@ -9,7 +9,7 @@ class LogJobExecutionStateChangedEventListener : JobExecutionStateChangedEventLi
 
   companion object {
 
-    val LOG: Logger = LoggerFactory.getLogger(LogJobExecutionStateChangedEventListener::class.java)
+    private val LOG: Logger = LoggerFactory.getLogger(LogJobExecutionStateChangedEventListener::class.java)
   }
 
   override fun consumeJobExecutionStateChanged(event: JobExecutionStateChangedEvent) {

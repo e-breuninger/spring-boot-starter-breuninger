@@ -17,6 +17,7 @@ import org.junit.jupiter.params.provider.MethodSource
 class JobExecutionMessageLogAppenderTest {
 
   companion object {
+
     @JvmStatic
     private fun testDataProvider() = listOf(
       TestData(Level.INFO, JobExecutionMessage.Level.INFO),
