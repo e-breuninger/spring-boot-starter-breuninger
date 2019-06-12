@@ -6,18 +6,29 @@
           <h1 class="title is-size-5">{{ app.name }}</h1>
         </header>
         <div class="card-content">
-          <table>
+          <table class="table">
             <tbody>
-            <tr v-for="instance in app.instances" :key="instance.registration.serviceUrl">
+            <tr>
               <td>
-                <i :class="instance.statusInfo.status === 'UP' ? faCheckClass : instance.statusInfo.status === 'OFFLINE' ? faMinusCircle : faTimesCircle" />
+                <div v-for="instance in app.instances"
+                     :key="instance.registration.serviceUrl">
+                  <i
+                    :class="instance.statusInfo.status === 'UP' ? checkIconClass : instance.statusInfo.status === 'OFFLINE' ? minusIconClass : timesIconClass"
+                  />
+                </div>
               </td>
               <td>
-                <div class="link" @click.stop="showDetails(instance)">{{ instance.registration.serviceUrl }}</div>
+                <div v-for="instance in app.instances"
+                     :key="instance.registration.serviceUrl"
+                     class="link"
+                     @click.stop="showDetails(instance)">{{ instance.registration.serviceUrl }}
+                </div>
               </td>
               <td>
-                <iframe v-if="instance.statusInfo.status !== 'OFFLINE'" :src="instance.registration.serviceUrl + 'jobs'"
-                        ref="iframe" />
+                <iframe v-if="app.instances[0].statusInfo.status !== 'OFFLINE'"
+                        :src="app.instances[0].registration.serviceUrl + 'jobs'"
+                        ref="iframe"
+                />
               </td>
             </tr>
             </tbody>
@@ -33,16 +44,16 @@
 
   export default {
     props: {
-      applications: { //<1>
+      applications: {
         type: Array,
         required: true
       }
     },
     data: () => ({
       apps: '',
-      faCheckClass: 'fas fa-check',
-      faMinusCircle: 'fas fa-minus-circle',
-      faTimesCircle: 'fas fa-times-circle'
+      checkIconClass: 'fas fa-check',
+      minusIconClass: 'fas fa-minus-circle',
+      timesIconClass: 'fas fa-times-circle'
     }),
     async created() {
       this.apps = await this.applications;
