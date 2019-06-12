@@ -3,31 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <title>Togglz</title>
-  <link rel="stylesheet" type="text/css" href="../bulma.min.css">
-  <link rel="stylesheet" type="text/css" href="../togglz.css">
+  <link href="../base.min.css" rel="stylesheet" type="text/css">
+  <link href="../togglz.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <!--/*@thymesVar id="togglz" type="java.util.List<com.breuninger.boot.togglz.domain.TogglzFeature>"*/-->
 <!--/*@thymesVar id="toggle" type="com.breuninger.boot.togglz.domain.TogglzFeature"*/-->
-<div class="column is-half-desktop">
-  <div class="card panel">
-    <div class="card-header"><p class="card-header-title">Feature Toggles</p></div>
-    <div class="card-content content">
-      <table class="table">
-        <tr th:each="toggle : ${togglz}">
-          <td>
-            <label class="switch">
-              <input type="checkbox" th:checked="${toggle.enabled}" th:id="${toggle.feature}" onclick="onToggleChange(this)">
-              <span class="slider round"></span>
-            </label>
-          </td>
-          <td th:text="${toggle.feature}" class="switch-label"></td>
-        </tr>
-      </table>
-    </div>
+<div class="card panel">
+  <div class="card-header"><p class="card-header-title">Feature Toggles</p></div>
+  <div class="card-content">
+    <table class="table">
+      <tr th:each="toggle : ${togglz}">
+        <td>
+          <label class="switch">
+            <input onclick="onToggleChange(this)" th:checked="${toggle.enabled}" th:id="${toggle.feature}" type="checkbox">
+            <span class="slider"></span>
+          </label>
+        </td>
+        <td th:text="${toggle.feature}"></td>
+      </tr>
+    </table>
   </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="../togglz.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" type="text/javascript"></script>
+<script src="../togglz.js" type="text/javascript"></script>
+<script src="../iframeResizer.contentWindow.min.js" type="text/javascript"></script>
 </body>
 </html>

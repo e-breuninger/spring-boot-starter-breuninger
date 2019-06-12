@@ -6,17 +6,29 @@
           <h1 class="title is-size-5">{{ app.name }}</h1>
         </header>
         <div class="card-content">
-          <table>
+          <table class="table">
             <tbody>
-            <tr v-for="instance in app.instances" :key="instance.registration.serviceUrl">
+            <tr>
               <td>
-                <i :class="instance.statusInfo.status === 'UP' ? faCheckClass : instance.statusInfo.status === 'OFFLINE' ? faMinusCircle : faTimesCircle" />
+                <div v-for="instance in app.instances"
+                     :key="instance.registration.serviceUrl">
+                  <i
+                    :class="instance.statusInfo.status === 'UP' ? checkIconClass : instance.statusInfo.status === 'OFFLINE' ? minusIconClass : timesIconClass"
+                  />
+                </div>
               </td>
               <td>
-                <div class="link" @click.stop="showDetails(instance)">{{ instance.registration.serviceUrl }}</div>
+                <div v-for="instance in app.instances"
+                     :key="instance.registration.serviceUrl"
+                     class="link"
+                     @click.stop="showDetails(instance)">{{ instance.registration.serviceUrl }}
+                </div>
               </td>
               <td>
-                <iframe v-if="instance.statusInfo.status !== 'OFFLINE'" :src="instance.registration.serviceUrl + 'togglz'" />
+                <iframe v-if="app.instances[0].statusInfo.status !== 'OFFLINE'"
+                        :src="app.instances[0].registration.serviceUrl + 'togglz'"
+                        ref="iframe"
+                />
               </td>
             </tr>
             </tbody>
@@ -28,6 +40,8 @@
 </template>
 
 <script>
+  import iFrameResize from 'iframe-resizer';
+
   export default {
     props: {
       applications: {
@@ -37,19 +51,28 @@
     },
     data: () => ({
       apps: '',
-      faCheckClass: 'fas fa-check',
-      faMinusCircle: 'fas fa-minus-circle',
-      faTimesCircle: 'fas fa-times-circle'
+      checkIconClass: 'fas fa-check',
+      minusIconClass: 'fas fa-minus-circle',
+      timesIconClass: 'fas fa-times-circle'
     }),
     async created() {
       this.apps = await this.applications;
     },
     methods: {
-      stringify: JSON.stringify,
       showDetails(instance) {
         this.$router.push({
           name: 'instances/details',
           params: {instanceId: instance.id}
+        });
+      },
+      iFrameResize
+    },
+    updated() {
+      if (this.$refs.iframe) {
+        this.$refs.iframe.forEach((iFrame) => {
+          iFrame.onload = () => {
+            window.iFrameResize(iFrame);
+          };
         });
       }
     }
@@ -60,8 +83,8 @@
   @import "https://use.fontawesome.com/releases/v5.8.1/css/all.css";
 
   iframe {
-    width: 800px;
-    height: 350px;
+    min-width: 100%;
+    width: 100%;
   }
 
   .title {
@@ -69,7 +92,13 @@
   }
 
   td {
-    padding: 0 10px;
+    padding: .5em .75em;
+    position: relative;
+    width: 1%;
+  }
+
+  td:last-child {
+    width: 100%;
   }
 
   .fa-check {
@@ -77,7 +106,7 @@
   }
 
   .fa-minus-circle {
-    color: #7a7a7a;
+    color: #808080;
   }
 
   .fa-times-circle {
@@ -85,7 +114,11 @@
   }
 
   .link {
-    color: #00d1b2;
+    color: #42d3a5;
     cursor: pointer;
+  }
+
+  .link:hover {
+    color: #363636;
   }
 </style>

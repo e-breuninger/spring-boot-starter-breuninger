@@ -16,6 +16,7 @@ dependencies {
   compile(project(":togglz"))
   compile(project(":jobs"))
 
+  compile(libraries["spring-boot-devtools"] as String)
   compileOnly(libraries["spring-context-indexer"] as String)
 }
 
