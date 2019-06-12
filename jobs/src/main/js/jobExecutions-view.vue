@@ -16,7 +16,9 @@
                 <div class="link" @click.stop="showDetails(instance)">{{ instance.registration.serviceUrl }}</div>
               </td>
               <td>
-                <iframe v-if="instance.statusInfo.status !== 'OFFLINE'" :src="instance.registration.serviceUrl + 'jobExecutions'" />
+                <iframe v-if="instance.statusInfo.status !== 'OFFLINE'"
+                        :src="instance.registration.serviceUrl + 'jobExecutions'"
+                        ref="iframe" />
               </td>
             </tr>
             </tbody>
@@ -28,6 +30,8 @@
 </template>
 
 <script>
+  import iFrameResize from 'iframe-resizer';
+
   export default {
     props: {
       applications: { //<1>
@@ -45,11 +49,20 @@
       this.apps = await this.applications;
     },
     methods: {
-      stringify: JSON.stringify,
       showDetails(instance) {
         this.$router.push({
           name: 'instances/details',
           params: {instanceId: instance.id}
+        });
+      },
+      iFrameResize
+    },
+    updated() {
+      if (this.$refs.iframe) {
+        this.$refs.iframe.forEach((iFrame) => {
+          iFrame.onload = () => {
+            window.iFrameResize(iFrame);
+          };
         });
       }
     }
@@ -60,8 +73,8 @@
   @import "https://use.fontawesome.com/releases/v5.8.1/css/all.css";
 
   iframe {
-    width: 800px;
-    height: 350px;
+    min-width: 100%;
+    width: 100%;
   }
 
   .title {
@@ -69,7 +82,13 @@
   }
 
   td {
-    padding: 0 10px;
+    padding: .5em .75em;
+    position: relative;
+    width: 1%;
+  }
+
+  td:last-child {
+    width: 100%;
   }
 
   .fa-check {
@@ -77,7 +96,7 @@
   }
 
   .fa-minus-circle {
-    color: #7a7a7a;
+    color: #808080;
   }
 
   .fa-times-circle {
@@ -85,7 +104,11 @@
   }
 
   .link {
-    color: #00d1b2;
+    color: #42d3a5;
     cursor: pointer;
+  }
+
+  .link:hover {
+    color: #363636;
   }
 </style>
