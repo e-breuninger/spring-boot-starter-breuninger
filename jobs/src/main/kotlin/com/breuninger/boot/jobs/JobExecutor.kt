@@ -126,14 +126,14 @@ class JobExecutor(
       "Fatal error in jobRunnable $jobId ($jobExecutionId) - ${exception.javaClass.name}: ${exception.message}", exception)
   }
 
-  private fun wrapWithTimer(jobRunnableToTime: JobRunnable) = object : JobRunnable {
+  private fun wrapWithTimer(jobRunnable: JobRunnable) = object : JobRunnable {
 
-    override fun definition() = jobRunnableToTime.definition()
+    override fun definition() = jobRunnable.definition()
 
     override fun execute() = definition().timer?.let {
       val startTimer = Timer.start(meterRegistry)
       try {
-        return jobRunnableToTime.execute()
+        return jobRunnable.execute()
       } finally {
         try {
           val stopTimer = Timer.builder(if (it.name.isEmpty()) DEFAULT_METRIC_NAME else it.name)
@@ -150,12 +150,12 @@ class JobExecutor(
         } catch (ignored: Exception) {
         }
       }
-    } ?: jobRunnableToTime.execute()
+    } ?: jobRunnable.execute()
   }
 
-  private fun wrapWithLongTaskTimer(jobRunnableToTime: JobRunnable) = object : JobRunnable {
+  private fun wrapWithLongTaskTimer(jobRunnable: JobRunnable) = object : JobRunnable {
 
-    override fun definition() = jobRunnableToTime.definition()
+    override fun definition() = jobRunnable.definition()
 
     override fun execute() = definition().timer?.let {
       if (it.longTask) {
@@ -168,7 +168,7 @@ class JobExecutor(
           .register(meterRegistry)
           .start()
         try {
-          return jobRunnableToTime.execute()
+          return jobRunnable.execute()
         } finally {
           try {
             longTaskTimer.stop()
@@ -176,8 +176,8 @@ class JobExecutor(
           }
         }
       } else {
-        jobRunnableToTime.execute()
+        jobRunnable.execute()
       }
-    } ?: jobRunnableToTime.execute()
+    } ?: jobRunnable.execute()
   }
 }

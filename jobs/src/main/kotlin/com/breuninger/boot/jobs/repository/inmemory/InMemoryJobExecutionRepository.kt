@@ -15,9 +15,10 @@ class InMemoryJobExecutionRepository : JobExecutionRepository {
 
   override fun findOne(jobExecutionId: JobExecutionId) = jobExecutions[jobExecutionId]
 
-  override fun find100DescendingByLastUpdated(jobId: JobId?) = jobExecutions.values.filter {
-    jobId?.equals(it.jobId) ?: true
-  }.sortedByDescending { it.lastUpdated }.take(100)
+  override fun find100DescendingByLastUpdated(jobId: JobId?) = jobExecutions.values
+    .filter { jobId?.equals(it.jobId) ?: true }
+    .sortedByDescending { it.lastUpdated }
+    .take(100)
 
   override fun findAllIgnoreMessages() = jobExecutions.values
     .sortedByDescending { it.started }

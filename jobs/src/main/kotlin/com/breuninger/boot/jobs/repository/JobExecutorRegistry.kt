@@ -15,7 +15,5 @@ class JobExecutorRegistry {
     jobExecutorMap[jobId] = jobExecutor
   }
 
-  fun findOne(jobId: JobId): JobExecutor? {
-    return jobExecutorMap[jobId]
-  }
+  fun findOne(jobId: JobId) = jobExecutorMap[jobId]
 }

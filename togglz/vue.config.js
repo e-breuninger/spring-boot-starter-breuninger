@@ -14,7 +14,7 @@ module.exports = {
       }
     });
     if (process.env.NODE_ENV === 'development') {
-      //Fix different paths for watch-mode
+      // TODO(KA): Fix different paths for watch-mode
       config.output.filename('js/[name].js');
       config.output.chunkFilename('js/[name].js');
     }

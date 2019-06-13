@@ -18,6 +18,7 @@ class JobExecutionRestController(private val jobExecutionService: JobExecutionSe
   @GetMapping("/{jobExecutionId}", produces = [APPLICATION_JSON_VALUE])
   fun find(@PathVariable jobExecutionId: String) = jobExecutionService.findOne(JobExecutionId(jobExecutionId))
 
+  // TODO(BS): add error handling if no job found
   @PostMapping
   fun create(@RequestParam(value = "jobId") jobIdValue: String) = jobExecutionService.create(JobId(jobIdValue))
 }
