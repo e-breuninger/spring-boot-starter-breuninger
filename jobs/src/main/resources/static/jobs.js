@@ -15,7 +15,7 @@ function openCollapseCards(button) {
 }
 
 function startJob(button) {
-  $.post(`jobExecutions?jobId=${button.value}`, job => {
+  $.post(`/jobExecutions?jobId=${button.value}`, job => {
     if (job && job.runningJobExecutionId) {
       const jobExecutionLink = $(`#${button.value}executionid`)[0];
       jobExecutionLink.textContent = job.runningJobExecutionId.value;
@@ -23,7 +23,7 @@ function startJob(button) {
 
       const jobExecutionLinkHeader = $(`#${button.value}executionidheader`)[0];
       jobExecutionLinkHeader.textContent = job.runningJobExecutionId.value;
-      jobExecutionLinkHeader.href = `../jobExecutions/${job.runningJobExecutionId.value}`;
+      jobExecutionLinkHeader.href = `/jobExecutions/${job.runningJobExecutionId.value}`;
 
       // updateDisableState header status
       updateJob(job.id.value, job);
@@ -40,7 +40,7 @@ function disableJob(disable, button) {
     }),
     contentType: 'application/json',
     type: 'PUT',
-    url: `jobs/${button.value}`,
+    url: `/jobs/${button.value}`,
     success: fragment => {
       if (fragment) {
         updateJob(button.value, fragment);
