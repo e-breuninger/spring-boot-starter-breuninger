@@ -11,15 +11,16 @@ function updateJobExecution(input) {
   const updateState = jobExecution => {
     const statusOk = 'OK';
     const statusSkipped = 'SKIPPED';
-    const statusElement = document.getElementById(`${id}-status`);
-    statusElement.innerHTML = jobExecution.status === statusOk && !jobExecution.stopped ? 'Running' : jobExecution.status;
-    statusElement.className = jobExecution.status === statusOk ?
-      !jobExecution.stopped ? 'badge has-background-primary' : 'badge has-background-success' :
-      jobExecution.status === statusSkipped ? 'badge has-background-grey' : 'badge has-background-danger';
 
     document.getElementById(`${id}-headerstate`).className = jobExecution.status === statusOk ?
       !jobExecution.stopped ? 'fas fa-spinner fa-spin has-text-primary' : 'fas fa-check has-text-success' :
-      jobExecution.status === statusSkipped ? 'fas fa-exclamation has-text-warning' : 'fas fa-times has-text-danger';
+      jobExecution.status === statusSkipped ? 'fas fa-exclamation has-text-grey' : 'fas fa-times has-text-danger';
+
+    const statusElement = document.getElementById(`${id}-status`);
+    statusElement.textContent = jobExecution.status === statusOk && !jobExecution.stopped ? 'Running' : jobExecution.status;
+    statusElement.className = jobExecution.status === statusOk ?
+      !jobExecution.stopped ? 'badge has-background-primary' : 'badge has-background-success' :
+      jobExecution.status === statusSkipped ? 'badge has-background-grey' : 'badge has-background-danger';
   };
   const updateDates = jobExecution => {
     const localeDE = 'de-DE';

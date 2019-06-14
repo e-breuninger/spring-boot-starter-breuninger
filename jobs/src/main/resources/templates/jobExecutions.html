@@ -17,7 +17,7 @@
     <button class="collapsible hero flex-header" onclick="openCollapseCards(this)" th:value="${jobExecution.id.value} + '-card'">
       <div>
         <i th:class="(${jobExecution.status.name()} == 'OK') ? (!${jobExecution.stopped} ? 'fas fa-spinner fa-spin has-text-primary' : 'fas fa-check has-text-success') :
-        ((${jobExecution.status.name()} == 'SKIPPED') ? 'fas fa-exclamation has-text-warning' : 'fas fa-times has-text-danger')"
+        ((${jobExecution.status.name()} == 'SKIPPED') ? 'fas fa-exclamation has-text-grey' : 'fas fa-times has-text-danger')"
            th:id="${jobExecution.id.value} + '-headerstate'">
         </i>
       </div>
