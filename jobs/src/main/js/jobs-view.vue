@@ -20,7 +20,7 @@
               <td>
                 <div v-for="instance in app.instances"
                      :key="instance.registration.serviceUrl"
-                     class="link"
+                     class="link has-text-primary"
                      @click.stop="showDetails(instance)">{{ instance.registration.serviceUrl }}
                 </div>
               </td>
@@ -51,9 +51,9 @@
     },
     data: () => ({
       apps: '',
-      checkIconClass: 'fas fa-check',
-      minusIconClass: 'fas fa-minus-circle',
-      timesIconClass: 'fas fa-times-circle'
+      checkIconClass: 'fas fa-check has-text-success',
+      minusIconClass: 'fas fa-minus-circle has-text-grey',
+      timesIconClass: 'fas fa-times-circle has-text-danger'
     }),
     async created() {
       this.apps = await this.applications;
@@ -101,24 +101,11 @@
     width: 100%;
   }
 
-  .fa-check {
-    color: #23d160;
-  }
-
-  .fa-minus-circle {
-    color: #808080;
-  }
-
-  .fa-times-circle {
-    color: #ff3860;
-  }
-
   .link {
-    color: #42d3a5;
     cursor: pointer;
   }
 
   .link:hover {
-    color: #363636;
+    color: #2bb78b;
   }
 </style>

@@ -1,0 +1,79 @@
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 1px;
+}
+
+.card {
+  flex-grow: unset;
+}
+
+.card-content {
+  display: none;
+  justify-content: space-between;
+}
+
+.collapsible {
+  cursor: pointer;
+  padding: 0 !important;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 16px;
+}
+
+.collapsible:hover:not(.is-primary) {
+  background-color: #fafafa;
+}
+
+.flex-header {
+  flex-direction: initial;
+  align-items: center;
+}
+
+.flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.fas {
+  margin: 0 20px 0 10px;
+}
+
+.is-primary a,
+.is-primary .fa-spinner,
+.is-primary .fa-check,
+.is-primary .fa-times,
+.is-primary .fa-minus-circle,
+.is-primary .fa-exclamation {
+  color: #ffffff !important;
+}
+
+.is-primary a {
+  text-decoration: underline;
+}
+
+.is-primary a:hover {
+  color: #ffffff !important;
+}
+
+.badge {
+  color: white;
+  border-radius: 4px;
+  padding: 2px 5px;
+  width: fit-content;
+}
+
+.messages {
+  width: 100%;
+  height: 400px;
+  overflow: auto;
+  background-color: #f9f9f9;
+  font-family: monospace;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+pre.messages {
+  white-space: pre-wrap;
+}

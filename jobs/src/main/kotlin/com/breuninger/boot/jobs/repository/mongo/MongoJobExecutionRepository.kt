@@ -5,6 +5,7 @@ import com.breuninger.boot.jobs.domain.JobExecution.Status
 import com.breuninger.boot.jobs.domain.JobExecutionId
 import com.breuninger.boot.jobs.domain.JobExecutionMessage
 import com.breuninger.boot.jobs.domain.JobId
+import com.breuninger.boot.jobs.domain.UnableToRemoveException
 import com.breuninger.boot.jobs.repository.JobExecutionRepository
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.data.domain.Sort
@@ -65,7 +66,10 @@ class MongoJobExecutionRepository(private val mongoTemplate: MongoTemplate) : Jo
   }
 
   override fun remove(jobExecution: JobExecution) {
-    mongoTemplate.remove(jobExecution)
+    val deleteResult = mongoTemplate.remove(jobExecution)
+    if (deleteResult.deletedCount != 1L) {
+      throw UnableToRemoveException("Unable to remove $jobExecution")
+    }
   }
 
   override fun drop() = mongoTemplate.dropCollection<JobExecution>()

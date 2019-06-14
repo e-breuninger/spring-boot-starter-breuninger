@@ -8,6 +8,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.time.Duration.ofMillis
+import kotlin.random.Random
 
 @Component
 class NotTimedJob : JobRunnable {
@@ -29,7 +30,10 @@ class NotTimedJob : JobRunnable {
   override fun actuatorEndpointPublicMethodName() = this::logShitToConsole.name
 
   fun logShitToConsole(): Boolean {
-    LOG.info(JOB_MARKER, "IT WORKS")
+    repeat(Random.nextInt(10, 60)) {
+      LOG.info(JOB_MARKER, "NOT TIMED IT WORKS")
+      Thread.sleep(1000)
+    }
     return true
   }
 }

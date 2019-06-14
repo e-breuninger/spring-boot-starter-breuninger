@@ -4,6 +4,7 @@ import com.breuninger.boot.jobs.domain.Job
 import com.breuninger.boot.jobs.domain.JobBlockedException
 import com.breuninger.boot.jobs.domain.JobExecutionId
 import com.breuninger.boot.jobs.domain.JobId
+import com.breuninger.boot.jobs.domain.UnableToRemoveException
 import com.breuninger.boot.jobs.repository.JobRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -81,7 +82,10 @@ class MongoJobRepository(private val mongoTemplate: MongoTemplate) : JobReposito
   }
 
   override fun remove(job: Job) {
-    mongoTemplate.remove(job)
+    val deleteResult = mongoTemplate.remove(job)
+    if (deleteResult.deletedCount != 1L) {
+      throw UnableToRemoveException("Unable to remove $job")
+    }
   }
 
   override fun drop() = mongoTemplate.dropCollection<Job>()

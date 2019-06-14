@@ -1,15 +1,9 @@
 // TODO(BS): check this file
-const timermap = new Map();
 const faSpinner = 'fas fa-spinner fa-spin';
 const faCheck = 'fas fa-check';
-const faExclamation = 'fas fa-exclamation';
-const faTimes = 'fas fa-times';
 const faMinusCircle = 'fas fa-minus-circle';
 const displayTableRow = 'display-table-row';
 const displayNone = 'display-none';
-const statusOk = 'OK';
-const statusSkipped = 'SKIPPED';
-const localeDE = 'de-DE';
 
 function openCollapseCards(button) {
   const content = $(`#${button.value}content`)[0];
@@ -18,73 +12,6 @@ function openCollapseCards(button) {
   button.classList.toggle('hide-last-child');
   content.classList.toggle('flex');
   content.classList.toggle('flex-wrap');
-}
-
-function updateMessagesAndDates(input) {
-  const id = input.value;
-
-  const callJobExecutionUpdateFromServer = () => {
-    $.getJSON(`/jobExecutions/${id}`, jobExecution => {
-      if (jobExecution) {
-        const messageElement = $(`#${id}`)[0];
-        messageElement.innerHTML = formatMessages(jobExecution.messages);
-        messageElement.scrollTop = messageElement.scrollHeight;
-
-        const statusElement = $(`#${id}status`)[0];
-        statusElement.innerHTML = jobExecution.status === statusOk && !jobExecution.stopped ? 'Running' : jobExecution.status;
-        statusElement.className = jobExecution.status === statusOk ? 'green' : jobExecution.status === statusSkipped ? 'yellow' : 'red';
-
-        $(`#${id}headerstate`)[0].className = jobExecution.status === statusOk ?
-          !jobExecution.stopped ? faSpinner : faCheck :
-          jobExecution.status === statusSkipped ? faExclamation : faTimes;
-
-        const options = {
-          year: 'numeric',
-          month: '2-digit',
-          day: 'numeric',
-          hour: 'numeric',
-          minute: 'numeric',
-          second: 'numeric'
-        };
-
-        // updateDisableState last updated date
-        $(`#${id}update`)[0].textContent = new Date(jobExecution.lastUpdated).toLocaleDateString(localeDE, options).replace(',', '');
-
-        // if stopped updateDisableState stopped date
-        if (jobExecution.stopped) {
-          $(`#${id}stopped`)[0].textContent = new Date(jobExecution.stopped).toLocaleDateString(localeDE, options).replace(',', '');
-          input.checked = false;
-          clearInterval(timermap.get(id));
-          timermap.delete(id);
-        }
-      }
-    });
-  };
-
-  if (input.checked) {
-    callJobExecutionUpdateFromServer();
-    const intervalId = setInterval(callJobExecutionUpdateFromServer, 1000);
-    timermap.set(id, intervalId);
-  } else {
-    clearInterval(timermap.get(id));
-    timermap.delete(id);
-  }
-}
-
-function formatMessages(rawMessages) {
-  const formattedMessages = [];
-  for (const rawMessage of rawMessages) {
-    const formattedMessage = [];
-    const date = new Date(rawMessage.timestamp);
-    const month = date.getMonth() + 1;
-    formattedMessage.push([
-      date.getFullYear(),
-      month < 10 ? `0${month}` : month,
-      date.getDate()
-    ].join('-'), date.toLocaleTimeString(), rawMessage.level, '---', rawMessage.message);
-    formattedMessages.push(formattedMessage.join(' '));
-  }
-  return formattedMessages.join('\n');
 }
 
 function startJob(button) {

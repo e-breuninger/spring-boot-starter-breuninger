@@ -15,6 +15,10 @@ body {
   background: white;
 }
 
+.card {
+  flex-grow: unset;
+}
+
 .card-content {
   display: none;
   justify-content: space-between;
