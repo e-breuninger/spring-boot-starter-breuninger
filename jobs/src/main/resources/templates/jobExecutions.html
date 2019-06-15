@@ -23,7 +23,8 @@
       </div>
       <div class="column">
         <span th:text="${jobExecution.id.value} + ' '"></span>
-        <a class="has-text-primary" onclick="stopPropagation(event)"
+        <a class="has-text-primary"
+           onclick="stopPropagation(event)"
            th:href="'/jobs/' + ${jobExecution.jobId.value}"
            th:text="${jobExecution.jobId.value}">
         </a>
