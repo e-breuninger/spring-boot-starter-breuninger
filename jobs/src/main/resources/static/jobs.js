@@ -1,70 +1,71 @@
-// TODO(BS): check this file
-const faSpinner = 'fas fa-spinner fa-spin';
-const faCheck = 'fas fa-check';
-const faMinusCircle = 'fas fa-minus-circle';
-const displayTableRow = 'display-table-row';
 const displayNone = 'display-none';
 
 function openCollapseCards(button) {
-  const content = $(`#${button.value}content`)[0];
-  button.classList.toggle('card-header-title');
   button.classList.toggle('is-primary');
-  button.classList.toggle('hide-last-child');
-  content.classList.toggle('flex');
-  content.classList.toggle('flex-wrap');
+  button.classList.toggle('card-header-title');
+  document.getElementById(`${button.value}-content`).classList.toggle('flex-wrap');
 }
 
 function startJob(button) {
-  $.post(`/jobExecutions?jobId=${button.value}`, job => {
-    if (job && job.runningJobExecutionId) {
-      const jobExecutionLink = $(`#${button.value}executionid`)[0];
-      jobExecutionLink.textContent = job.runningJobExecutionId.value;
-      jobExecutionLink.href = `/jobExecutions/${job.runningJobExecutionId.value}`;
+  fetch(`/jobExecutions?jobId=${button.value}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: ''
+  }).then(response => {
+    response.json().then(job => {
+      if (job && job.runningJobExecutionId) {
+        const jobExecutionId = job.runningJobExecutionId.value;
+        const jobExecutionsLink = `/jobExecutions/${jobExecutionId}`;
 
-      const jobExecutionLinkHeader = $(`#${button.value}executionidheader`)[0];
-      jobExecutionLinkHeader.textContent = job.runningJobExecutionId.value;
-      jobExecutionLinkHeader.href = `/jobExecutions/${job.runningJobExecutionId.value}`;
+        const jobExecutionLinkHeader = document.getElementById(`${button.value}-executionid-header`);
+        jobExecutionLinkHeader.textContent = jobExecutionId;
+        jobExecutionLinkHeader.href = jobExecutionsLink;
 
-      // updateDisableState header status
-      updateJob(job.id.value, job);
-    }
+        const jobExecutionLink = document.getElementById(`${button.value}-executionid`);
+        jobExecutionLink.textContent = jobExecutionId;
+        jobExecutionLink.href = jobExecutionsLink;
+
+        updateJob(job.id.value, job);
+      }
+    });
   });
 }
 
 function disableJob(disable, button) {
-  $.ajax({
-    data: JSON.stringify({
+  fetch(`/jobs/${button.value}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
       id: {value: button.value},
       disabled: disable,
-      disableComment: $(`#${button.value}disabledcommentinput`)[0].value
-    }),
-    contentType: 'application/json',
-    type: 'PUT',
-    url: `/jobs/${button.value}`,
-    success: fragment => {
-      if (fragment) {
-        updateJob(button.value, fragment);
+      disableComment: document.getElementById(`${button.value}-disabledcomment-input`).value
+    })
+  }).then(response => {
+    response.json().then(job => {
+      if (job) {
+        updateJob(button.value, job);
       }
-    },
-    dataType: 'json'
-  });
+    });
+  })
 }
 
-function updateJob(jobId, jobData) {
-  const statusElement = $(`#${jobId}status`)[0];
-  statusElement.textContent = jobData.disabled ? 'Disabled' : 'Enabled';
-  statusElement.className = jobData.disabled ? 'disabled' : 'enabled';
+function updateJob(jobId, job) {
+  document.getElementById(`${jobId}-headerstate`).className = job.runningJobExecutionId ?
+    'fas fa-spinner fa-spin has-text-primary' :
+    job.disabled ? 'fas fa-minus-circle has-text-grey' : 'fas fa-check has-text-success';
 
-  $(`#${jobId}disabledcomment`)[0].textContent = jobData.disableComment;
+  document.getElementById(`${jobId}-start`).disabled = job.disabled;
 
-  $(`#${jobId}disabled`)[0].className = jobData.disabled ? displayTableRow : displayNone;
-  $(`#${jobId}enabled`)[0].className = jobData.disabled ? displayNone : displayTableRow;
-  $(`#${jobId}headerstate`)[0].className = jobData.disabled ? faMinusCircle : jobData.runningJobExecutionId ? faSpinner : faCheck;
+  const statusElement = document.getElementById(`${jobId}-status`);
+  statusElement.textContent = job.disabled ? 'Disabled' : 'Enabled';
+  statusElement.className = job.disabled ? 'badge has-background-grey' : 'badge has-background-success';
 
-  $(`#${jobId}start`)[0].disabled = jobData.runningJobExecutionId ? true : jobData.disabled;
-}
+  document.getElementById(`${jobId}-disabledcomment`).textContent = job.disableComment;
+  document.getElementById(`${jobId}-disabled`).className = job.disabled ? '' : displayNone;
 
-function stopPropagation(e) {
-  e.stopPropagation();
-  e.stopImmediatePropagation();
+  document.getElementById(`${jobId}-enabled`).className = job.disabled ? displayNone : '';
 }

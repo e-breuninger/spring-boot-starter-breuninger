@@ -6,8 +6,10 @@
   <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
   <link href="../base.min.css" rel="stylesheet" type="text/css">
   <link href="../jobExecutions.css" rel="stylesheet" type="text/css">
-  <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" rel="stylesheet">
+  <link crossorigin="anonymous"
+        href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+        rel="stylesheet">
 </head>
 <body>
 <!--/*@thymesVar id="jobExecutions" type="java.util.List<com.breuninger.boot.jobs.domain.JobExecution>"*/-->
@@ -24,7 +26,6 @@
       <div class="column">
         <span th:text="${jobExecution.id.value} + ' '"></span>
         <a class="has-text-primary"
-           onclick="stopPropagation(event)"
            th:href="'/jobs/' + ${jobExecution.jobId.value}"
            th:text="${jobExecution.jobId.value}">
         </a>

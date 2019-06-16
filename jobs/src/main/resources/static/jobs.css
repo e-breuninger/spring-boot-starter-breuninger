@@ -1,18 +1,6 @@
-/* TODO(BS): check this file */
 body {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   margin: 1px;
-}
-
-.collapsible {
-  cursor: pointer;
-  padding: .75rem;
-  width: 100%;
-  border: none;
-  text-align: left;
-  outline: none;
-  font-size: 16px;
-  background: white;
 }
 
 .card {
@@ -24,161 +12,59 @@ body {
   justify-content: space-between;
 }
 
-li {
-  list-style: none;
-}
-
-.enabled, .green {
-  background-color: green;
-  color: white;
-  border-radius: 4px;
-  padding: 2px 5px;
-  width: fit-content;
-}
-
-.disabled, .red {
-  background-color: red;
-  color: white;
-  border-radius: 4px;
-  padding: 2px 5px;
-  width: fit-content;
-}
-
-.yellow {
-  background-color: yellow;
-  color: black;
-  border-radius: 4px;
-  padding: 2px 5px;
-  width: fit-content;
-}
-
-.message-box {
+.collapsible {
+  cursor: pointer;
+  padding: 0 !important;
   width: 100%;
-  max-width: 800px;
-  height: 400px;
-  overflow: auto;
-  background-color: #f9f9f9;
-  padding: 0 10px;
-  font-family: monospace;
+  border: none;
+  text-align: left;
+  outline: none;
   font-size: 16px;
-  font-weight: 400;
 }
 
-.card {
-  max-width: 1200px;
-}
-
-.panel {
-  /* the content of the jobexecutions wont get smaller than this */
-  min-width: 418px;
-}
-
-.content table tbody tr:last-child td, .content table tbody tr:last-child th {
-  border: 1px solid #dbdbdb;
-  border-width: 0 0 1px;
-  padding: .5em .75em;
-  vertical-align: top;
-}
-
-.heading {
-  display: block;
-  font-size: 11px;
-  letter-spacing: 1px;
-  margin-bottom: 5px;
-  text-transform: uppercase;
-}
-
-.flex {
-  display: flex;
-}
-
-.flex-wrap {
-  flex-wrap: wrap;
-}
-
-.space-left {
-  margin-left: 10px;
-}
-
-.display-none {
-  display: none;
-}
-
-.display-table-row {
-  display: table-row;
-}
-
-.hide-last-child span:last-child, .hide-last-child div a, .hide-last-child br, .hide-last-child div:first-child {
-  display: none;
-}
-
-a, .fa-check, .fa-spinner {
-  color: #00d1b2;
+.collapsible:hover:not(.is-primary) {
+  background-color: #fafafa;
 }
 
 .flex-header {
   flex-direction: initial;
-  justify-content: flex-start;
   align-items: center;
+}
+
+.flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .fas {
   margin: 0 20px 0 10px;
 }
 
-.fa-times {
-  color: #ff3860;
+.is-primary a,
+.is-primary .fa-spinner,
+.is-primary .fa-check,
+.is-primary .fa-times,
+.is-primary .fa-minus-circle,
+.is-primary .fa-exclamation {
+  color: #ffffff !important;
 }
 
-.fa-exclamation {
-  color: #ffdd57;
+.is-primary a {
+  text-decoration: underline;
 }
 
-.second-level-headline {
-  font-size: 14px;
-  color: grey;
+.is-primary a:hover {
+  color: #ffffff !important;
 }
 
-.margin-left-auto {
-  margin-left: auto;
+.badge {
+  color: white;
+  border-radius: 4px;
+  padding: 2px 5px;
+  width: fit-content;
 }
 
-.display-block {
-  display: block;
-}
-
-.fa-minus-circle {
-  color: #7a7a7a;
-}
-
-.td-15 {
-  width: 15%;
-}
-
-.td-25 {
-  width: 25%;
-}
-
-.td-60 {
-  width: 60%;
-}
-
-.td-75 {
-  width: 75%;
-}
-
-.td-100 {
-  width: 100%;
-}
-
-.width-320 {
-  width: 320px !important;
-}
-
-.content pre {
-  white-space: pre-wrap;
-}
-
-.max-width-800 {
-  max-width: 800px;
+.display-none {
+  display: none;
+  opacity: 0;
 }
