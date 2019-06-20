@@ -9,5 +9,5 @@ object SanitizingUtil {
   private val DISALLOW_ANYTHING_POLICY = HtmlPolicyBuilder().toFactory()
 
   fun sanitize(text: String) =
-    StringUtils.trimAllWhitespace(HtmlEscape.unescapeHtml(DISALLOW_ANYTHING_POLICY.sanitize(HtmlEscape.unescapeHtml(text))))
+    StringUtils.trimWhitespace(HtmlEscape.unescapeHtml(DISALLOW_ANYTHING_POLICY.sanitize(HtmlEscape.unescapeHtml(text))))
 }
