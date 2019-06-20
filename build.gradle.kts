@@ -77,7 +77,7 @@ subprojects {
   }
 
   group = "com.breuninger.boot"
-  version = "3.1.0.RELEASE"
+  version = "3.1.1.RELEASE"
 
   repositories {
     jcenter()
