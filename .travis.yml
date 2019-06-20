@@ -1,3 +1,5 @@
+# TODO(BS): release new versions from travis-ci
+
 language: java
 
 jdk:
@@ -9,5 +11,4 @@ before_cache:
 cache:
   directories:
     - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/ 
-
+    - $HOME/.gradle/wrapper/
