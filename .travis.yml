@@ -1,4 +1,5 @@
 # TODO(BS): release new versions from travis-ci
+# TODO(BS): add secrets to this file analog to https://github.com/scalacenter/sbt-release-early/wiki/How-to-release-in-Travis-(CI)
 
 language: java
 
