@@ -18,7 +18,7 @@ val libraryVersions = mapOf(
   "owasp-java-html-sanitizer" to "20190503.1",
   "slugify" to "2.3",
 
-  "junit" to "5.5.0-M1",
+  "junit" to "5.5.0-RC2",
   "mockk" to "1.9.3",
   "assertk" to "0.17",
   "flapdoodle" to "2.2.0"

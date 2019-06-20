@@ -9,7 +9,7 @@ val gradlePluginVersions = mapOf(
   "node" to "1.3.1",
 
   "detekt" to "1.0.0-RC15",
-  "jacoco" to "0.8.3",
+  "jacoco" to "0.8.4",
   "dokka" to "0.9.18",
 
   "nexus-staging" to "0.21.0",
