@@ -12,7 +12,6 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 
-// TODO(KA): missing IntegrationTest equivalent
 class JobExecutionRestControllerTest {
 
   private val jobExecutionService = mockk<JobExecutionService>()

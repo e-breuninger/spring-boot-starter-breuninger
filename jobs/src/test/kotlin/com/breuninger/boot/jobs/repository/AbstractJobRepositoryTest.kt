@@ -16,7 +16,6 @@ import com.breuninger.boot.jobs.domain.JobId
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-// TODO(BS): implement more tests see TODOs in repository class
 abstract class AbstractJobRepositoryTest {
 
   @BeforeEach

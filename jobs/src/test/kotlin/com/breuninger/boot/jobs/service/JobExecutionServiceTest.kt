@@ -32,7 +32,7 @@ class JobExecutionServiceTest {
     jobExecutorRegistry, emptySet())
 
   @BeforeEach
-  fun beforeEach(){
+  fun beforeEach() {
     every { jobExecutionRepository.appendMessage(any(), any()) } returns null
     every { jobExecutionRepository.updateStatus(any(), any()) } returns null
     every { jobExecutionRepository.findOne(any()) } returns null
@@ -130,7 +130,7 @@ class JobExecutionServiceTest {
   }
 
   @Test
-  fun `ensure markRestarted appends a message to the correct job`(){
+  fun `ensure markRestarted appends a message to the correct job`() {
     val jobExecutionId = JobExecutionId("foo")
 
     jobExecutionService.markRestarted(jobExecutionId)
@@ -139,7 +139,7 @@ class JobExecutionServiceTest {
   }
 
   @Test
-  fun `ensure markSkipped appends a message to the correct job`(){
+  fun `ensure markSkipped appends a message to the correct job`() {
     val jobExecutionId = JobExecutionId("foo")
 
     jobExecutionService.markSkipped(jobExecutionId)
@@ -148,7 +148,7 @@ class JobExecutionServiceTest {
   }
 
   @Test
-  fun `ensure markDead appends a message to the correct job`(){
+  fun `ensure markDead appends a message to the correct job`() {
     val jobExecutionId = JobExecutionId("foo")
 
     jobExecutionService.markRestarted(jobExecutionId)
@@ -157,49 +157,60 @@ class JobExecutionServiceTest {
   }
 
   @Test
-  fun `ensure acquireRunLock calls acquireRunLock of the JobRepository and does not throw an exception if the job is not disabled not already running and not part of a mutexGroup with an already running job`(){
+  fun `ensure acquireRunLock calls acquireRunLock of the JobRepository and does not throw an exception if the job is not disabled not already running and not part of a mutexGroup with an already running job`() {
     val jobExecutionId = JobExecutionId("foo")
     val jobId = JobId("bar")
     every { jobRepository.acquireRunLock(jobId, jobExecutionId) } returns Job(jobId, null, false, "", emptyMap())
     every { jobRepository.findOneRunning(any()) } returns null
 
-    assertThat { jobExecutionService.acquireRunLock(jobId,jobExecutionId) }.doesNotThrowAnyException()
-    verify { jobRepository.acquireRunLock(jobId,jobExecutionId) }
+    assertThat { jobExecutionService.acquireRunLock(jobId, jobExecutionId) }.doesNotThrowAnyException()
+    verify { jobRepository.acquireRunLock(jobId, jobExecutionId) }
   }
 
   @Test
-  fun `ensure acquireRunLock throws an exception and releases the previous acquired run lock if the job is disabled`(){
+  fun `ensure acquireRunLock throws an exception and releases the previous acquired run lock if the job is disabled`() {
     val jobExecutionId = JobExecutionId("foo")
     val jobId = JobId("bar")
     every { jobRepository.acquireRunLock(jobId, jobExecutionId) } returns Job(jobId, null, true, "", emptyMap())
     every { jobRepository.findOneRunning(any()) } returns null
     every { jobRepository.releaseRunLock(jobId, jobExecutionId) } returns Unit
 
-    assertThat { jobExecutionService.acquireRunLock(jobId,jobExecutionId) }.thrownError { hasClass(JobBlockedException::class).also { hasMessage("JobRunnable '$jobId' is currently disabled") } }
-    verify { jobRepository.acquireRunLock(jobId,jobExecutionId) }
-    verify { jobRepository.releaseRunLock(jobId,jobExecutionId) }
-  }
-
-  // TODO(BS): define mutexgroup
-  fun `ensure acquireRunLock throws an exception and releases the previous acquired run lock if the job is part of a mutex group with an already running job`(){
-    val jobExecutionId = JobExecutionId("foo")
-    val jobId = JobId("bar")
-    every { jobRepository.acquireRunLock(jobId, jobExecutionId) } returns Job(jobId, null, false, "", emptyMap())
-    every { jobRepository.releaseRunLock(jobId, jobExecutionId) } returns Unit
-
-    assertThat { jobExecutionService.acquireRunLock(jobId,jobExecutionId) }.thrownError { hasClass(JobBlockedException::class).also { hasMessage("JobRunnable '$jobId' blocked by currently running job '$it'") } }
-    verify { jobRepository.acquireRunLock(jobId,jobExecutionId) }
-    verify { jobRepository.releaseRunLock(jobId,jobExecutionId) }
+    assertThat { jobExecutionService.acquireRunLock(jobId, jobExecutionId) }.thrownError {
+      hasClass(JobBlockedException::class).also { hasMessage("JobRunnable '$jobId' is currently disabled") }
+    }
+    verify { jobRepository.acquireRunLock(jobId, jobExecutionId) }
+    verify { jobRepository.releaseRunLock(jobId, jobExecutionId) }
   }
 
   @Test
-  fun `ensure acquireRunLock throws an exception if the job is already running`(){
+  fun `ensure acquireRunLock throws an exception and releases the previous acquired run lock if the job is part of a mutex group with an already running job`() {
+    val jobId = JobId("bar")
+    val jobExecutionId = JobExecutionId("foo")
+    val mutexJobId = JobId("foo")
+    val mutexJob = Job(mutexJobId, jobExecutionId, false, "", emptyMap())
+    every { jobRepository.acquireRunLock(jobId, jobExecutionId) } returns Job(jobId, null, false, "", emptyMap())
+    every { jobRepository.releaseRunLock(jobId, jobExecutionId) } returns Unit
+    every { jobRepository.findOneRunning(any()) } returns mutexJob
+
+    assertThat { jobExecutionService.acquireRunLock(jobId, jobExecutionId) }.thrownError {
+      hasClass(JobBlockedException::class).also {
+        hasMessage("JobRunnable '$jobId' blocked by currently running job '$mutexJob'")
+      }
+    }
+    verify { jobRepository.acquireRunLock(jobId, jobExecutionId) }
+    verify { jobRepository.releaseRunLock(jobId, jobExecutionId) }
+  }
+
+  @Test
+  fun `ensure acquireRunLock throws an exception if the job is already running`() {
     val jobExecutionId = JobExecutionId("foo")
     val jobId = JobId("bar")
     every { jobRepository.acquireRunLock(jobId, jobExecutionId) } returns null
 
-    assertThat { jobExecutionService.acquireRunLock(jobId,jobExecutionId) }.thrownError { hasClass(JobBlockedException::class).also { hasMessage("JobRunnable '$jobId' is already running") } }
-    verify { jobRepository.acquireRunLock(jobId,jobExecutionId) }
+    assertThat { jobExecutionService.acquireRunLock(jobId, jobExecutionId) }.thrownError {
+      hasClass(JobBlockedException::class).also { hasMessage("JobRunnable '$jobId' is already running") }
+    }
+    verify { jobRepository.acquireRunLock(jobId, jobExecutionId) }
   }
 
   @Test

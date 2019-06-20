@@ -1,8 +1,8 @@
 package com.breuninger.boot.togglz.web
 
 import assertk.assertThat
+import assertk.assertions.contains
 import assertk.assertions.isEqualTo
-import assertk.assertions.isTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -17,7 +17,6 @@ import org.springframework.http.MediaType
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class TogglzHtmlControllerIntegrationTest(
-  // TODO(KA): use WebClient instead of restTemplate
   @Autowired private val restTemplate: TestRestTemplate,
   @LocalServerPort private val port: Int
 ) {
@@ -33,6 +32,6 @@ class TogglzHtmlControllerIntegrationTest(
       HttpEntity<Map<String, String>>(headers))
 
     assertThat(result.statusCode).isEqualTo(HttpStatus.OK)
-    assertThat(result.body!!.contains("<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\">")).isTrue()
+    assertThat(result.body!!).contains("<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\">")
   }
 }
