@@ -9,7 +9,7 @@ import reactor.core.publisher.Flux
 
 @Controller
 @RequestMapping("/products")
-class ProductsHtmlController {
+class ProductHtmlController {
 
   @GetMapping
   fun findAll(model: Model): String {

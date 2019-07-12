@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono
 
 @RestController
 @RequestMapping("/products")
-class ProductsRestController(private val validator: BindExceptionValidator) {
+class ProductRestController(private val validator: BindExceptionValidator) {
 
   @GetMapping(produces = [APPLICATION_JSON_VALUE])
   fun findAll() =

@@ -31,8 +31,18 @@
         </a>
       </div>
       <div class="column has-text-right"
+           th:classappend="${jobExecution.id.value} + '-runtime'"
+           th:text="${#temporals.format(T(java.time.LocalTime).ofNanoOfDay(jobExecution.runtime.toNanos()), 'HH:mm:ss')}"
+           th:if="${jobExecution.runtime != null && jobExecution.runtime.toDays() < 1}">
+      </div>
+      <div class="column has-text-right"
+           th:classappend="${jobExecution.id.value} + '-runtime'"
+           th:if="${jobExecution.runtime != null && jobExecution.runtime.toDays() >= 1}">
+        > 24h
+      </div>
+      <div class="column has-text-right"
            th:classappend="${jobExecution.id.value} + '-update'"
-           th:text="${#dates.format(jobExecution.lastUpdated, 'dd.MM.yyyy HH:mm:ss')}">
+           th:text="${#temporals.format(jobExecution.lastUpdated, 'dd.MM.yyyy HH:mm:ss')}">
       </div>
     </button>
   </div>
@@ -58,17 +68,17 @@
       </tr>
       <tr>
         <td>Started</td>
-        <td th:text="${#dates.format(jobExecution.started, 'dd.MM.yyyy HH:mm:ss')}"></td>
+        <td th:text="${#temporals.format(jobExecution.started, 'dd.MM.yyyy HH:mm:ss')}"></td>
       </tr>
       <tr>
         <td>Last Update</td>
         <td th:class="${jobExecution.id.value} + '-update'"
-            th:text="${#dates.format(jobExecution.lastUpdated, 'dd.MM.yyyy HH:mm:ss')}"></td>
+            th:text="${#temporals.format(jobExecution.lastUpdated, 'dd.MM.yyyy HH:mm:ss')}"></td>
       </tr>
       <tr>
         <td>Stopped</td>
         <td th:id="${jobExecution.id.value} + '-stopped'"
-            th:text="(${jobExecution.stopped} ? ${#dates.format(jobExecution.stopped, 'dd.MM.yyyy HH:mm:ss')} : '-')"></td>
+            th:text="(${jobExecution.stopped} ? ${#temporals.format(jobExecution.stopped, 'dd.MM.yyyy HH:mm:ss')} : '-')"></td>
       </tr>
     </table>
     <table class="table">
@@ -87,7 +97,7 @@
       <tr class="card-content-item">
         <td class="messages">
           <pre class="messages" th:id="${jobExecution.id.value}"><div th:each="message : ${jobExecution.messages}"
-                                                                      th:text="${#dates.format(message.timestamp, 'yyyy-MM-dd HH:mm:ss')} + ' ' + ${message.level} + ' --- ' + ${message.message}"></div></pre>
+                                                                      th:text="${#temporals.format(message.timestamp, 'yyyy-MM-dd HH:mm:ss')} + ' ' + ${message.level} + ' --- ' + ${message.message}"></div></pre>
         </td>
       </tr>
     </table>

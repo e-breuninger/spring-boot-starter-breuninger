@@ -5,6 +5,7 @@ import com.breuninger.boot.jobs.domain.JobExecution.Status
 import com.breuninger.boot.jobs.domain.JobExecutionId
 import com.breuninger.boot.jobs.domain.JobExecutionMessage
 import com.breuninger.boot.jobs.domain.JobId
+import java.time.Duration
 import java.time.Instant
 
 interface JobExecutionRepository {
@@ -23,7 +24,7 @@ interface JobExecutionRepository {
 
   fun appendMessage(jobExecutionId: JobExecutionId, message: JobExecutionMessage): Unit?
 
-  fun stop(jobExecutionId: JobExecutionId, stopped: Instant): Unit?
+  fun stop(jobExecutionId: JobExecutionId, stopped: Instant, runtime: Duration): Unit?
 
   fun remove(jobExecution: JobExecution)
 

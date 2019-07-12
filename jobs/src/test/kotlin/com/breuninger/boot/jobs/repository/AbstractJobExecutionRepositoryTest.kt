@@ -17,6 +17,7 @@ import com.breuninger.boot.jobs.domain.JobExecutionMessage.Level
 import com.breuninger.boot.jobs.domain.JobId
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.Duration
 import java.time.Instant
 import java.time.Instant.now
 import java.time.temporal.ChronoUnit.MILLIS
@@ -129,7 +130,8 @@ abstract class AbstractJobExecutionRepositoryTest {
 
     assertThat(getRepository().findOne(JobExecutionId("foo"))!!.stopped).isNull()
 
-    getRepository().stop(JobExecutionId("foo"), now())
+    val now = now()
+    getRepository().stop(JobExecutionId("foo"), now, Duration.between(jobExecutionFoo.started, now))
 
     assertThat(getRepository().findOne(JobExecutionId("foo"))!!.stopped).isNotNull()
   }
@@ -202,8 +204,9 @@ abstract class AbstractJobExecutionRepositoryTest {
     id: JobExecutionId = JobExecutionId("foo"),
     jobId: JobId = JobId("bar"),
     stopped: Instant? = null,
+    runtime: Duration? = null,
     messages: List<JobExecutionMessage> = emptyList(),
     hostname: String = "foobar",
     lastUpdated: Instant = now().truncatedTo(MILLIS)
-  ) = JobExecution(id, jobId, OK, now().truncatedTo(MILLIS), stopped, messages, hostname, lastUpdated)
+  ) = JobExecution(id, jobId, OK, now().truncatedTo(MILLIS), stopped, runtime, messages, hostname, lastUpdated)
 }

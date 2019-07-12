@@ -22,6 +22,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
+import java.time.Duration
 import java.time.Instant.now
 
 @Service
@@ -95,9 +96,12 @@ class JobExecutionService(
   }
 
   fun stop(jobId: JobId, jobExecutionId: JobExecutionId) {
-    jobExecutionRepository.stop(jobExecutionId, now())
-    releaseRunLock(jobId, jobExecutionId)?.let {
-      jobHealthIndicator.setJobExecutionStatus(jobId, it.status)
+    jobExecutionRepository.findOne(jobExecutionId)?.let {
+      val now = now()
+      jobExecutionRepository.stop(jobExecutionId, now, Duration.between(it.started, now))
+      releaseRunLock(jobId, jobExecutionId)?.let { stoppedJobExecution ->
+        jobHealthIndicator.setJobExecutionStatus(jobId, stoppedJobExecution.status)
+      }
     }
   }
 

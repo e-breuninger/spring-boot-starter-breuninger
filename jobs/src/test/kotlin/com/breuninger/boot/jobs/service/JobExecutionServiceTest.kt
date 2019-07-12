@@ -235,14 +235,18 @@ class JobExecutionServiceTest {
     verify { jobExecutionRepository.findOne(jobExecutionId) }
   }
 
-  private fun createJobExecution() = JobExecution(
-    JobExecutionId("foo"),
-    JobId("bar"),
-    Status.OK,
-    now(),
-    null,
-    emptyList(),
-    "foobar",
-    now()
-  )
+  private fun createJobExecution(): JobExecution {
+    val now = now()
+    return JobExecution(
+      JobExecutionId("foo"),
+      JobId("bar"),
+      Status.OK,
+      now,
+      null,
+      null,
+      emptyList(),
+      "foobar",
+      now
+    )
+  }
 }

@@ -20,6 +20,7 @@ import org.springframework.data.mongodb.core.query.Query.query
 import org.springframework.data.mongodb.core.query.Update.update
 import org.springframework.data.mongodb.core.updateFirst
 import org.springframework.stereotype.Repository
+import java.time.Duration
 import java.time.Instant
 
 @Repository
@@ -59,10 +60,11 @@ class MongoJobExecutionRepository(private val mongoTemplate: MongoTemplate) : Jo
         .addToSet(JobExecution::messages.name, message))
   }
 
-  override fun stop(jobExecutionId: JobExecutionId, stopped: Instant) {
+  override fun stop(jobExecutionId: JobExecutionId, stopped: Instant, runtime: Duration) {
     mongoTemplate.updateFirst<JobExecution>(query(where("_id").`is`(jobExecutionId)),
       update(JobExecution::stopped.name, stopped)
-        .set(JobExecution::lastUpdated.name, stopped))
+        .set(JobExecution::lastUpdated.name, stopped)
+        .set(JobExecution::runtime.name, runtime))
   }
 
   override fun remove(jobExecution: JobExecution) {

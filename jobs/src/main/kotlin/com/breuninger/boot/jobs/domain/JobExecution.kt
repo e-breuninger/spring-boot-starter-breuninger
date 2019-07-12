@@ -4,6 +4,7 @@ import com.breuninger.boot.jobs.domain.JobExecution.Status.OK
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import java.net.InetAddress
+import java.time.Duration
 import java.time.Instant
 import java.time.Instant.now
 
@@ -14,6 +15,7 @@ data class JobExecution(
   val status: Status,
   val started: Instant,
   val stopped: Instant?,
+  val runtime: Duration?,
   val messages: List<JobExecutionMessage>,
   val hostname: String,
   val lastUpdated: Instant
@@ -24,6 +26,7 @@ data class JobExecution(
       jobId,
       OK,
       started,
+      null,
       null,
       emptyList(),
       InetAddress.getLocalHost().hostAddress,
