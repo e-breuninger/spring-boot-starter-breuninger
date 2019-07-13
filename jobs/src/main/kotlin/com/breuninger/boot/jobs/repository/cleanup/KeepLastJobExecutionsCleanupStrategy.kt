@@ -15,11 +15,11 @@ class KeepLastJobExecutionsCleanupStrategy(
 
   companion object {
 
-    private const val KEEP_LAST_JOB_EXECUTIONS_CLEANUP_INTERVAL = 1L * 60L * 1000L
+    private const val KEEP_LAST_JOB_EXECUTIONS_CLEANUP_FIXED_RATE = 1L * 60L * 1000L
   }
 
   @Timed("com.breuninger.boot.jobs.repository.cleanup.KeepLastJobExecutionsCleanupStrategy.cleanUp", longTask = true)
-  @Scheduled(fixedRate = KEEP_LAST_JOB_EXECUTIONS_CLEANUP_INTERVAL)
+  @Scheduled(fixedRate = KEEP_LAST_JOB_EXECUTIONS_CLEANUP_FIXED_RATE)
   override fun cleanUp() {
     jobExecutionService.findAllIgnoreMessages()
       .sortedByDescending { it.started }

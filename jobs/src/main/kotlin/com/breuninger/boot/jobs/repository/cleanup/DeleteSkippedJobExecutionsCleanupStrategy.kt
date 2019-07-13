@@ -15,11 +15,11 @@ class DeleteSkippedJobExecutionsCleanupStrategy(
 
   companion object {
 
-    private const val DELETE_SKIPPED_JOB_EXECUTIONS_CLEANUP_INTERVAL = 10L * 60L * 1000L
+    private const val DELETE_SKIPPED_JOB_EXECUTIONS_CLEANUP_FIXED_RATE = 10L * 60L * 1000L
   }
 
   @Timed("com.breuninger.boot.jobs.repository.cleanup.DeleteSkippedJobExecutionsCleanupStrategy.cleanUp", longTask = true)
-  @Scheduled(fixedRate = DELETE_SKIPPED_JOB_EXECUTIONS_CLEANUP_INTERVAL)
+  @Scheduled(fixedRate = DELETE_SKIPPED_JOB_EXECUTIONS_CLEANUP_FIXED_RATE)
   override fun cleanUp() {
     jobExecutionService.findAllIgnoreMessages()
       .sortedByDescending { it.started }

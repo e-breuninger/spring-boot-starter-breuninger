@@ -17,13 +17,13 @@ class KillDeadJobExecutionsCleanupStrategy(
 
   companion object {
 
-    private const val KILL_DEAD_JOB_EXECUTIONS_CLEANUP_INTERVAL = 10L * 1000L
+    private const val KILL_DEAD_JOB_EXECUTIONS_CLEANUP_FIXED_RATE = 10L * 1000L
 
     private val LOG: Logger = LoggerFactory.getLogger(KillDeadJobExecutionsCleanupStrategy::class.java)
   }
 
   @Timed("com.breuninger.boot.jobs.repository.cleanup.KillDeadJobExecutionsCleanupStrategy.cleanUp", longTask = true)
-  @Scheduled(fixedRate = KILL_DEAD_JOB_EXECUTIONS_CLEANUP_INTERVAL)
+  @Scheduled(fixedRate = KILL_DEAD_JOB_EXECUTIONS_CLEANUP_FIXED_RATE)
   override fun cleanUp() {
     val killDeadJobExecutionAt = now().minusSeconds(jobsProperties.cleanup.killDeadJobExecutionsAfterSeconds.toLong())
     LOG.info("Looking for job executions older than $killDeadJobExecutionAt ")
