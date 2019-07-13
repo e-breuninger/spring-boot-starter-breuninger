@@ -10,12 +10,12 @@ import org.togglz.core.repository.StateRepository
 
 @Repository
 @ConditionalOnProperty(prefix = "breuni.togglz", name = ["mongo.enabled"], havingValue = "true")
-class MongoStateRepository(private val mongoTemplate: MongoTemplate) : StateRepository {
+class MongoStateRepository(private val togglzMongoTemplate: MongoTemplate) : StateRepository {
 
-  override fun getFeatureState(feature: Feature) = mongoTemplate.findById(feature.name(),
+  override fun getFeatureState(feature: Feature) = togglzMongoTemplate.findById(feature.name(),
     TogglzFeature::class.java)?.toFeatureState(feature)
 
   override fun setFeatureState(featureState: FeatureState) {
-    mongoTemplate.save(TogglzFeature(featureState.feature, featureState))
+    togglzMongoTemplate.save(TogglzFeature(featureState.feature, featureState))
   }
 }
