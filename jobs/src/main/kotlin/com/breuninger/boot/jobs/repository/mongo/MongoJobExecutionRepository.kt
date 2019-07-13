@@ -25,54 +25,54 @@ import java.time.Instant
 
 @Repository
 @ConditionalOnProperty(prefix = "breuni.jobs", name = ["mongo.enabled"], havingValue = "true")
-class MongoJobExecutionRepository(private val mongoTemplate: MongoTemplate) : JobExecutionRepository {
+class MongoJobExecutionRepository(private val jobsMongoTemplate: MongoTemplate) : JobExecutionRepository {
 
-  override fun findOne(jobExecutionId: JobExecutionId) = mongoTemplate.findById<JobExecution>(jobExecutionId)
+  override fun findOne(jobExecutionId: JobExecutionId) = jobsMongoTemplate.findById<JobExecution>(jobExecutionId)
 
   override fun find100DescendingByLastUpdated(jobId: JobId?): List<JobExecution> {
     val query = Query()
     jobId?.let { query.addCriteria(where(JobExecution::jobId.name).`is`(jobId)) }
     query.with(Sort.by(DESC, JobExecution::lastUpdated.name)).limit(100)
-    return mongoTemplate.find(query)
+    return jobsMongoTemplate.find(query)
   }
 
   override fun findAllIgnoreMessages(): List<JobExecution> {
     val query = Query()
     query.fields().slice(JobExecution::messages.name, 0)
-    return mongoTemplate.find(query)
+    return jobsMongoTemplate.find(query)
   }
 
-  override fun save(jobExecution: JobExecution) = mongoTemplate.save(jobExecution)
+  override fun save(jobExecution: JobExecution) = jobsMongoTemplate.save(jobExecution)
 
   override fun updateStatus(jobExecutionId: JobExecutionId, status: Status) {
-    mongoTemplate.updateFirst<JobExecution>(query(where("_id").`is`(jobExecutionId)),
+    jobsMongoTemplate.updateFirst<JobExecution>(query(where("_id").`is`(jobExecutionId)),
       update(JobExecution::status.name, status))
   }
 
   override fun updateLastUpdated(jobExecutionId: JobExecutionId, lastUpdated: Instant) {
-    mongoTemplate.updateFirst<JobExecution>(query(where("_id").`is`(jobExecutionId)),
+    jobsMongoTemplate.updateFirst<JobExecution>(query(where("_id").`is`(jobExecutionId)),
       update(JobExecution::lastUpdated.name, lastUpdated))
   }
 
   override fun appendMessage(jobExecutionId: JobExecutionId, message: JobExecutionMessage) {
-    mongoTemplate.updateFirst<JobExecution>(query(where("_id").`is`(jobExecutionId)),
+    jobsMongoTemplate.updateFirst<JobExecution>(query(where("_id").`is`(jobExecutionId)),
       update(JobExecution::lastUpdated.name, message.timestamp)
         .addToSet(JobExecution::messages.name, message))
   }
 
   override fun stop(jobExecutionId: JobExecutionId, stopped: Instant, runtime: Duration) {
-    mongoTemplate.updateFirst<JobExecution>(query(where("_id").`is`(jobExecutionId)),
+    jobsMongoTemplate.updateFirst<JobExecution>(query(where("_id").`is`(jobExecutionId)),
       update(JobExecution::stopped.name, stopped)
         .set(JobExecution::lastUpdated.name, stopped)
         .set(JobExecution::runtime.name, runtime))
   }
 
   override fun remove(jobExecution: JobExecution) {
-    val deleteResult = mongoTemplate.remove(jobExecution)
+    val deleteResult = jobsMongoTemplate.remove(jobExecution)
     if (deleteResult.deletedCount != 1L) {
       throw UnableToRemoveException("Unable to remove $jobExecution")
     }
   }
 
-  override fun drop() = mongoTemplate.dropCollection<JobExecution>()
+  override fun drop() = jobsMongoTemplate.dropCollection<JobExecution>()
 }

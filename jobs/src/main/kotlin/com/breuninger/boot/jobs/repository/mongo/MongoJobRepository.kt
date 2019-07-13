@@ -24,41 +24,41 @@ import org.springframework.stereotype.Repository
 
 @Repository
 @ConditionalOnProperty(prefix = "breuni.jobs", name = ["mongo.enabled"], havingValue = "true")
-class MongoJobRepository(private val mongoTemplate: MongoTemplate) : JobRepository {
+class MongoJobRepository(private val jobsMongoTemplate: MongoTemplate) : JobRepository {
 
   companion object {
 
     private val LOG: Logger = LoggerFactory.getLogger(MongoJobRepository::class.java)
   }
 
-  override fun findOne(jobId: JobId) = mongoTemplate.findById<Job>(jobId)
+  override fun findOne(jobId: JobId) = jobsMongoTemplate.findById<Job>(jobId)
 
   override fun findOneRunning(jobIds: Set<JobId>) =
-    mongoTemplate.findOne<Job>(query(where("_id").`in`(jobIds).and(Job::runningJobExecutionId.name).exists(true)))
+    jobsMongoTemplate.findOne<Job>(query(where("_id").`in`(jobIds).and(Job::runningJobExecutionId.name).exists(true)))
 
-  override fun findAll(): List<Job> = mongoTemplate.findAll(Job::class.java)
+  override fun findAll(): List<Job> = jobsMongoTemplate.findAll(Job::class.java)
 
   override fun create(job: Job) = try {
-    mongoTemplate.insert(job)
+    jobsMongoTemplate.insert(job)
     Unit
   } catch (exception: Exception) {
     LOG.info("Job already created")
   }
 
   override fun updateDisableState(jobId: JobId, job: Job) =
-    mongoTemplate.findAndModify(query(where("_id").`is`(jobId)).limit(1),
+    jobsMongoTemplate.findAndModify(query(where("_id").`is`(jobId)).limit(1),
       update(Job::disabled.name, job.disabled)
         .set(Job::disableComment.name, job.disableComment),
       FindAndModifyOptions().returnNew(true),
       Job::class.java)
 
   override fun acquireRunLock(jobId: JobId, jobExecutionId: JobExecutionId) =
-    mongoTemplate.findAndModify(query(where("_id").`is`(jobId).and(Job::runningJobExecutionId.name).exists(false)),
+    jobsMongoTemplate.findAndModify(query(where("_id").`is`(jobId).and(Job::runningJobExecutionId.name).exists(false)),
       update(Job::runningJobExecutionId.name, jobExecutionId), Job::class.java)
 
   @Throws(JobBlockedException::class)
   override fun releaseRunLock(jobId: JobId, jobExecutionId: JobExecutionId) {
-    if (mongoTemplate.updateFirst<Job>(
+    if (jobsMongoTemplate.updateFirst<Job>(
         query(where("_id").`is`(jobId).and(Job::runningJobExecutionId.name).`is`(jobExecutionId)),
         Update().unset(Job::runningJobExecutionId.name))
         .modifiedCount != 1L)
@@ -69,24 +69,24 @@ class MongoJobRepository(private val mongoTemplate: MongoTemplate) : JobReposito
     val query = query(where("_id").`is`(jobId))
     query.fields().include("${Job::state.name}.$key")
     val jobCollection = (Job::class.annotations.first { it is Document } as Document).collection
-    return mongoTemplate.findOne<Map<String, Map<String, String>>>(query, jobCollection)?.let {
+    return jobsMongoTemplate.findOne<Map<String, Map<String, String>>>(query, jobCollection)?.let {
       it[Job::state.name]?.get(key)
     }
   }
 
   override fun updateState(jobId: JobId, key: String, value: String?) {
     val stateKey = "${Job::state.name}.$key"
-    mongoTemplate.updateFirst<Job>(query(where("_id").`is`(jobId)), value?.let { update(stateKey, it) } ?: let {
+    jobsMongoTemplate.updateFirst<Job>(query(where("_id").`is`(jobId)), value?.let { update(stateKey, it) } ?: let {
       Update().unset(stateKey)
     })
   }
 
   override fun remove(job: Job) {
-    val deleteResult = mongoTemplate.remove(job)
+    val deleteResult = jobsMongoTemplate.remove(job)
     if (deleteResult.deletedCount != 1L) {
       throw UnableToRemoveException("Unable to remove $job")
     }
   }
 
-  override fun drop() = mongoTemplate.dropCollection<Job>()
+  override fun drop() = jobsMongoTemplate.dropCollection<Job>()
 }
