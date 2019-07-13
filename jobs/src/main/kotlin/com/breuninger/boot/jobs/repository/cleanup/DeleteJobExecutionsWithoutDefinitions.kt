@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 class DeleteJobExecutionsWithoutDefinitions(
   private val jobExecutionService: JobExecutionService,
   private val jobRunnables: List<JobRunnable>
-) : JobExecutionCleanupStrategy {
+) {
 
   companion object {
 
@@ -18,8 +18,8 @@ class DeleteJobExecutionsWithoutDefinitions(
   }
 
   @Timed("com.breuninger.boot.jobs.repository.cleanup.DeleteJobExecutionsWithoutDefinitions.cleanUp", longTask = true)
-  @Scheduled(fixedRate = DELETE_JOB_EXECUTIONS_WITHOUT_DEFINITIONS_CLEANUP_FIXED_RATE)
-  override fun cleanUp() {
+  @Scheduled(initialDelay = 0, fixedRate = DELETE_JOB_EXECUTIONS_WITHOUT_DEFINITIONS_CLEANUP_FIXED_RATE)
+  fun cleanUp() {
     jobExecutionService.findAllIgnoreMessages().forEach {
       if (!jobRunnables.map { it.definition().jobId }.toList().contains(it.jobId)) {
         jobExecutionService.remove(it)

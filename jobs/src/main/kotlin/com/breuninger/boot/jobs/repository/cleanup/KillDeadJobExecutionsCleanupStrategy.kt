@@ -13,7 +13,7 @@ import java.time.Instant.now
 class KillDeadJobExecutionsCleanupStrategy(
   private val jobExecutionService: JobExecutionService,
   private val jobsProperties: JobsProperties
-) : JobExecutionCleanupStrategy {
+) {
 
   companion object {
 
@@ -23,8 +23,8 @@ class KillDeadJobExecutionsCleanupStrategy(
   }
 
   @Timed("com.breuninger.boot.jobs.repository.cleanup.KillDeadJobExecutionsCleanupStrategy.cleanUp", longTask = true)
-  @Scheduled(fixedRate = KILL_DEAD_JOB_EXECUTIONS_CLEANUP_FIXED_RATE)
-  override fun cleanUp() {
+  @Scheduled(initialDelay = 0, fixedRate = KILL_DEAD_JOB_EXECUTIONS_CLEANUP_FIXED_RATE)
+  fun cleanUp() {
     val killDeadJobExecutionAt = now().minusSeconds(jobsProperties.cleanup.killDeadJobExecutionsAfterSeconds.toLong())
     LOG.info("Looking for job executions older than $killDeadJobExecutionAt ")
     jobExecutionService.findAllIgnoreMessages()

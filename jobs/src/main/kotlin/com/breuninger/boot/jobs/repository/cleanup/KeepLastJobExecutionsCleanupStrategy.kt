@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 class KeepLastJobExecutionsCleanupStrategy(
   private val jobExecutionService: JobExecutionService,
   private val jobsProperties: JobsProperties
-) : JobExecutionCleanupStrategy {
+) {
 
   companion object {
 
@@ -19,8 +19,8 @@ class KeepLastJobExecutionsCleanupStrategy(
   }
 
   @Timed("com.breuninger.boot.jobs.repository.cleanup.KeepLastJobExecutionsCleanupStrategy.cleanUp", longTask = true)
-  @Scheduled(fixedRate = KEEP_LAST_JOB_EXECUTIONS_CLEANUP_FIXED_RATE)
-  override fun cleanUp() {
+  @Scheduled(initialDelay = 0, fixedRate = KEEP_LAST_JOB_EXECUTIONS_CLEANUP_FIXED_RATE)
+  fun cleanUp() {
     jobExecutionService.findAllIgnoreMessages()
       .sortedByDescending { it.started }
       .groupBy { it.jobId }

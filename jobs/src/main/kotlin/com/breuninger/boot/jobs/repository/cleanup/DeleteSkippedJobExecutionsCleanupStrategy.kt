@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 class DeleteSkippedJobExecutionsCleanupStrategy(
   private val jobExecutionService: JobExecutionService,
   private val jobsProperties: JobsProperties
-) : JobExecutionCleanupStrategy {
+) {
 
   companion object {
 
@@ -19,8 +19,8 @@ class DeleteSkippedJobExecutionsCleanupStrategy(
   }
 
   @Timed("com.breuninger.boot.jobs.repository.cleanup.DeleteSkippedJobExecutionsCleanupStrategy.cleanUp", longTask = true)
-  @Scheduled(fixedRate = DELETE_SKIPPED_JOB_EXECUTIONS_CLEANUP_FIXED_RATE)
-  override fun cleanUp() {
+  @Scheduled(initialDelay = 0, fixedRate = DELETE_SKIPPED_JOB_EXECUTIONS_CLEANUP_FIXED_RATE)
+  fun cleanUp() {
     jobExecutionService.findAllIgnoreMessages()
       .sortedByDescending { it.started }
       .groupBy { it.jobId }
