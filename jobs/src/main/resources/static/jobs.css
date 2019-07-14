@@ -13,7 +13,6 @@ body {
 }
 
 .collapsible {
-  cursor: pointer;
   padding: 0 !important;
   width: 100%;
   border: none;
@@ -22,8 +21,16 @@ body {
   font-size: 16px;
 }
 
-.collapsible:hover:not(.is-primary) {
+.collapsible:hover:not(.headline) {
+  cursor: pointer;
+}
+
+.collapsible:hover:not(.is-primary):not(.headline) {
   background-color: #fafafa;
+}
+
+.headline {
+  font-weight: bold;
 }
 
 .flex-header {
@@ -55,13 +62,6 @@ body {
 
 .is-primary a:hover {
   color: #ffffff !important;
-}
-
-.badge {
-  color: white;
-  border-radius: 4px;
-  padding: 2px 5px;
-  width: fit-content;
 }
 
 .display-none {

@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Job Overview</title>
-  <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
   <link href="../base.min.css" rel="stylesheet" type="text/css">
   <link href="../jobExecutions.css" rel="stylesheet" type="text/css">
   <link crossorigin="anonymous"
@@ -14,54 +13,62 @@
 <body>
 <!--/*@thymesVar id="jobExecutions" type="java.util.List<com.breuninger.boot.jobs.domain.JobExecution>"*/-->
 <!--/*@thymesVar id="jobExecution" type="com.breuninger.boot.jobs.domain.JobExecution"*/-->
-<div class="card" th:each="jobExecution : ${jobExecutions}">
+<div class="card">
   <div class="card-header">
-    <button class="collapsible hero flex-header" onclick="openCollapseCards(this)" th:value="${jobExecution.id.value} + '-card'">
+    <button class="collapsible hero flex-header headline">
+      <div>
+        <span class="fas">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      </div>
+      <div class="column">
+        Job name
+      </div>
+      <div class="column">
+        Runtime
+      </div>
+      <div class="column has-text-right">
+        Last updated
+      </div>
+    </button>
+  </div>
+</div>
+<div class="card" th:each="jobExecution,iter : ${jobExecutions}">
+  <div class="card-header">
+    <button class="collapsible hero flex-header"
+            th:classappend="(${iter.size == 1} ? 'is-primary card-header-title')"
+            onclick="openCollapseCards(this)"
+            th:value="${jobExecution.id.value} + '-card'">
       <div>
         <i th:class="(${jobExecution.status.name()} == 'OK') ? (!${jobExecution.stopped} ? 'fas fa-spinner fa-spin has-text-primary' : 'fas fa-check has-text-success') :
         ((${jobExecution.status.name()} == 'SKIPPED') ? 'fas fa-exclamation has-text-yellow' : 'fas fa-times has-text-danger')"
-           th:id="${jobExecution.id.value} + '-headerstate'">
+           th:id="${jobExecution.id.value} + '-status'">
         </i>
       </div>
       <div class="column">
-        <span th:text="${jobExecution.id.value} + ' '"></span>
         <a class="has-text-primary"
            th:href="'/jobs/' + ${jobExecution.jobId.value}"
            th:text="${jobExecution.jobId.value}">
         </a>
       </div>
-      <div class="column has-text-right"
+      <div class="column"
            th:classappend="${jobExecution.id.value} + '-runtime'"
            th:text="${#temporals.format(T(java.time.LocalTime).ofNanoOfDay(jobExecution.runtime.toNanos()), 'HH:mm:ss')}"
            th:if="${jobExecution.runtime != null && jobExecution.runtime.toDays() < 1}">
       </div>
-      <div class="column has-text-right"
+      <div class="column"
            th:classappend="${jobExecution.id.value} + '-runtime'"
            th:if="${jobExecution.runtime != null && jobExecution.runtime.toDays() >= 1}">
         > 24h
       </div>
       <div class="column has-text-right"
-           th:classappend="${jobExecution.id.value} + '-update'"
+           th:classappend="${jobExecution.id.value} + '-last-updated'"
            th:text="${#temporals.format(jobExecution.lastUpdated, 'dd.MM.yyyy HH:mm:ss')}">
       </div>
     </button>
   </div>
-  <div class="card-content content" th:id="${jobExecution.id.value} + '-card-content'">
+  <div class="card-content content"
+       th:classappend="(${iter.size == 1} ? 'flex-wrap')"
+       th:id="${jobExecution.id.value} + '-card-content'">
     <table class="table">
-      <tr>
-        <td>Job ID</td>
-        <td th:text="${jobExecution.jobId.value}"></td>
-      </tr>
-      <tr>
-        <td>Status</td>
-        <td>
-          <span th:class="(${jobExecution.status.name()} == 'OK') ? (!${jobExecution.stopped} ? 'badge has-background-primary' : 'badge has-background-success') :
-          ((${jobExecution.status.name()} == 'SKIPPED') ? 'badge has-background-yellow has-text-black' : 'badge has-background-danger')"
-                th:id="${jobExecution.id.value} + '-status'"
-                th:text="(!${jobExecution.stopped} ? 'Running' : ${jobExecution.status.name()})">
-          </span>
-        </td>
-      </tr>
       <tr>
         <td>Hostname</td>
         <td th:text="${jobExecution.hostname}"></td>
@@ -69,11 +76,6 @@
       <tr>
         <td>Started</td>
         <td th:text="${#temporals.format(jobExecution.started, 'dd.MM.yyyy HH:mm:ss')}"></td>
-      </tr>
-      <tr>
-        <td>Last Update</td>
-        <td th:class="${jobExecution.id.value} + '-update'"
-            th:text="${#temporals.format(jobExecution.lastUpdated, 'dd.MM.yyyy HH:mm:ss')}"></td>
       </tr>
       <tr>
         <td>Stopped</td>
@@ -86,11 +88,13 @@
         <td>
           <label class="checkbox"
                  th:disabled="${jobExecution.stopped}"
-                 th:for="${jobExecution.id.value} + '-input'">
+                 th:for="${jobExecution.id.value} + '-update-messages-checkbox'">
             <input onchange="updateJobExecution(this)"
-                   th:id="${jobExecution.id.value} + '-input'"
+                   th:id="${jobExecution.id.value} + '-update-messages-checkbox'"
                    th:value="${jobExecution.id.value}"
-                   type="checkbox" /> Update Messages
+                   th:disabled="${jobExecution.stopped}"
+                   th:checked="${jobExecution.stopped == null && iter.size == 1}"
+                   type="checkbox"/> Update messages
           </label>
         </td>
       </tr>
@@ -104,6 +108,7 @@
   </div>
 </div>
 <script src="../jobExecutions.js" type="text/javascript"></script>
+<script th:each="jobExecution,iter : ${jobExecutions}" th:if="${jobExecution.stopped == null && iter.size == 1}" th:utext="('updateJobExecution(document.getElementById(\'' + ${jobExecution.id.value} + '-update-messages-checkbox\'));')"></script>
 <script src="../iframeResizer.contentWindow.min.js" type="text/javascript"></script>
 </body>
 </html>

@@ -54,15 +54,11 @@ function disableJob(disable, button) {
 }
 
 function updateJob(jobId, job) {
-  document.getElementById(`${jobId}-headerstate`).className = job.runningJobExecutionId ?
+  document.getElementById(`${jobId}-status`).className = job.runningJobExecutionId ?
     'fas fa-spinner fa-spin has-text-primary' :
     job.disabled ? 'fas fa-minus-circle has-text-grey' : 'fas fa-check has-text-success';
 
   document.getElementById(`${jobId}-start`).disabled = job.disabled;
-
-  const statusElement = document.getElementById(`${jobId}-status`);
-  statusElement.textContent = job.disabled ? 'Disabled' : 'Enabled';
-  statusElement.className = job.disabled ? 'badge has-background-grey' : 'badge has-background-success';
 
   document.getElementById(`${jobId}-disabledcomment`).textContent = job.disableComment;
   document.getElementById(`${jobId}-disabled`).className = job.disabled ? '' : displayNone;

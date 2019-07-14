@@ -8,19 +8,13 @@ function openCollapseCards(button) {
 
 function updateJobExecution(input) {
   const id = input.value;
-  const updateState = jobExecution => {
+  const updateStatus = jobExecution => {
     const statusOk = 'OK';
     const statusSkipped = 'SKIPPED';
 
-    document.getElementById(`${id}-headerstate`).className = jobExecution.status === statusOk ?
+    document.getElementById(`${id}-status`).className = jobExecution.status === statusOk ?
       !jobExecution.stopped ? 'fas fa-spinner fa-spin has-text-primary' : 'fas fa-check has-text-success' :
       jobExecution.status === statusSkipped ? 'fas fa-exclamation has-text-yellow' : 'fas fa-times has-text-danger';
-
-    const statusElement = document.getElementById(`${id}-status`);
-    statusElement.textContent = jobExecution.status === statusOk && !jobExecution.stopped ? 'Running' : jobExecution.status;
-    statusElement.className = jobExecution.status === statusOk ?
-      !jobExecution.stopped ? 'badge has-background-primary' : 'badge has-background-success' :
-      jobExecution.status === statusSkipped ? 'badge has-background-yellow has-text-black' : 'badge has-background-danger';
   };
   const updateDates = jobExecution => {
     const localeDE = 'de-DE';
@@ -33,7 +27,7 @@ function updateJobExecution(input) {
       second: 'numeric'
     };
 
-    const lastUpdatedDateFields = document.getElementsByClassName(`${id}-update`);
+    const lastUpdatedDateFields = document.getElementsByClassName(`${id}-last-updated`);
     for (let i = 0; i < lastUpdatedDateFields.length; i++) {
       lastUpdatedDateFields[i].textContent = new Date(jobExecution.lastUpdated)
         .toLocaleDateString(localeDE, options)
@@ -76,10 +70,12 @@ function updateJobExecution(input) {
       response.json().then((jobExecution => {
         if (jobExecution) {
           updateMessages(jobExecution);
-          updateState(jobExecution);
+          updateStatus(jobExecution);
           updateDates(jobExecution);
           if (jobExecution.stopped) {
             input.checked = false;
+            input.parentNode.setAttribute('disabled', '');
+            input.setAttribute('disabled', '');
             clearInterval(intervalIds.get(id));
             intervalIds.delete(id);
           }

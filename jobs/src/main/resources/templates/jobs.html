@@ -14,13 +14,28 @@
 <!--/*@thymesVar id="jobs" type="java.util.List<com.breuninger.boot.jobs.domain.Job>"*/-->
 <!--/*@thymesVar id="job" type="com.breuninger.boot.jobs.domain.Job"*/-->
 <!--/*@thymesVar id="jobDefinitions" type="java.util.Map<com.breuninger.boot.jobs.domain.JobId, com.breuninger.boot.jobs.domain.JobDefinition>"*/-->
-<div class="card" th:each="job : ${jobs}">
+<div class="card">
   <div class="card-header">
-    <button class="collapsible hero flex-header" onclick="openCollapseCards(this);" th:value="${job.id.value}">
+    <button class="collapsible hero flex-header headline">
+      <div>
+        <span class="fas">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      </div>
+      <div class="column">
+        Job name
+      </div>
+    </button>
+  </div>
+</div>
+<div class="card" th:each="job,iter : ${jobs}">
+  <div class="card-header">
+    <button class="collapsible hero flex-header"
+            th:classappend="(${iter.size == 1} ? 'is-primary card-header-title')"
+            onclick="openCollapseCards(this);"
+            th:value="${job.id.value} + '-card'">
       <div>
         <i th:class="${job.runningJobExecutionId} ? 'fas fa-spinner fa-spin has-text-primary' :
           (${job.disabled} ? 'fas fa-minus-circle has-text-grey' : 'fas fa-check has-text-success')"
-           th:id="${job.id.value} + '-headerstate'">
+           th:id="${job.id.value} + '-status'">
         </i>
       </div>
       <div class="column">
@@ -28,14 +43,16 @@
         <a class="has-text-primary"
            th:href="${job.runningJobExecutionId} ? '/jobExecutions/' + ${job.runningJobExecutionId.value} : '/jobExecutions'"
            th:id="${job.id.value} + '-executionid-header'"
-           th:text="${job.runningJobExecutionId} ? ${job.runningJobExecutionId.value} : ''"></a>
+           th:text="${job.runningJobExecutionId} ? 'Running job execution'"></a>
       </div>
       <div class="column has-text-right">
-        <a class="has-text-primary" th:href="'/jobExecutions?jobId=' + ${job.id.value}">JobExecutions</a>
+        <a class="has-text-primary" th:href="'/jobExecutions?jobId=' + ${job.id.value}">All job executions</a>
       </div>
     </button>
   </div>
-  <div class="card-content content" th:id="${job.id.value} + '-content'">
+  <div class="card-content content"
+       th:classappend="(${iter.size == 1} ? 'flex-wrap')"
+       th:id="${job.id.value} + '-card-content'">
     <table class="table">
       <tr th:if="${jobDefinitions.get(job.id)}">
         <td>Description</td>
@@ -43,11 +60,12 @@
         <td></td>
       </tr>
       <tr>
-        <td>Running Job Execution ID</td>
+        <td>Running job execution Id</td>
         <td>
-          <a th:href="${job.runningJobExecutionId} ? '/jobExecutions/' + ${job.runningJobExecutionId.value} : '/jobExecutions'"
+          <a class="has-text-primary"
+             th:href="${job.runningJobExecutionId} ? '/jobExecutions/' + ${job.runningJobExecutionId.value} : '/jobExecutions'"
              th:id="${job.id.value} + '-executionid'"
-             th:text="${job.runningJobExecutionId} ? ${job.runningJobExecutionId.value} : ''">
+             th:text="${job.runningJobExecutionId} ? ${job.runningJobExecutionId.value}">
           </a>
         </td>
         <td>
@@ -60,26 +78,17 @@
           </button>
         </td>
       </tr>
-      <tr>
-        <td>Status</td>
-        <td>
-          <div th:class="${job.disabled} ? 'badge has-background-grey' : 'badge has-background-success'"
-               th:id="${job.id.value} + '-status'"
-               th:text="${job.disabled} ? 'Disabled' : 'Enabled'"></div>
-        </td>
-        <td></td>
-      </tr>
       <tr th:class="(${job.disabled} ? 'display-none')" th:id="${job.id.value} + '-enabled'">
         <td colspan="2">
           <input class="input"
                  placeholder="Disabled Comment"
                  th:id="${job.id.value} + '-disabledcomment-input'"
-                 type="text" />
+                 type="text"/>
         </td>
         <td>
           <button class="button is-danger" onclick="disableJob(true, this)" th:value="${job.id.value}">
-              Disable job
-            </button>
+            Disable job
+          </button>
         </td>
       </tr>
       <tr th:class="(!${job.disabled} ? 'display-none')" th:id="${job.id.value} + '-disabled'">
