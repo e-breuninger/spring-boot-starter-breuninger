@@ -19,6 +19,7 @@ body {
   text-align: left;
   outline: none;
   font-size: 16px;
+  word-break: break-all;
 }
 
 .collapsible:hover:not(.headline) {

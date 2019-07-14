@@ -20,7 +20,7 @@
       <div>
         <span class="fas">&nbsp;&nbsp;&nbsp;&nbsp;</span>
       </div>
-      <div class="column">
+      <div class="column is-7">
         Job name
       </div>
     </button>
@@ -38,16 +38,16 @@
            th:id="${job.id.value} + '-status'">
         </i>
       </div>
-      <div class="column">
+      <div class="column is-7">
         <span th:text="${job.id.value}"></span>
       </div>
-      <div class="column">
+      <div class="column is-2 has-text-right">
         <a class="has-text-primary"
            th:href="${job.runningJobExecutionId} ? '/jobExecutions/' + ${job.runningJobExecutionId.value} : '/jobExecutions'"
            th:id="${job.id.value} + '-executionid-header'"
            th:text="${job.runningJobExecutionId} ? 'Running job execution'"></a>
       </div>
-      <div class="column has-text-right">
+      <div class="column is-2 has-text-right">
         <a class="has-text-primary" th:href="'/jobExecutions?jobId=' + ${job.id.value}">All job executions</a>
       </div>
     </button>

@@ -21,13 +21,22 @@
       <div>
         <span class="fas">&nbsp;&nbsp;&nbsp;&nbsp;</span>
       </div>
-      <div class="column">
+      <div class="column is-3">
         Job name
+      </div>
+      <div class="column">
+        Hostname
+      </div>
+      <div class="column is-2">
+        Started
+      </div>
+      <div class="column is-2">
+        Stopped
       </div>
       <div class="column">
         Runtime
       </div>
-      <div class="column has-text-right">
+      <div class="column is-2 has-text-right">
         Last updated
       </div>
     </button>
@@ -45,11 +54,20 @@
            th:id="${jobExecution.id.value} + '-status'">
         </i>
       </div>
-      <div class="column">
+      <div class="column is-3">
         <a class="has-text-primary"
            th:href="'/jobs/' + ${jobExecution.jobId.value}"
            th:text="${jobExecution.jobId.value}">
         </a>
+      </div>
+      <div class="column" th:text="${jobExecution.hostname}">
+      </div>
+      <div class="column is-2" th:text="${#temporals.format(jobExecution.started, 'dd.MM.yyyy HH:mm:ss')}">
+      </div>
+      <div class="column is-2" th:id="${jobExecution.id.value} + '-stopped'"
+           th:text="(${jobExecution.stopped} ? ${#temporals.format(jobExecution.stopped, 'dd.MM.yyyy HH:mm:ss')} : '-')">
+      </div>
+      <div class="column" th:if="${jobExecution.runtime == null}">
       </div>
       <div class="column"
            th:classappend="${jobExecution.id.value} + '-runtime'"
@@ -61,7 +79,7 @@
            th:if="${jobExecution.runtime != null && jobExecution.runtime.toDays() >= 1}">
         > 24h
       </div>
-      <div class="column has-text-right"
+      <div class="column is-2 has-text-right"
            th:classappend="${jobExecution.id.value} + '-last-updated'"
            th:text="${#temporals.format(jobExecution.lastUpdated, 'dd.MM.yyyy HH:mm:ss')}">
       </div>
@@ -70,21 +88,6 @@
   <div class="card-content content"
        th:classappend="(${jobExecutionId != null && iter.size == 1 || jobId != null && iter.index == 0 && jobExecution.stopped == null} ? 'flex-wrap')"
        th:id="${jobExecution.id.value} + '-card-content'">
-    <table class="table">
-      <tr>
-        <td>Hostname</td>
-        <td th:text="${jobExecution.hostname}"></td>
-      </tr>
-      <tr>
-        <td>Started</td>
-        <td th:text="${#temporals.format(jobExecution.started, 'dd.MM.yyyy HH:mm:ss')}"></td>
-      </tr>
-      <tr>
-        <td>Stopped</td>
-        <td th:id="${jobExecution.id.value} + '-stopped'"
-            th:text="(${jobExecution.stopped} ? ${#temporals.format(jobExecution.stopped, 'dd.MM.yyyy HH:mm:ss')} : '-')"></td>
-      </tr>
-    </table>
     <table class="table">
       <tr>
         <td>
