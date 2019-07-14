@@ -31,7 +31,7 @@
     <button class="collapsible hero flex-header"
             th:classappend="(${iter.size == 1} ? 'is-primary card-header-title')"
             onclick="openCollapseCards(this);"
-            th:value="${job.id.value} + '-card'">
+            th:value="${job.id.value}">
       <div>
         <i th:class="${job.runningJobExecutionId} ? 'fas fa-spinner fa-spin has-text-primary' :
           (${job.disabled} ? 'fas fa-minus-circle has-text-grey' : 'fas fa-check has-text-success')"

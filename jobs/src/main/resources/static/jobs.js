@@ -3,7 +3,7 @@ const displayNone = 'display-none';
 function openCollapseCards(button) {
   button.classList.toggle('is-primary');
   button.classList.toggle('card-header-title');
-  document.getElementById(`${button.value}-content`).classList.toggle('flex-wrap');
+  document.getElementById(`${button.value}-card-content`).classList.toggle('flex-wrap');
 }
 
 function startJob(button) {

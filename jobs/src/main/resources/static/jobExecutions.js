@@ -3,10 +3,11 @@ const intervalIds = new Map();
 function openCollapseCards(button) {
   button.classList.toggle('is-primary');
   button.classList.toggle('card-header-title');
-  document.getElementById(`${button.value}-content`).classList.toggle('flex-wrap');
+  document.getElementById(`${button.value}-card-content`).classList.toggle('flex-wrap');
+  updateJobExecution(document.getElementById(`${button.value}-update-messages-checkbox`), true);
 }
 
-function updateJobExecution(input) {
+function updateJobExecution(input, checked) {
   const id = input.value;
   const updateStatus = jobExecution => {
     const statusOk = 'OK';
@@ -84,7 +85,8 @@ function updateJobExecution(input) {
     });
   };
 
-  if (input.checked) {
+  if (!input.disabled && (input.checked || checked)) {
+    input.checked = true;
     getAndUpdateJobExecution();
     const intervalId = setInterval(getAndUpdateJobExecution, 1000);
     intervalIds.set(id, intervalId);
