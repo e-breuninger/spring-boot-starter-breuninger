@@ -204,6 +204,6 @@ abstract class AbstractJobExecutionRepositoryTest {
     id: JobExecutionId = JobExecutionId("foo"),
     jobId: JobId = JobId("bar"),
     messages: List<JobExecutionMessage> = emptyList(),
-    lastUpdated: Instant = now()
-  ) = JobExecution(id, jobId, OK, now(), null, null, messages, "foobar", lastUpdated)
+    lastUpdated: Instant = now().truncatedTo(MILLIS)
+  ) = JobExecution(id, jobId, OK, now().truncatedTo(MILLIS), null, null, messages, "foobar", lastUpdated)
 }

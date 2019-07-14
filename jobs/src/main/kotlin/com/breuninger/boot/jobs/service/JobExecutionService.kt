@@ -95,6 +95,7 @@ class JobExecutionService(
     return jobRepository.releaseRunLock(jobId, jobExecutionId)?.let { jobExecutionRepository.findOne(jobExecutionId) }
   }
 
+  // TODO(BS): add tests for runtime
   fun stop(jobId: JobId, jobExecutionId: JobExecutionId) {
     jobExecutionRepository.findOne(jobExecutionId)?.let {
       val now = now()

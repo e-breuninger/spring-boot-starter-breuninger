@@ -8,6 +8,7 @@ import java.time.Duration
 import java.time.Instant
 import java.time.Instant.now
 
+// TODO(BS): add tests for runtime
 @Document(collection = "jobExecutions")
 data class JobExecution(
   @Id val id: JobExecutionId,
