@@ -40,6 +40,8 @@
       </div>
       <div class="column">
         <span th:text="${job.id.value}"></span>
+      </div>
+      <div class="column">
         <a class="has-text-primary"
            th:href="${job.runningJobExecutionId} ? '/jobExecutions/' + ${job.runningJobExecutionId.value} : '/jobExecutions'"
            th:id="${job.id.value} + '-executionid-header'"
