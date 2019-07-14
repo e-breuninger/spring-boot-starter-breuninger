@@ -13,6 +13,7 @@
 <body>
 <!--/*@thymesVar id="jobExecutions" type="java.util.List<com.breuninger.boot.jobs.domain.JobExecution>"*/-->
 <!--/*@thymesVar id="jobExecution" type="com.breuninger.boot.jobs.domain.JobExecution"*/-->
+<!--/*@thymesVar id="jobExecutionId" type="com.breuninger.boot.jobs.domain.JobExecutionId"*/-->
 <!--/*@thymesVar id="jobId" type="com.breuninger.boot.jobs.domain.JobId"*/-->
 <div class="card">
   <div class="card-header">
@@ -35,7 +36,7 @@
 <div class="card" th:each="jobExecution,iter : ${jobExecutions}">
   <div class="card-header">
     <button class="collapsible hero flex-header"
-            th:classappend="(${iter.size == 1 || jobId != null && iter.index == 0 && jobExecution.stopped == null} ? 'is-primary card-header-title')"
+            th:classappend="(${jobExecutionId != null && iter.size == 1 || jobId != null && iter.index == 0 && jobExecution.stopped == null} ? 'is-primary card-header-title')"
             onclick="openCollapseCards(this)"
             th:value="${jobExecution.id.value}">
       <div>
@@ -67,7 +68,7 @@
     </button>
   </div>
   <div class="card-content content"
-       th:classappend="(${iter.size == 1 || jobId != null && iter.index == 0 && jobExecution.stopped == null} ? 'flex-wrap')"
+       th:classappend="(${jobExecutionId != null && iter.size == 1 || jobId != null && iter.index == 0 && jobExecution.stopped == null} ? 'flex-wrap')"
        th:id="${jobExecution.id.value} + '-card-content'">
     <table class="table">
       <tr>
@@ -94,7 +95,7 @@
                    th:id="${jobExecution.id.value} + '-update-messages-checkbox'"
                    th:value="${jobExecution.id.value}"
                    th:disabled="${jobExecution.stopped}"
-                   th:checked="${jobExecution.stopped == null && iter.size == 1 || jobId != null && iter.index == 0 && jobExecution.stopped == null}"
+                   th:checked="${jobExecutionId != null && iter.size == 1 && jobExecution.stopped == null || jobId != null && iter.index == 0 && jobExecution.stopped == null}"
                    type="checkbox"/> Update messages
           </label>
         </td>
@@ -110,7 +111,7 @@
 </div>
 <script src="../jobExecutions.js" type="text/javascript"></script>
 <script th:each="jobExecution,iter : ${jobExecutions}"
-        th:if="${jobExecution.stopped == null && iter.size == 1 || jobId != null && iter.index == 0 && jobExecution.stopped == null}"
+        th:if="${jobExecutionId != null && iter.size == 1 && jobExecution.stopped == null || jobId != null && iter.index == 0 && jobExecution.stopped == null}"
         th:utext="('updateJobExecution(document.getElementById(\'' + ${jobExecution.id.value} + '-update-messages-checkbox\'));')"></script>
 <script src="../iframeResizer.contentWindow.min.js" type="text/javascript"></script>
 </body>
