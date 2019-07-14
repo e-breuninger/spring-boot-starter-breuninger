@@ -22,6 +22,7 @@ class JobExecutionHtmlController(private val jobExecutionService: JobExecutionSe
 
   @GetMapping
   fun findAll(@RequestParam(required = false) jobId: String?, model: Model): String {
+    jobId?.let { model.addAttribute("jobId", JobId(it)) }
     model.addAttribute("jobExecutions", jobExecutionService.find100DescendingByLastUpdated(jobId?.let { JobId(it) }))
     return "jobExecutions"
   }
