@@ -47,7 +47,7 @@ class JobExecutionTest {
       OK,
       now,
       stopped,
-      Duration.between(now, stopped),
+      stopped?.let { Duration.between(now, it) },
       emptyList(),
       "foobar",
       now

@@ -176,7 +176,7 @@ abstract class AbstractJobExecutionRepositoryTest {
 
   @Test
   fun `ensure updateLastUpdated works`() {
-    val jobExecutionFoo = createJobExecution(lastUpdated = now())
+    val jobExecutionFoo = createJobExecution()
     getRepository().save(jobExecutionFoo)
 
     val newInstant = now().epochSecond + 1
@@ -203,10 +203,7 @@ abstract class AbstractJobExecutionRepositoryTest {
   private fun createJobExecution(
     id: JobExecutionId = JobExecutionId("foo"),
     jobId: JobId = JobId("bar"),
-    stopped: Instant? = null,
-    runtime: Duration? = null,
     messages: List<JobExecutionMessage> = emptyList(),
-    hostname: String = "foobar",
-    lastUpdated: Instant = now().truncatedTo(MILLIS)
-  ) = JobExecution(id, jobId, OK, now().truncatedTo(MILLIS), stopped, runtime, messages, hostname, lastUpdated)
+    lastUpdated: Instant = now()
+  ) = JobExecution(id, jobId, OK, now(), null, null, messages, "foobar", lastUpdated)
 }
