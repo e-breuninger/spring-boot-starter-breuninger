@@ -1,4 +1,5 @@
 # spring-boot-starter-breuninger
+[![Build Status](https://travis-ci.org/e-breuninger/spring-boot-starter-breuninger.svg?branch=master)](https://travis-ci.org/e-breuninger/spring-boot-starter-breuninger)
 
 ## Development Environment
 
